@@ -10,7 +10,7 @@ addons:
 
 env:
   global:
-    CACHE_IMAGE: ml4ailab/automates-v2:latest
+    CACHE_IMAGE: ml4ailab/automates:v2
 
 before_install:
   - docker pull $CACHE_IMAGE
