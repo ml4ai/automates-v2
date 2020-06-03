@@ -36,7 +36,7 @@ RUN pip3 install sphinx ruamel.yaml
 # ==============================================================================
 # SETUP THE AUTOMATES REPOSITORY AND ENVIRONMENT
 # ==============================================================================
-RUN git clone https://github.com/ml4ai/automates-v2
+RUN git clone https://github.com/ml4ai/automates-v2.git
 ENV PYTHONPATH="/automates-v2/src:$PYTHONPATH"
 WORKDIR /automates-v2
 # ==============================================================================
