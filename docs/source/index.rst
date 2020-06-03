@@ -10,6 +10,10 @@ Welcome to AutoMATES's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   air_spec
+   air_openapi
+   grfn_openapi
+
 
 
 Indices and tables
