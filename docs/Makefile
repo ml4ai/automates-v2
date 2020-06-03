@@ -21,13 +21,14 @@ help:
 
 
 air_openapi.html:
-	python3 swagger-yaml-to-html.py SOURCEDIR/air_openapi.yaml $@
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml $@
 
 grfn_openapi.html:
-	python3 swagger-yaml-to-html.py SOURCEDIR/grfn_openapi.yaml $@
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
 
 apidocs:
-	air_openapi.html
-	grfn_openapi.html
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml air_openapi.html
+# air_openapi.html
+# grfn_openapi.html
 # rm -rf generated/
 # sphinx-apidoc -o source <list of source roots> -f
