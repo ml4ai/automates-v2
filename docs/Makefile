@@ -27,7 +27,8 @@ grfn_openapi.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
 
 apidocs:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml air_openapi.html
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml ${SOURCEDIR}/air_openapi.html
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml ${SOURCEDIR}/grfn_openapi.html
 # air_openapi.html
 # grfn_openapi.html
 # rm -rf generated/
