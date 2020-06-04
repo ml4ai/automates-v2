@@ -12,7 +12,7 @@ Welcome to AutoMATES's documentation!
 
    air_openapi
    grfn_openapi
-   networks
+   sample
    modules
 
 
