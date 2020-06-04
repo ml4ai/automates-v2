@@ -22,7 +22,7 @@ def my_fun(blah):
 def zeta_fn_complete_solution():
     """See comments for sketch of the proof
     """
-    # proof...
+    # proof will be added to the docs by end of June 2020
     solution = 42
     return solution
 
