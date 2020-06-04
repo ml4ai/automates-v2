@@ -21,7 +21,8 @@ script:
   - docker exec build-con git checkout $TRAVIS_BRANCH
   - if [[ $TRAVIS_BRANCH == "master" ]]; then docker exec build-con git pull; fi
   - if [[ ! $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then docker exec build-con git pull origin $TRAVIS_PULL_REQUEST_BRANCH; fi
-  - docker exec --workdir /automates-v2/docs build-con make apidocs
+  - docker exec --workdir /automates-v2/docs build-con mkdir -p build
+  - docker exec --workdir /automates-v2/docs build-con make apidocs && make html
 
 deploy:
   local-dir: docs/build/html

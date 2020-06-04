@@ -30,7 +30,7 @@ RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
 
 # Common-use and testing packages
-RUN pip3 install sphinx ruamel.yaml
+RUN pip3 install -r requirements.txt
 # ==============================================================================
 
 # ==============================================================================
