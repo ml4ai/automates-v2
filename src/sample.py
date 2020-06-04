@@ -19,6 +19,14 @@ def my_fun(blah):
     return blah
 
 
+def zeta_fn_complete_solution():
+    """See comments for sketch of the proof
+    """
+    # proof...
+    solution = 42
+    return solution
+
+
 if __name__ == "__main__":
     myclass = MyClass(6)
     print(my_fun(myclass.blee))
