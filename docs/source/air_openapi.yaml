@@ -1,15 +1,15 @@
 openapi: 3.0.0
 
 info:
-  title: GrFN spec
-  description: Grounded Function Network (GrFN) schema specification
+  title: AIR spec
+  description: AutoMATES Intermediate Representation (AIR) schema specification
   contact:
     name: Clayton T. Morrison
     email: claytonm@email.arizona.edu
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 0.2.17
+  version: 1.0.0
 
 paths: {}
 
@@ -20,8 +20,8 @@ components:
     system_def:
       title: <system_def>
       description: >
-        Specification of a GrFN system consisting of one or
-        more GrFN files.
+        Specification of an AIR system consisting of one or
+        more AIR definition (air_def) files.
         With imports, the system must represent a DAG.
       required:
         - date_created
@@ -36,22 +36,22 @@ components:
         components:
           type: array
           items:
-            $ref: '#/components/schemas/grfn_ref'
+            $ref: '#/components/schemas/air_ref'
 
-    grfn_ref:
-      title: <grfn_ref>
+    air_ref:
+      title: <air_ref>
       description: >
-        Specifies a GrFN definition file (`grfn_source`) that is part of
-        a GrFN system, along with it source code files (`code_sources`)
-        and any <grfn_def> imports (`imports`).
+        Specifies a AIR definition file (`air_source`) that is part of
+        an AIR system, along with it source code files (`code_sources`)
+        and any <air_def> imports (`imports`).
       required:
-        - grfn_source
+        - air_source
         - code_sources
       properties:
-        grfn_source:
+        air_source:
           $ref: '#/components/schemas/file_path'
           description: >
-            Path to <grfn_def> file for this reference.
+            Path to <air_def> file for this reference.
         code_sources:
           type: array
           items:
@@ -59,22 +59,22 @@ components:
           description: >
             List of one or more source code file
             paths that contain the namespace for
-            the current <grfn_def>.
+            the current <air_def>.
         imports:
           type: array
           items:
             $ref: '#/components/schemas/file_path'
           description: >
-             (optional) List of any <grfn_def> files
+             (optional) List of any <air_def> files
              representing namespaces that are imported
-             to the current <grfn_def>.
+             to the current <air_def>.
 
-    grfn_def:
-      title: <grfn_def>
+    air_def:
+      title: <air_def>
       description: >
-        The top-level structure of the GrFN definition derived
+        The top-level structure of the AIR definition derived
         from Program Analysis of source code.
-        A <grfn_def> corresponds to a namespace.
+        A <air_def> corresponds to a namespace.
       required:
         - date_created
         - source
@@ -86,7 +86,7 @@ components:
           type: string
           format: date-time
           description: >
-            Date and time that current GrFN was generated.
+            Date and time that current AIR was generated.
         source:
           description:
             Path(s) to source code file(s) that were analyzed.
@@ -268,14 +268,14 @@ components:
       required:
         - name
         - source_ref
-        - gensym
+        # - gensym
       properties:
         name:
           $ref: '#/components/schemas/type_identifier_name'
         source_ref:
           $ref: '#/components/schemas/source_code_ref'
-        gensym:
-          $ref: '#/components/schemas/gensym'
+        # gensym:
+        #   $ref: '#/components/schemas/gensym'
 
         attributes:
           type: array
@@ -332,7 +332,7 @@ components:
       required:
         - name
         - source_refs
-        - gensym
+        # - gensym
         - repeat
         - arguments
         - return_value
@@ -342,8 +342,8 @@ components:
           $ref: '#/components/schemas/container_identifier_name'
         source_ref:
           $ref: '#/components/schemas/source_code_ref'
-        gensym:
-          $ref: '#/components/schemas/gensym'
+        # gensym:
+        #   $ref: '#/components/schemas/gensym'
 
         repeat:
           type: boolean
@@ -672,4 +672,4 @@ components:
 
 externalDocs:
   description: Find more information here
-  url: 'https://ml4ai.github.io/delphi/grfn_spec.html'
+  url: 'TODO'  # 'https://ml4ai.github.io/delphi/GrFN_spec.html'

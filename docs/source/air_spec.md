@@ -1,157 +1,47 @@
-# Grounded Function Network (GrFN) Documentation
+# AutoMATES Intermediate Representation (AIR) Documentation
 
-**Version 0.2.8**
+**Version 1.0.0**
 
-### `[0.2.8]` - 2019-09-01
+### `[0.2.8]` - 2020-02-04
 
-Changes since [0.1.m9]
+Changes since [0.2.8]
 
 #### Changes
 
-- Major refactoring of GrFN Spec into
-	1. OpenAPI
-	2. GrFN documentation (this document)
-- Change GrFN specification versioning from `#.#.m#` to `#.#.#`
-	- Previous release was `[0.1.m9]`
-	- Advancing minor version to 2 with refactoring to OpenAPI
+- Decision to separate simplified representation of GrFN for export/communication/analysis from details of the core intermediate representation. Most of the description here, previously referred to as the Grounded Function Network (GrFN) will now be referred to as the AutoMATES Intermediate Representation (AIR). 
+  1. Have start converting all references to GrFN to AIR.
+  2. Removed the top-level index for this document; assuming that role is now handled by the OpenAPI docs.
 
 [Change Log](#change-og) (from previous releases)
-
-
-## grfn_spec Index
-
-Example whole system GrFN specification file structure
-
-```
-system.json
-namespace1.json
-namespace1_lambdas.py
-namespace2.json
-namespace2_lambdas.py
-...
-```
-
-NOTE: [`<variable_name>`](#variable-naming-convention) and [`<function_name>`](#function-naming-convention) are both formatted as [`<identifier_string>`](#identifier-string), but with particular [naming conventions](#variable-and-function-identifiers-and-references).
-
-- `<system_def>` ::=  # serves as an index; has to be a DAG
-	- "date_created" : `<string>`
-	- "name" : `<string>` # name of system; optional?
-	- "components" : list of `<grfn_spec_refs>`[attrval] ::=
-		- "name" : [`<namespace_path_string>`](#path-strings)
-		- "imports" : list of [`<namespace_path_string>`](#path-strings) # specifies which grfn_spec files to load
-
-- [`<grfn_spec>`](#top-level-grfn-specification)[attrval] ::=
-	- "date_created" : `<string>`
-	- "namespace" : [`<namespace_path_string>`](#path-strings) # 'current' namespace; grfn_spec filename will be the same
-	- "imports" : list of `<import_identifier_spec>`[attrval] ::=
-		- "source_identifier" : [`<identifier_string>`](#identifier-string)
-		- "name" : `<string>` # the name as used locally in this grfn_spec
-	- "source" : list of [`<source_code_file_path>`](#scope-and-namespace-paths)
-	- "start": list of `<string>` # 'top-level' function(s)
-	- "identifiers" : list of [`<identifier_spec>`](#identifier-specification)[attrval] ::=
-
-		- "base_name" : [`<base_name>`](#base-name)
-		- "scope" : [`<scope_path>`](#scope-and-namespace-paths)
-		- "namespace" : [`<namespace_path>`](#scope-and-namespace-paths)
-		- "source\_references" : list of [`<source_code_reference>`](#grounding-and-source-code-reference)
-		- "gensym" : [`<gensym>`](#identifier-gensym)
-		- "grounding" : list of [`<grounding_metadata_spec>`](#grounding-metadata-spec)[attrval] ::=
-			- "source" : `<string>` # URI to source document
-			- "type" : `"definition"` | `"units"` | `"constraint"`
-			- "value" : `<string>`
-			- "score" : `<real>` # confidence score of grounding
-	
-	- "variables" : list of [`<variable_spec>`](#variable-specification)[attrval] ::=
-
-		- "name" : [`<variable_name>`](#variable-naming-convention)
-		- "domain" : [`<variable_domain_type>`](#variable-value-domain)[attrval] ::=
-			- "type" : `"real"` | `"integer"` | `"boolean"` | `"string"`
-			- "precision" : TODO
-		- "domain_constraints" : `<string>` # a disjunctive normal form, with v := variable value
-			- e.g., `"(or (and (< v infty) (>= v 5) (and (> v -infty) (< v 0)))"`
-			- Could this more generally reference other variables?
-		- "mutable" : `TRUE` | `FALSE`
-		
-	- "functions" : list of [`<function_spec>`](#function-specification) ... instances of the following:
-		
-		- [`<function_assign_spec>`](#function-assign-specification)[attrval] ::=
-			- "name" : [`<function_name>`](#function-naming-convention)
-			- "type" : `"assign"` | `"condition"` | `"decision"`
-			- "arguments" : list of [ [`<function_source_reference>`](#function-assign-specification) | [`<variable_name>`](#variable-naming-convention) ]
-			- "return_value" : [`<function_source_reference>`](#function-assign-specification) | [`<variable_name>`](#variable-naming-convention)
-			- "body" : one of the following:
-				- [`<function_assign_body_literal_spec>`](#function-assign-body-literal)[attrval] ::=
-					- "type" : `"literal"`
-					- "value" : [`<literal_value>`](#function-assign-body-literal)[attrval] ::=
-						- "dtype" : `"real"` | `"integer"` | `"boolean"` | `"string"`
-						- "value" : `<string>`
-				- [`<function_assign_body_lambda_spec>`](#function_assign_body_lambda)[attrval] ::=
-					- "type" : `"lambda"`
-					- "name" : [`<function_name>`](#function-naming-convention)
-					- "reference" : [`<lambda_function_reference>`](#funciton-assign-body-lambda) ::= a `<string>` denoting the python function in `lambdas.py`
-		
-		- [`<function_container_spec>`](#function-container-specification)[attrval] ::=
-			- "name" : [`<function_name>`](#function-naming-convention)
-			- "type" : `"container"`
-			- "arguments" : list of [ [`<function_source_reference>`](#function-assign-specification) | [`<variable_name>`](#variable-naming-convention) ]
-			- "updated" : list of [`<variable_name>`](#variable-naming-convention) # variables side-effected during execution
-			- "return_value" : [`<function_source_reference>`](#function-assign-specification) | [`<variable_name>`](#variable-naming-convention)
-			- "body" : list of [`<function_reference_spec>`](#function-reference-specification)
-		
-		- [`<function_loop_plate_spec>`](#function-loop-plate-specification)[attrval] ::=
-			- "name" : [`<function_name>`](#function-naming-convention)
-			- "type" : `"loop_plate"`
-			- "arguments" : list of [`<variable_name>`](#variable-naming-convention)
-			- "updated" : list of [`<variable_name>`](#variable-naming-convention) # variables side-effected during execution
-			- "test\_at\_end" : `TRUE` | `FALSE`
-			- "exit\_condition" : `<loop_condition>` ::= # continue loop WHILE predicate evaluates to "output\_literal"
-				- "arguments" : list of [ [`<variable_reference>`](#variable-reference) | [`<variable_name>`](#variable-naming-convention) ]
-				- "return_value" : [`<variable_name>`](#variable-naming-convention) # the named variable of the exit\_condition result
-				- "output_literal" : `TRUE` | `FALSE`
-				- "predicate" : [`<function_name>`](#function-naming-convention) # reference to lambda fn computing the condition (which must match the output_literal in order to exit)
-			- "body" : list of [`<function_reference_spec>`](#function-reference-specification)
-
-- [`<function_reference_spec>`](#function-reference-specification)[attrval] ::=
-	- "function" : [`<function_name>`](#function-naming-convention)
-	- "arguments" : list of [ [`<variable_reference>`](#variable-reference) | [`<variable_name>`](#variable-naming-convention) ]
-	- "return_value" : [`<variable_reference>`](#variable-reference) | [`<variable_name>`](#variable-naming-convention)
-
-- [`<function_source_reference>`](#function-assign-specification)[attrval] ::=
-	- "name" : [ [`<variable_name>`](#variable-naming-convention) | [`<function_name>`](#function-naming-convention) ]
-	- "type" : `"variable"` | `"function"`
-
-- [`<variable_reference>`](#variable-reference)[attrval] ::=
-	- "variable" : [`<variable_name>`](#variable-naming-convention)
-	- "index" : `<integer>`
 
 
 ## Introduction
 
 ### Background: From source code to dynamic system representation
+AIR
+AIR, pronounced "Griffin", is the central representation generated and manipulated by the [AutoMATES](https://ml4ai.github.io/automates/) system (incorporating [Delphi](https://ml4ai.github.io/delphi)).
 
-GrFN, pronounced "Griffin", is the central representation generated and manipulated by the [AutoMATES](https://ml4ai.github.io/automates/) system (incorporating [Delphi](https://ml4ai.github.io/delphi)).
-
-The goal of GrFN is to provide the end-point target for a translation from the semantics of program (computation) specification (as asserted in source code) and scientific domain concepts (as expressed in text and equations) to the semantics of a (discretized) dynamic system model (akin to an extended version of a probabilistic graphical model).
+The goal of AIR is to provide the end-point target for a translation from the semantics of program (computation) specification (as asserted in source code) and scientific domain concepts (as expressed in text and equations) to the semantics of a (discretized) dynamic system model (akin to an extended version of a probabilistic graphical model).
 
 A key assumption is that the program source code we are analyzing is intended to model aspects of some target physical domain, and that this target physical domain is a dynamical system that evolves over time. This means that some source code variables are assumed to correspond to dynamical system states of the represented system. 
 
 The system is decomposed into a set of individual states (represented as (random) variables), where the values of the states at any given time are a function of the values of zero or more other states at the current and/or previous time point(s). Because we are considering the evolution of the system over time, in general every variable has an index. The functional relationships may be instantaneous (based on the variables indexed at the same point in time) or a function of states of variables at different time indices.
 
-There are four components in AutoMATES that generate (contribute to) and/or consume (operate on) GrFN:
+There are four components in AutoMATES that generate (contribute to) and/or consume (operate on) AIR:
 
 - Program Analysis (PA) - generates
 - Text Reading (TR) - generates
 - Equation Reading (ER) - generates
 - Model Analysis (MA) - consumes
 
-GrFN integrates the extracted _Function Network_ representation of source code (the result of Program Analysis) along with associated extracted comments, links to natural language text (the result of natural language processing by Text Reading), and links to and representation of equations (the result of equation extraction by Equation Reading).
+AIR integrates the extracted _Function Network_ representation of source code (the result of Program Analysis) along with associated extracted comments, links to natural language text (the result of natural language processing by Text Reading), and links to and representation of equations (the result of equation extraction by Equation Reading).
 
 
 ### Spec Notation Conventions
 
-This specification (spec) document describes the GrFN JSON schema, specifying the JSON format that is to be generated by Program Analysis, Text Reading and Equation Reading. Model Analysis is the current main consumer; we also hope that other scientific model analysis systems (e.g., from the ASKE Program) will also be consumers and/or generators.
+This specification (spec) document describes the AIR JSON schema, specifying the JSON format that is to be generated by Program Analysis, Text Reading and Equation Reading. Model Analysis is the current main consumer; we also hope that other scientific model analysis systems (e.g., from the ASKE Program) will also be consumers and/or generators.
 
-In this document we adopt a simplified [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)-inspired grammar specification convention combined with a convention for intuitively defining JSON attribute-value lists. The schema definitions and instance GrFN examples are rendered in `monospaced font`, and interspersed with comments/discussion.
+In this document we adopt a simplified [Backus-Naur Form (BNF)](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)-inspired grammar specification convention combined with a convention for intuitively defining JSON attribute-value lists. The schema definitions and instance AIR examples are rendered in `monospaced font`, and interspersed with comments/discussion.
 
 Following BNF convention, elements in `<...>` denote nonterminals, with `::=` indicating a definition of how a nonterminal is expanded. We will use some common nonterminals with standard expected interpretations, such as `<string>` for strings, `<integer>` for integers, etc. Many of the definitions below will specify JSON attribute-value lists; when this is the case, we will decorate the nonterminal element definition by adding `[attrval]`, as follows::
 
@@ -159,14 +49,14 @@ Following BNF convention, elements in `<...>` denote nonterminals, with `::=` in
 
 We will then specify the structure of the JSON attribute-value list attributes (quoted strings) and their value types using a mixture of [JSON](https://www.json.org/) and [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form).
 
-For example, the following grfn_spec definition
+For example, the following air_spec definition
 
 	<grounding_metadata_spec>[attrval] ::=
 		"source" : <string>
 		"type" : "definition" | "units" | "constraint"
 		"value" : <string> 
 
-specifies the structure of the grfn JSON instance:
+specifies the structure of the air JSON instance:
 
 	{
 		"source" : "http://epirecip.es/epicookbook/chapters/sir/intro",
@@ -187,14 +77,14 @@ resolution
 
 ### Preamble
 
-The current GrFN design strategy is to separate _identifiers_ (any program symbol used to denote a program element) from the _program elements_ themselves (namely, variables and functions), as each program element will be denoted by one or more identifiers, and the different types of program elements themselves have intended scientific modeling "functions": variables (may) represent aspects of the modeled domain, and functions represent processes that change variable states.
+The current AIR design strategy is to separate _identifiers_ (any program symbol used to denote a program element) from the _program elements_ themselves (namely, variables and functions), as each program element will be denoted by one or more identifiers, and the different types of program elements themselves have intended scientific modeling "functions": variables (may) represent aspects of the modeled domain, and functions represent processes that change variable states.
 
-A key role of identifiers in the GrFN representation is to enable _linking_ (grounding) of program elements to information extracted by Text and Equation Reading. Identifiers bring together two types of information that make this linking possible:
+A key role of identifiers in the AIR representation is to enable _linking_ (grounding) of program elements to information extracted by Text and Equation Reading. Identifiers bring together two types of information that make this linking possible:
 
 1. The identifier name ([`<base_name>`](#base-name)) and namespace context ([scope and namespace paths](#scope-and-namespace-paths)) of the identifier as it appears in program source context are used as evidence of potential semantic relations to other textual sources based on string similarity or name embedding;
 2. Information about the location and neighborhood in source code where the identifier is used (a [`<source_code_reference>`](#grounding-and-source-code-reference)) provides additional sources of evidence, based on proximity to source code comments and docstrings, as well as proximity to uses of other identifiers.
 
-An linking/grounding inference algorithm uses string or embedding similarity between base, scope and namespace names and information extracted from documents by Text Reading to form hypotheses of potential links between identifiers and the text-extracted information. Such link hypotheses are explicitly connected to identifiers in GrFN (by instances of [`<grounding_metadata_spec>`](#grounding-metadata-spec)).
+An linking/grounding inference algorithm uses string or embedding similarity between base, scope and namespace names and information extracted from documents by Text Reading to form hypotheses of potential links between identifiers and the text-extracted information. Such link hypotheses are explicitly connected to identifiers in AIR (by instances of [`<grounding_metadata_spec>`](#grounding-metadata-spec)).
 
 Program elements (variables and functions) are associated with identifiers based on declarations in source code, and thereafter, the use of the same identifiers elsewher in source code is a denotation of the variable or function. Information from Text Reading (e.g., "mentions" of domain concept terms or phrases in text) associated with identifiers is then linked to program elements by association of the idenifier. For example, the indicator 'S' may store an integer and be described in documentation as associated with (defined as representing) the "susceptible population".
 
@@ -271,7 +161,7 @@ Examples:
     ["foo", "loop$1", "loop$2"]
     ```
     
-    In general, it is not necessary within GrFN to independently declare scopes. Instead, we simply specify the `<scope_path>` in an indicator declaration as a list of strings under the "scope" attribute in the identifier declaration (below).
+    In general, it is not necessary within AIR to independently declare scopes. Instead, we simply specify the `<scope_path>` in an indicator declaration as a list of strings under the "scope" attribute in the identifier declaration (below).
     
     ```
     <scope_path> ::= list of <string>
@@ -295,7 +185,7 @@ Examples:
 
 	In the case of declared namespaces, the namespace declaration will determine the path (which may only consist of one string name).
 
-    Again, it is not necessary within GrFN to independently declare a namespace; like the `<scope_path>`, we specify the `<namespace_path>` within an identifier declaration as a list strings under the "namespace" attribute in the identifier declaration:
+    Again, it is not necessary within AIR to independently declare a namespace; like the `<scope_path>`, we specify the `<namespace_path>` within an identifier declaration as a list strings under the "namespace" attribute in the identifier declaration:
 	
 	```
     <namespace_path> ::= list of <string>
@@ -305,7 +195,7 @@ Examples:
 
 ### Path Strings
 
-It will be convenient to be able to express [`<scope_path>`](#scope-and-namespace-paths)s and [`<namespace_path>`](#scope-and-namespace-paths)s using single strings within GrFN (particularly when building an identifier string). For this we introduce a special string notation in which the string names that make up a path are expressed in order but separated by periods. These representations will be referred to as the `<scope_path_string>` and `<namespace_path_string>`, respectively. The string representations of the [`<scope_path>`](#scope-and-namespace-paths) and [`<namespace_path>`](#scope-and-namespace-paths) examples above would be:
+It will be convenient to be able to express [`<scope_path>`](#scope-and-namespace-paths)s and [`<namespace_path>`](#scope-and-namespace-paths)s using single strings within AIR (particularly when building an identifier string). For this we introduce a special string notation in which the string names that make up a path are expressed in order but separated by periods. These representations will be referred to as the `<scope_path_string>` and `<namespace_path_string>`, respectively. The string representations of the [`<scope_path>`](#scope-and-namespace-paths) and [`<namespace_path>`](#scope-and-namespace-paths) examples above would be:
 
 - Example `<scope_path_string>`:
     
@@ -335,7 +225,7 @@ Identifiers are uniquely defined by their [`<base_name>`](#base-name), [`<scope_
 
 ### Identifier Gensym
 
-One of the outputs of program analysis is a functionally equivalent version of the original source code and lambda functions (described below), both expressed in Python (as the intermediate target language). All identifiers in the output Python must match identifiers in GrFN. Since capturing the semantics (particularly the namespace and scope context) results in a representation that does not appear to be consistently expressible in legal Python symbol names, we will use `<gensym>`s that can be represented (generally more compactly) as legal Python names and associated uniquely with identifiers.
+One of the outputs of program analysis is a functionally equivalent version of the original source code and lambda functions (described below), both expressed in Python (as the intermediate target language). All identifiers in the output Python must match identifiers in AIR. Since capturing the semantics (particularly the namespace and scope context) results in a representation that does not appear to be consistently expressible in legal Python symbol names, we will use `<gensym>`s that can be represented (generally more compactly) as legal Python names and associated uniquely with identifiers.
 
 >FUTURE: Create a hashing function that can translate uniquely back and forth between `<gensym>`s and identifier strings.
 
@@ -362,7 +252,7 @@ Each of these types can be expressed as an instance of a `<grounding_metadata_sp
 
 ### Identifier Specification
 
-Each identifier within a GrFN specification will have a single `<identifier_spec>` declaration. An identifier will be declared in the GrFN spec JSON by the following attribute-value list:
+Each identifier within a AIR specification will have a single `<identifier_spec>` declaration. An identifier will be declared in the AIR spec JSON by the following attribute-value list:
 
     <identifier_spec>[attrval] ::=
         "base_name" : <base_name>
@@ -402,7 +292,7 @@ In addition to capturing source code variable environment context in variable de
 
 ### Function Naming Convention
 
-Function names, like variable names, are also ultimately [identifiers](#identifier-specification) that will commonly be referenced within GrFN by their [`<identifier_string>`](#identifier-string) (and therefore include their [`<namespace_path_string>`](#path-strings) and [`<scope_path_string>`](#path-strings))
+Function names, like variable names, are also ultimately [identifiers](#identifier-specification) that will commonly be referenced within AIR by their [`<identifier_string>`](#identifier-string) (and therefore include their [`<namespace_path_string>`](#path-strings) and [`<scope_path_string>`](#path-strings))
 
     <function_name> ::= <identifier_string>
 
@@ -476,11 +366,11 @@ Here are example function names for each function type. In each example, we assu
         (Note that the above string is still unambiguous to parse to recover the components pieces of the name: the first two names separated by '::' are the [`<namespace_path_string>`](#path-strings) followed by the [`<scope_path_string>`](#path-strings), with the rest being the `<function_base_name>` of the function, which itself is an "assign" of a variable that itself is a complete [`<identifier_string>`](#identifier-string))
 
 
-## Top-level GrFN Specification
+## Top-level AIR Specification
 
-The top-level structure of the GrFN specification is the `<grfn_spec>` and is itself a JSON attribute-value list, with the following schema definition:
+The top-level structure of the AIR specification is the `<air_spec>` and is itself a JSON attribute-value list, with the following schema definition:
 
-    <grfn_spec>[attrval] ::=
+    <air_spec>[attrval] ::=
         "date_created" : <string>
         "source" : list of <source_code_file_path>
         "start": list of <string>
@@ -488,18 +378,18 @@ The top-level structure of the GrFN specification is the `<grfn_spec>` and is it
         "variables" : list of <variable_spec>
         "functions" : list of <function_spec>
 
-The "date\_created" attribute is a string representing the date+time that the current GrFN was generated (this helps resolve what version of the program analysis code (e.g., for2py) was used).
+The "date\_created" attribute is a string representing the date+time that the current AIR was generated (this helps resolve what version of the program analysis code (e.g., for2py) was used).
 
-There may be a single GrFN spec file for multiple source code files.
+There may be a single AIR spec file for multiple source code files.
 
->CHOICE: A source file may define identifiers and program elements that are then referenced/used in many other system program unit components (other files). We can defined the concepts of a "Program" as the collection of source code from a file plus any other files containing source code that it references/uses. If we have a single GrFN spec for each "Program", then we will be repeatedly reproducing many identifiers and other program element declarations (variables, functions). The alternatives are:
+>CHOICE: A source file may define identifiers and program elements that are then referenced/used in many other system program unit components (other files). We can defined the concepts of a "Program" as the collection of source code from a file plus any other files containing source code that it references/uses. If we have a single AIR spec for each "Program", then we will be repeatedly reproducing many identifiers and other program element declarations (variables, functions). The alternatives are:
 
->1. A single GrFN spec for a given "Program" and live with the redundant re-representation of source code that is shared across different units. 
->2. Have a single GrFN spec for each individual file and develop method for importing/using GrFN specs that are used by other GrFN specs. (A variant of this approach could allow only including GrFN spec for the parts of the shared source code that are directly relevant to a "Program".)
+>1. A single AIR spec for a given "Program" and live with the redundant re-representation of source code that is shared across different units. 
+>2. Have a single AIR spec for each individual file and develop method for importing/using AIR specs that are used by other AIR specs. (A variant of this approach could allow only including AIR spec for the parts of the shared source code that are directly relevant to a "Program".)
 
->FOR NOW: Go with Option (1): The main target of a GrFN spec file is _all_ of the source code files involved in defining a "Program".
+>FOR NOW: Go with Option (1): The main target of a AIR spec file is _all_ of the source code files involved in defining a "Program".
     
->FUTURE: Add ability for GrFN specs to "import" and/or "use" other GrFN specs of other modules (leading to the more efficient option (2)).
+>FUTURE: Add ability for AIR specs to "import" and/or "use" other AIR specs of other modules (leading to the more efficient option (2)).
 
 >FOR NOW: the "source" attribute is a list of one or more `<source_code_file_path>`s. The `<source_code_file_path>` identifying a source file is represented the same way as a [`<namespace_path>`](#scope-and-namespace-paths), except that the final name (the name of the file itself) _will_ include the file extension.
 
@@ -513,15 +403,15 @@ To capture this concept, the "start" attribute is a list of zero or more names o
 
 The "identifiers" attributes contains a list of [`<identifer_spec>`](#identifier-specification)s.
 
->FUTURE: It may also be desirable to add an attribute to represent the program analysis code version used to generate the GrFN (as the program analysis code is evolving and each change has different properties).
+>FUTURE: It may also be desirable to add an attribute to represent the program analysis code version used to generate the AIR (as the program analysis code is evolving and each change has different properties).
 
 >FOR NOW: "dateCreated" will play this role.
 
 The "variables" attribute contains a list of [`<variable_spec>`](#variable-specification)s.
 
->(NOTE: In GrFN version 0.1.m3, [`<variable_spec>`](#variable-specification)s were defined in the context of [`<function_spec>`](#function-specification)s. With need to iterate over variables (e.g. when performing inference for associating comments and text with variable definitions), it is more convenient to group variable specifications at the top level. Starting in GrFN version 0.1.m5, references to variables within functions will use [`<identifier_string>`](#identifier-string)s to identify the variables, and [`<variable_spec>`](#variable-specification)s will be listed in the top-level GrFN "variables" attribute.)
+>(NOTE: In AIR version 0.1.m3, [`<variable_spec>`](#variable-specification)s were defined in the context of [`<function_spec>`](#function-specification)s. With need to iterate over variables (e.g. when performing inference for associating comments and text with variable definitions), it is more convenient to group variable specifications at the top level. Starting in AIR version 0.1.m5, references to variables within functions will use [`<identifier_string>`](#identifier-string)s to identify the variables, and [`<variable_spec>`](#variable-specification)s will be listed in the top-level AIR "variables" attribute.)
 
-A (partial) example instance of the JSON generated for a `<grfn_spec>` of an analyzed file in the path 'crop\_system/yield/crop\_yield.py' is:
+A (partial) example instance of the JSON generated for a `<air_spec>` of an analyzed file in the path 'crop\_system/yield/crop\_yield.py' is:
 
 ```javascript
 {
@@ -549,7 +439,7 @@ The "mutable" attribute specifies whether the variable value _can_ (TRUE) or _ca
 
 Some languages (including Fortran and Python) provide mechanisms for making variable declarations private (such as Python's name mangling, by prepending an underscore to a variable name).
 
->FOR NOW: Our hypothesis is that simply prepending another underscore (following python [name mangling](https://docs.python.org/2/tutorial/classes.html#private-variables-and-class-local-references)) will make the "private" variable [`<base_name>`](#base-name) unique from other variable names. Also, Program Analysis will "preserve" the semantics of privacy by ensuring there are no outer-scope references to a private variable, and this will carry through in explicit references (or lack thereof, in this case) captured in the GrFN spec (in particular, in the [`<function_reference_spec>`](#function-reference-specification)s of the "body" of container and loop\_plate function specs).
+>FOR NOW: Our hypothesis is that simply prepending another underscore (following python [name mangling](https://docs.python.org/2/tutorial/classes.html#private-variables-and-class-local-references)) will make the "private" variable [`<base_name>`](#base-name) unique from other variable names. Also, Program Analysis will "preserve" the semantics of privacy by ensuring there are no outer-scope references to a private variable, and this will carry through in explicit references (or lack thereof, in this case) captured in the AIR spec (in particular, in the [`<function_reference_spec>`](#function-reference-specification)s of the "body" of container and loop\_plate function specs).
 
 ### Variable Value Domain
 
@@ -822,6 +712,18 @@ This definition permits loop iteration bounds to be specified either as literal 
 Inspired by [Keep a Changelog](https://keepachangelog.com)
 
 This project does not (yet) adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+## `[0.2.8]` - 2019-09-01
+
+### Changed
+
+- Major refactoring of GrFN Spec into
+	1. OpenAPI
+	2. GrFN documentation (this document)
+- Change GrFN specification versioning from `#.#.m#` to `#.#.#`
+	- Previous release was `[0.1.m9]`
+	- Advancing minor version to 2 with refactoring to OpenAPI
+
 
 ## `[0.1.m9]` - 2019-07-01:
 
