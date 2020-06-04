@@ -28,9 +28,6 @@ RUN git config --global user.name "Paul Hein"
 # Upgrading setuptools and installing wheel
 RUN pip3 install --upgrade setuptools
 RUN pip3 install wheel
-
-# Common-use and testing packages
-RUN pip3 install -r requirements.txt
 # ==============================================================================
 
 # ==============================================================================
@@ -39,4 +36,7 @@ RUN pip3 install -r requirements.txt
 RUN git clone https://github.com/ml4ai/automates-v2.git
 ENV PYTHONPATH="/automates-v2/src:$PYTHONPATH"
 WORKDIR /automates-v2
+
+# Common-use and testing packages
+RUN pip3 install -r requirements.txt
 # ==============================================================================
