@@ -8,12 +8,12 @@ Welcome to AutoMATES's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-   air_spec
    air_openapi
    grfn_openapi
-
+   networks
+   modules
 
 
 Indices and tables

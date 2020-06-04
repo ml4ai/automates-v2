@@ -20,16 +20,12 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 
-air_openapi.html:
+${SOURCEDIR}/air_openapi.html: 
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml $@
 
-grfn_openapi.html:
+${SOURCEDIR}/grfn_openapi.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
 
-apidocs:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml ${SOURCEDIR}/air_openapi.html
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml ${SOURCEDIR}/grfn_openapi.html
-# air_openapi.html
-# grfn_openapi.html
-# rm -rf generated/
-# sphinx-apidoc -o source <list of source roots> -f
+apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/grfn_openapi.html
+	rm -rf generated/
+	sphinx-apidoc -o source ../src -f

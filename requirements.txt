@@ -1,0 +1,6 @@
+ruamel.yaml
+sphinx
+sphinx-rtd-theme
+sphinxcontrib-bibtex
+sphinxcontrib-trio
+recommonmark
