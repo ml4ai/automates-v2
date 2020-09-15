@@ -128,13 +128,14 @@ components:
           type: string
         # Function Network Definitions
         variables: # node
+          description: >
+            Array of \<variable> definitions.
           type: array
           items:
             $ref: '#/components/schemas/variable'
         functions:  # hyperedge and subgraph
           description: >
             Array of \<function> definitions.
-            A \<function> is a hyperedge and a subgraph of a FN.
           type: array
           items:
             $ref: '#/components/schemas/function'
@@ -147,7 +148,7 @@ components:
             $ref: '#/components/schemas/edge'
         instances:
           description: >
-            Array of all <instance> definitions.
+            Array of all \<instance> definitions.
           type: array
           items:
             $ref: '#/components/schemas/instance'
@@ -168,7 +169,12 @@ components:
 
     variable:
       title: <variable>
-      description: A representation of a variable (represents state)
+      description: >
+        A representation of a variable (represents state).
+        A \<variable> can represent an abstraction, with instance_ids
+          denoting a set of \<variable> and \<function> instances.
+          Case 1: set of variables: e.g., defines an array;
+          Case 2: random variable: function->variable
       required:
         - name
         - node_id
@@ -183,8 +189,6 @@ components:
           description: >
             Array of all instance_ids for \<variable> and \<function>
             instances of this \<variable>.
-            Case 1: set of variables: e.g., defines an array
-            Case 2: random variable: function->variable
           type: array
           items:
             type: string
@@ -196,29 +200,31 @@ components:
 
     function:
       title: <function>
-      description: A representation of a function (transforms state)
+      description: >
+        A representation of a function (transforms state).
+        A \<function> is a hyperedge and a subgraph of a FN.
       required:
         - node_id
         - type
       properties:
         node_id:
+          description: Unique identifier.
           type: string
-          description: Unique identifier
         type:
-          type: string
           description: >
             The type of function being computed by this \<function> node.
             [executable only: primitive, identity, literal]
             [executable + instances (wiring): assign, condition, decision]
             [containers: container, conditional, loop]
+          type: string
         expression:
+          description: Executable expression.
           type: string
-          description: Executable expression
         exit:
-          type: string
           description: >
             Only used in loop type.
             Unique identifier for the lambda function that computes the exit condition.
+          type: string
         instance_ids:
           description: >
             Array of all instance_ids for <variable> and \<function>
