@@ -9,7 +9,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 2.0.0
+  version: 2.0.1
 
 paths: {}
 
@@ -17,157 +17,293 @@ components:
 
   schemas:
 
+    ### grfn_collection
+
+    grfn_collection:
+      title: <grfn_collection>
+      description: >
+        A collection of 1 or more \<grfn>.
+        \<node_set>s denote arbitrary subsets of \<grfn>.
+        A collection with an \<alignment> will have at least two \<grfn>.
+        Each \<grfn_collection> will have its own JSON file.
+      required:
+        - grfns
+      properties:
+        grfns:
+          description: Array of \<grfn> ids.
+          type: array
+          items:
+            type: string
+        alignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/alignment'
+        node_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/node_set'
+
+    alignment:
+      title: <alignment>
+      description: >
+        A mapping of elements (node_ids or \<node_sets>)
+        from one \<grfn> (grfn_1) to another (grfn_2).
+        The elements in the map are paired by their array index.
+      required:
+          - grfn_1
+          - grfn_1_elements
+          - grfn_2
+          - grfn_2_elements
+      properties:
+        grfn_1:
+          description: grfn_id for <grfn> source 1
+          type: string  # grfn_id
+        grfn_1_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 1
+          type: array
+          items:
+            type: string # node_id or node_set_id
+        grfn_2:
+          description: grfn_id for \<grfn> source 2
+          type: string  # grfn_id
+        grfn_2_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 2
+          type: array
+          items:
+            type: string # node_id or node_set_id
+
+    node_set:
+      title: <node_set>
+      description: >
+        A collection of FN node_ids from a source \<grfn>, used to denote to an
+        arbitrary subset of the GrFN FN.
+        A \<node_set> may have metadata associated with it.
+      required:
+        - node_set_id
+        - grfn_id
+        - nodes
+      properties:
+        node_set_id:
+          description: Unique identifier.
+          type: string
+        grfn_id:
+          description: The id of the source \<grfn>.
+          type: string
+        node_ids:
+          description: Array of node_ids denoting the nodes in the \<grfn>.
+          type: array
+          items:
+            type: string
+        metadata:
+          description: Metadata associated with the \<node_set>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    ### grfn
+
     grfn:
       title: <grfn>
       description: >
-        Top-level structure.
-        A <grfn_def> corresponds to a namespace.
+        Top-level GrFN structure.
+        A \<grfn> corresponds to a namespace.
+        Contains: \<variable> and \<function> node definitions,
+          \<instance> map defining map from node_ids to instance_ids,
+          and \<edge> definitions for wiring between variables and functions.
+          <instance_ids> represents the node_ids for top-level \<grfn> FN
+          (function nodes may recursively define subnetwork FNs).
+        \<grfn> may have metadata associated with it.
+        Each \<grfn> will have its own JSON file.
       required:
-        - uid
-        - date_created
-        - functions
+        - grfn_id
         - variables
+        - functions
         - edges
-        - containers
+        - instances
+        - instance_ids
       properties:
-        uid:
+        # id
+        grfn_id:
+          description: Unique identifier
           type: string
-          description: unique identifier
-        date_created:
-          type: string
-          format: date-time
-          description: >
-            Date and time that current GrFN was generated.
-        variables:
+        # Function Network Definitions
+        variables: # node
           type: array
           items:
             $ref: '#/components/schemas/variable'
-        functions:
+        functions:  # hyperedge and subgraph
+          description: >
+            Array of \<function> definitions.
+            A \<function> is a hyperedge and a subgraph of a FN.
           type: array
           items:
             $ref: '#/components/schemas/function'
         edges:
+          description: >
+            Array of all \<edge> definitions, which connect variables to function
+            input/output interfaces.
           type: array
           items:
             $ref: '#/components/schemas/edge'
-        containers:
+        instances:
+          description: >
+            Array of all <instance> definitions.
           type: array
           items:
-            $ref: '#/components/schemas/container'
-
-    edge:
-      title: <edge>
-      description: GrFN edge
-      required:
-      - in
-      - function
-      - out
-      properties:
-        in:
+            $ref: '#/components/schemas/instance'
+        # Top level FN Instances
+        instance_ids:
+          description: >
+            Array of all instance_ids for \<variable> and \<function>
+            instances in the \<grfn> top-level Function Network.
           type: array
           items:
-            $ref: '#/components/schemas/variable_identifier'
-        function:
-          $ref: '#/components/schemas/function_identifier'
-        out:
+            type: string
+        # metadata
+        metadata:
+          description: Metadata associated with \<grfn>.
           type: array
           items:
-            $ref: '#/components/schemas/variable_identifier'
+            $ref: '#/components/schemas/metadata'
 
     variable:
       title: <variable>
-      description: A representation of a variable extracted from source code
+      description: A representation of a variable (represents state)
       required:
         - name
-        - uid
-        - reference
+        - node_id
       properties:
         name:
+          description: Variable basename and index.
           type: string
-          description: variable basename and index extracted from source code
-        uid:
+        node_id:
+          description: Unique identifier.
           type: string
-          description: variable unique identifier
-        reference:
-          type: string
-          description: grounding reference to scientific variable ontology
-        data-type:
-          type: object
-          description: TODO -- not sure how to do this section
+        instance_ids:
+          description: >
+            Array of all instance_ids for \<variable> and \<function>
+            instances of this \<variable>.
+            Case 1: set of variables: e.g., defines an array
+            Case 2: random variable: function->variable
+          type: array
+          items:
+            type: string
+        metadata:
+          description: Metadata associated with the \<variable>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
 
     function:
       title: <function>
-      description: A representation of a functional computation extracted from source code
+      description: A representation of a function (transforms state)
       required:
-        - uid
+        - node_id
         - type
-        - reference
-        - lambda
       properties:
-        uid:
+        node_id:
           type: string
-          description: function unique identifier
+          description: Unique identifier
         type:
           type: string
-          description: states the type of function being computed by this function node
-        reference:
+          description: >
+            The type of function being computed by this \<function> node.
+            [executable only: primitive, identity, literal]
+            [executable + instances (wiring): assign, condition, decision]
+            [containers: container, conditional, loop]
+        expression:
           type: string
-          description: grounding reference to scientific variable ontology
-        lambda:
-          type: string
-          description: stringified pythonic version of the lambda function code
-
-    container:
-      title: <container>
-      description: >
-        TODO
-      required:
-        - name
-        - parent
-        - exit
-        - vertices
-      properties:
-        name:
-          type: string
-          description: a reference to the container that shows the original module path, scope path, and container name
-        parent:
-          type: string
-          description: the container name for the parent container to this container
+          description: Executable expression
         exit:
           type: string
-          description: a function unique identifier for the lambda function that computes the exit condition
-        vertices:
+          description: >
+            Only used in loop type.
+            Unique identifier for the lambda function that computes the exit condition.
+        instance_ids:
+          description: >
+            Array of all instance_ids for <variable> and \<function>
+            instances in this \<function_network>.
           type: array
-          description: TODO -- not sure how to do this section
+          items:
+            type: string
+        metadata:
+          type: array
+          description: Metadata associated with the \<function>.
+          items:
+            $ref: '#/components/schemas/metadata'
 
-    data-type:
-      title: <data-type>
-      description: TODO -- fill in this to define the data type field
+    edge:
+      title: <edge>
+      description: Function Network edge
+      required:
+        - in_variable_ids
+        - function_instance_id
+        - out_variable_ids
+      properties:
+        in_variable_ids:
+          description: Array of node_ids for all input <variable>s
+          type: array
+          items:
+            type: string
+        function_instance_id:
+          description: node_id of \<function>
+          type: string
+        out_variable_ids:
+          description: Array of node_ids for all output \<variable>s
+          type: array
+          items: # variable_instance_id's
+            type: string
+
+    instance:
+      title: <instance>
+      description: >
+        Map of node_id (of either a \<variable> or \<function> node)
+          to node instance_id.
+        NOTE: both node types are included in the same pool of unique
+          node_id and instance_id's
+      properties:
+        node_id:
+          description: >
+            The id of either a \<variable> or \<function> node defintion.
+          type: string
+        instance_id:
+          description: >
+            The id of a node instance.
+          type: string
+
+    ### metadata
+
+    metadata:
+      title: <metadata>
+      description: >
+        Typed metadata consisting of an array of attribute-value pairs.
+        \<grfn> is grounded through metadata.
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          description: Type of metadata.
+          type: string
+        definition:
+          description: Optional definition of this metadata type.
+          type: string
+        attributes:
+          description: Array of \<attribute> attribute-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
+    attribute:
+      title: <attribute>
+      description: An attribute-value pair
       required:
         - name
-        - type
-        - domain
+        - value
       properties:
         name:
+          description: The name of the attribute
           type: string
-          description: the type name of the data field used in Python/NumPy
-        type:
+        value:
+          description: The value of the attribute
           type: string
-          description: the scale of this data-type binary/categorical/discrete/continuous
-        domain:
-          type: array
-          description: TODO -- fill in this section
-
-    variable_identifier:
-      title: <variable_identifier>
-      description: variable unique identifier
-
-    function_identifier:
-      title: <function_identifier>
-      description: function unique identifier
-
-    file_path:
-      title: <file_path>
-      description: >
-        String representation of the path to a file.
-      type: string
