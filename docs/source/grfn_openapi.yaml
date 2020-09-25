@@ -213,9 +213,10 @@ components:
         type:
           description: >
             The type of function being computed by this \<function> node.<br>
-            [executable only: primitive, identity, literal]<br>
-            [executable + instances (wiring): assign, condition, decision]<br>
-            [containers: container, conditional, loop]
+            The following are three groups of types:<br>
+            <em>executable only</em>: [ primitive, identity, literal ]<br>
+            <em>executable + instances (wiring)</em>: [ assign, condition, decision ]<br>
+            <em>containers</em>: [ container, conditional, loop ]
           type: string
         expression:
           description: Executable expression.
@@ -247,15 +248,15 @@ components:
         - out_variable_ids
       properties:
         in_variable_ids:
-          description: Array of node instance_ids for all input \<variable>s
+          description: Array of instance_ids for all input \<variable>s
           type: array
           items:
             type: string
         function_instance_id:
-          description: node_id of \<function>
+          description: instance_id of \<function>
           type: string
         out_variable_ids:
-          description: Array of node instance_ids for all output \<variable>s
+          description: Array of instance_ids for all output \<variable>s
           type: array
           items: # variable_instance_id's
             type: string
@@ -303,6 +304,9 @@ components:
     provenance:
       title: <provenance>
       description: Provenance of data.
+      required:
+        - method
+        - date_time
       properties:
         method:
           description: >
