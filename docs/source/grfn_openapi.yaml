@@ -212,9 +212,9 @@ components:
           type: string
         type:
           description: >
-            The type of function being computed by this \<function> node.
-            [executable only: primitive, identity, literal]
-            [executable + instances (wiring): assign, condition, decision]
+            The type of function being computed by this \<function> node.<br>
+            [executable only: primitive, identity, literal]<br>
+            [executable + instances (wiring): assign, condition, decision]<br>
             [containers: container, conditional, loop]
           type: string
         expression:
@@ -247,7 +247,7 @@ components:
         - out_variable_ids
       properties:
         in_variable_ids:
-          description: Array of node_ids for all input <variable>s
+          description: Array of node instance_ids for all input \<variable>s
           type: array
           items:
             type: string
@@ -255,7 +255,7 @@ components:
           description: node_id of \<function>
           type: string
         out_variable_ids:
-          description: Array of node_ids for all output \<variable>s
+          description: Array of node instance_ids for all output \<variable>s
           type: array
           items: # variable_instance_id's
             type: string
@@ -266,7 +266,7 @@ components:
         Map of node_id (of either a \<variable> or \<function> node)
           to node instance_id.
         NOTE: both node types are included in the same pool of unique
-          node_id and instance_id's
+          node_id and instance_id's.
       properties:
         node_id:
           description: >
@@ -291,25 +291,45 @@ components:
         type:
           description: Type of metadata.
           type: string
-        definition:
-          description: Optional definition of this metadata type.
-          type: string
+        provenance:
+          description: Provenance of metadata.
+          $ref: '#/components/schemas/provenance'
         attributes:
           description: Array of \<attribute> attribute-value pairs.
           type: array
           items:
             $ref: '#/components/schemas/attribute'
 
+    provenance:
+      title: <provenance>
+      description: Provenance of data.
+      properties:
+        method:
+          description: >
+            The (top-level) inference method (with version) used to derive data.
+          type: string
+        date_time:
+          description: >
+            Date and time that current GrFN was generated.
+          type: string
+          format: date-time
+        source:
+          description: >
+            Array of attributes pairing source type (name) with source identifier (value).
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
     attribute:
       title: <attribute>
-      description: An attribute-value pair
+      description: An attribute-value pair.
       required:
         - name
         - value
       properties:
         name:
-          description: The name of the attribute
+          description: The name of the attribute.
           type: string
         value:
-          description: The value of the attribute
+          description: The value of the attribute.
           type: string
