@@ -255,85 +255,86 @@ components:
           description: The value of the attribute.
           type: string
 
-      ### grfn_collection
+    ### grfn_collection
 
-      grfn_collection:
-        title: <grfn_collection>
-        description: >
-          A collection of 1 or more \<grfn>.
-          \<node_set>s denote arbitrary subsets of \<grfn>.
-          A collection with an \<alignment> will have at least two \<grfn>.
-          Each \<grfn_collection> will have its own JSON file.
-        required:
-          - grfns
-        properties:
-          grfns:
-            description: Array of \<grfn> ids.
-            type: array
-            items:
-              type: string
-          alignments:
-            type: array
-            items:
-              $ref: '#/components/schemas/alignment'
-          node_sets:
-            type: array
-            items:
-              $ref: '#/components/schemas/node_set'
-
-      alignment:
-        title: <alignment>
-        description: >
-          A mapping of elements (node_ids or \<node_sets>)
-          from one \<grfn> (grfn_1) to another (grfn_2).
-          The elements in the map are paired by their array index.
-        required:
-            - grfn_1
-            - grfn_1_elements
-            - grfn_2
-            - grfn_2_elements
-        properties:
-          grfn_1:
-            description: grfn_id for <grfn> source 1
-            type: string  # grfn_id
-          grfn_1_elements:
-            description: Array of node_id or node_set_id from \<grfn> source 1
-            type: array
-            items:
-              type: string # node_id or node_set_id
-          grfn_2:
-            description: grfn_id for \<grfn> source 2
-            type: string  # grfn_id
-          grfn_2_elements:
-            description: Array of node_id or node_set_id from \<grfn> source 2
-            type: array
-            items:
-              type: string # node_id or node_set_id
-
-      node_set:
-        title: <node_set>
-        description: >
-          A collection of FN node_ids from a source \<grfn>, used to denote to an
-          arbitrary subset of the GrFN FN.
-          A \<node_set> may have metadata associated with it.
-        required:
-          - node_set_id
-          - grfn_id
-          - nodes
-        properties:
-          node_set_id:
-            description: Unique identifier.
+    grfn_collection:
+      title: <grfn_collection>
+      description: >
+        A collection of 1 or more \<grfn>.
+        \<node_set>s denote arbitrary subsets of \<grfn>.
+        A collection with an \<alignment> will have at least two \<grfn>.
+        Each \<grfn_collection> will have its own JSON file.
+      required:
+        - grfns
+      properties:
+        grfns:
+          description: Array of \<grfn> ids.
+          type: array
+          items:
             type: string
-          grfn_id:
-            description: The id of the source \<grfn>.
+        alignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/alignment'
+        node_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/node_set'
+
+    alignment:
+      title: <alignment>
+      description: >
+        A mapping of elements (node_ids or \<node_sets>)
+        from one \<grfn> (grfn_1) to another (grfn_2).
+        The elements in the map are paired by their array index.
+      required:
+          - grfn_1
+          - grfn_1_elements
+          - grfn_2
+          - grfn_2_elements
+      properties:
+        grfn_1:
+          description: grfn_id for <grfn> source 1
+          type: string  # grfn_id
+        grfn_1_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 1
+          type: array
+          items:
+            type: string # node_id or node_set_id
+        grfn_2:
+          description: grfn_id for \<grfn> source 2
+          type: string  # grfn_id
+        grfn_2_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 2
+          type: array
+          items:
+            type: string # node_id or node_set_id
+
+    node_set:
+      title: <node_set>
+      description: >
+        A collection of FN node_ids from a source \<grfn>, used to denote to an
+        arbitrary subset of the GrFN FN.
+        A \<node_set> may have metadata associated with it.
+      required:
+        - node_set_id
+        - grfn_id
+        - nodes
+      properties:
+        node_set_id:
+          description: Unique identifier.
+          type: string
+        grfn_id:
+          description: The id of the source \<grfn>.
+          type: string
+        node_ids:
+          description: Array of node_ids denoting the nodes in the \<grfn>.
+          type: array
+          items:
             type: string
-          node_ids:
-            description: Array of node_ids denoting the nodes in the \<grfn>.
-            type: array
-            items:
-              type: string
-          metadata:
-            description: Metadata associated with the \<node_set>.
-            type: array
-            items:
-              $ref: '#/components/schemas/metadata'
+        metadata:
+          description: Metadata associated with the \<node_set>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+  
