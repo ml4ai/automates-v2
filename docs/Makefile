@@ -23,9 +23,15 @@ help:
 ${SOURCEDIR}/air_openapi.html: 
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml $@
 
-${SOURCEDIR}/grfn_openapi.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
+# ${SOURCEDIR}/grfn_openapi.html:
+# 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
 
-apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/grfn_openapi.html
+${SOURCEDIR}/grfn_openapi_v2.1.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.1.0.yaml $@
+
+${SOURCEDIR}/grfn_openapi_v3.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v3.0.0.yaml $@
+
+apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/grfn_openapi_v2.1.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
