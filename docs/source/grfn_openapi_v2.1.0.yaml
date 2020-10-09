@@ -95,14 +95,15 @@ components:
           type: string
           description: variable unique identifier
         type:
-          description: "float32", "float64", "integer", "string", "boolean"
+          description: float32, float64, integer, string, boolean
           type: string
         measurement_scale:
           description: The measurement scale of this data-type binary/categorical/discrete/continuous
           type: string
         domain:
-          description: Expression of the possible values data can take, as interval
-          "(and (> v -infty) (< v infty))"
+          description: >
+            Expression of the possible values data can take, as interval
+            \"(and (> v -infty) (< v infty))\"
           type: string
         reference:
           type: string
@@ -157,7 +158,8 @@ components:
           description: a reference to the container that shows the original module path, scope path, and container name
         type:
           type: string
-          description: "func_container", "cond_container", "loop_container"
+          description: >
+            \"func_container\", \"cond_container\", \"loop_container\"
         parent:
           type: string
           description: the container name for the parent container to this container
@@ -288,25 +290,3 @@ components:
           type: array
           items:
             type: string # node_id or node_set_id
-
-    # data-type:
-    #   title: <data-type>
-    #   description: TODO -- fill in this to define the data type field
-    #   required:
-    #     - name
-    #     - type
-    #     - domain
-    #   properties:
-    #     name:
-    #       description: The type name of the data field used in Python/NumPy
-    #       type: string
-    #     type:
-    #       description: "float32", "float64", "integer", "string", "boolean"
-    #       type: string
-    #     measurement_scale:
-    #       description: The measurement scale of this data-type binary/categorical/discrete/continuous
-    #       type: string
-    #     domain:
-    #       description: Expression of the possible values data can take, as interval
-    #       "(and (> v -infty) (< v infty))"
-    #       type: string
