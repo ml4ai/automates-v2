@@ -1,4 +1,4 @@
-GrFN JSON OpenAPI Specification
+GrFN JSON OpenAPI Spec - v3.0.0
 ===============================
 
 .. raw:: html
