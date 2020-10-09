@@ -53,7 +53,7 @@ components:
         subgraphs:
           type: array
           items:
-            $ref: '#/components/schemas/subgraphs'
+            $ref: '#/components/schemas/subgraph'
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
@@ -72,13 +72,13 @@ components:
         in:
           type: array
           items:
-            $ref: '#/components/schemas/variable_identifier'
+            $ref: '#/components/schemas/variable'
         function:
-          $ref: '#/components/schemas/function_identifier'
+          $ref: '#/components/schemas/function'
         out:
           type: array
           items:
-            $ref: '#/components/schemas/variable_identifier'
+            $ref: '#/components/schemas/variable'
 
     variable:
       title: <variable>
