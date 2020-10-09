@@ -1,0 +1,312 @@
+openapi: 3.0.0
+
+info:
+  title: GrFN spec
+  description: Grounded Function Network (GrFN) schema specification
+  contact:
+    name: Clayton T. Morrison
+    email: claytonm@email.arizona.edu
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 2.1.0
+
+paths: {}
+
+components:
+
+  schemas:
+
+    grfn:
+      title: <grfn>
+      description: >
+        Top-level structure.
+        A <grfn_def> corresponds to a namespace.
+      required:
+        - uid
+        - date_created
+        - functions
+        - variables
+        - edges
+        - containers
+      properties:
+        uid:
+          type: string
+          description: unique identifier
+        date_created:
+          type: string
+          format: date-time
+          description: >
+            Date and time that current GrFN was generated.
+        variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/variable'
+        functions:
+          type: array
+          items:
+            $ref: '#/components/schemas/function'
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/edge'
+        subgraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/subgraphs'
+        # metadata
+        metadata:
+          description: Metadata associated with \<grfn>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    edge:
+      title: <edge>
+      description: GrFN edge
+      required:
+      - in
+      - function
+      - out
+      properties:
+        in:
+          type: array
+          items:
+            $ref: '#/components/schemas/variable_identifier'
+        function:
+          $ref: '#/components/schemas/function_identifier'
+        out:
+          type: array
+          items:
+            $ref: '#/components/schemas/variable_identifier'
+
+    variable:
+      title: <variable>
+      description: A representation of a variable extracted from source code
+      required:
+        - name
+        - uid
+        - reference
+      properties:
+        name:
+          type: string
+          description: variable basename and index extracted from source code
+        uid:
+          type: string
+          description: variable unique identifier
+        type:
+          description: "float32", "float64", "integer", "string", "boolean"
+          type: string
+        measurement_scale:
+          description: The measurement scale of this data-type binary/categorical/discrete/continuous
+          type: string
+        domain:
+          description: Expression of the possible values data can take, as interval
+          "(and (> v -infty) (< v infty))"
+          type: string
+        reference:
+          type: string
+          description: grounding reference to scientific variable ontology
+        # metadata
+        metadata:
+          description: Metadata associated with \<variable>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    function:
+      title: <function>
+      description: A representation of a functional computation extracted from source code
+      required:
+        - uid
+        - type
+        - reference
+        - lambda
+      properties:
+        uid:
+          type: string
+          description: function unique identifier
+        type: # pass, literal, assignment, condition, decision
+          type: string
+          description: states the type of function being computed by this function node
+        reference:
+          type: string
+          description: grounding reference to scientific variable ontology
+        lambda:
+          type: string
+          description: stringified pythonic version of the lambda function code
+        # metadata
+        metadata:
+          description: Metadata associated with \<grfn>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    subgraph:
+      title: <subgraph>
+      description: >
+        TODO
+      required:
+        - name
+        - parent
+        - exit
+        - vertices
+      properties:
+        name:
+          type: string
+          description: a reference to the container that shows the original module path, scope path, and container name
+        type:
+          type: string
+          description: "func_container", "cond_container", "loop_container"
+        parent:
+          type: string
+          description: the container name for the parent container to this container
+        exit:
+          type: string
+          description: a function unique identifier for the lambda function that computes the exit condition
+        vertices:
+          type: array
+          description: TODO -- not sure how to do this section
+        # metadata
+        metadata:
+          description: Metadata associated with \<grfn>.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    ### metadata
+
+    metadata:
+      title: <metadata>
+      description: >
+        Typed metadata consisting of an array of attribute-value pairs.
+        \<grfn> is grounded through metadata.
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          description: Type of metadata.
+          type: string
+        provenance:
+          description: Provenance of metadata.
+          $ref: '#/components/schemas/provenance'
+        attributes:
+          description: Array of \<attribute> attribute-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
+    provenance:
+      title: <provenance>
+      description: Provenance of data.
+      required:
+        - method
+        - date_time
+      properties:
+        method:
+          description: >
+            The (top-level) inference method (with version) used to derive data.
+          type: string
+        date_time:
+          description: >
+            Date and time that current GrFN was generated.
+          type: string
+          format: date-time
+        source:
+          description: >
+            Array of attributes pairing source type (name) with source identifier (value).
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
+    attribute:
+      title: <attribute>
+      description: An attribute-value pair.
+      required:
+        - name
+        - value
+      properties:
+        name:
+          description: The name of the attribute.
+          type: string
+        value:
+          description: The value of the attribute.
+          type: string
+
+    ### grfn_collection
+
+    grfn_collection:
+      title: <grfn_collection>
+      description: >
+        A collection of 1 or more \<grfn>.
+        \<node_set>s denote arbitrary subsets of \<grfn>.
+        A collection with an \<alignment> will have at least two \<grfn>.
+        Each \<grfn_collection> will have its own JSON file.
+      required:
+        - grfns
+      properties:
+        grfns:
+          description: Array of \<grfn> ids.
+          type: array
+          items:
+            type: string
+        alignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/alignment'
+        node_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/node_set'
+
+    alignment:
+      title: <alignment>
+      description: >
+        A mapping of elements (node_ids or \<node_sets>)
+        from one \<grfn> (grfn_1) to another (grfn_2).
+        The elements in the map are paired by their array index.
+      required:
+          - grfn_1
+          - grfn_1_elements
+          - grfn_2
+          - grfn_2_elements
+      properties:
+        grfn_1:
+          description: grfn_id for <grfn> source 1
+          type: string  # grfn_id
+        grfn_1_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 1
+          type: array
+          items:
+            type: string # node_id or node_set_id
+        grfn_2:
+          description: grfn_id for \<grfn> source 2
+          type: string  # grfn_id
+        grfn_2_elements:
+          description: Array of node_id or node_set_id from \<grfn> source 2
+          type: array
+          items:
+            type: string # node_id or node_set_id
+
+    # data-type:
+    #   title: <data-type>
+    #   description: TODO -- fill in this to define the data type field
+    #   required:
+    #     - name
+    #     - type
+    #     - domain
+    #   properties:
+    #     name:
+    #       description: The type name of the data field used in Python/NumPy
+    #       type: string
+    #     type:
+    #       description: "float32", "float64", "integer", "string", "boolean"
+    #       type: string
+    #     measurement_scale:
+    #       description: The measurement scale of this data-type binary/categorical/discrete/continuous
+    #       type: string
+    #     domain:
+    #       description: Expression of the possible values data can take, as interval
+    #       "(and (> v -infty) (< v infty))"
+    #       type: string

@@ -11,7 +11,8 @@ Welcome to AutoMATES's documentation!
    :caption: Contents
 
    air_openapi
-   grfn_openapi
+   grfn_openapi_v2.1.0
+   grfn_openapi_v3.0.0
    sample
    modules
 
