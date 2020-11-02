@@ -1,5 +1,5 @@
 # automates-v2
-AutoMATES: Automated Model Assembly from Text, Equations and Software
+AutoMATES: Automated Model Assembly from Text, Equations, and Software
 
 
 This repository holds the source code for the AutoMATES documentation
