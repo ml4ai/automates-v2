@@ -156,8 +156,14 @@ components:
         - nodes
       properties:
         namespace:
+          type: string
+          description: TODO
         scope:
+          type: string
+          description: TODO
         occurrence_num:
+          type: string
+          description: TODO
         basename:
           type: string
           description: a reference to the container that shows the original module path, scope path, and container name
