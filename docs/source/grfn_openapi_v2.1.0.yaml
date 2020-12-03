@@ -129,9 +129,10 @@ components:
           description: function unique identifier
         type: # pass, literal, assignment, condition, decision
           type: string
-          description: states the type of function being computed by this function node<br>
-            <em>executable only</em>: [ PRIMITIVE, IDENTITY, LITERAL ]<br>
-            <em>executable + instances (wiring)</em>: [ ASSIGN, CONDITION, DECISION ]
+          description: >
+            states the type of function being computed by this function node<br>
+            <em>executable only</em>: [ \"PRIMITIVE\", \"IDENTITY\", \"LITERAL\" ]<br>
+            <em>executable + instances (wiring)</em>: [ \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
         reference:
           type: string
           description: grounding reference to scientific variable ontology
@@ -155,16 +156,16 @@ components:
       properties:
         namespace:
           type: string
-          description: TODO
+          description: The namespace path of the subgraph
         scope:
           type: string
-          description: TODO
-        occurrence_num:
-          type: string
-          description: TODO
+          description: The scope path of the subgraph
         basename:
           type: string
           description: a reference to the container that shows the original module path, scope path, and container name
+        occurrence_num:
+          type: string
+          description: The subgraph instance tag
         # parent:
         #   type: string
         #   description: the container name for the parent container to this container
