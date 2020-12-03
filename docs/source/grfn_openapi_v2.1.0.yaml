@@ -150,9 +150,7 @@ components:
       description: >
         TODO
       required:
-        - name
-        - parent
-        - exit
+        - basename
         - nodes
       properties:
         namespace:
