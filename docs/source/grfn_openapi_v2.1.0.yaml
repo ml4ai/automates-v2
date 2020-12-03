@@ -129,7 +129,9 @@ components:
           description: function unique identifier
         type: # pass, literal, assignment, condition, decision
           type: string
-          description: states the type of function being computed by this function node
+          description: states the type of function being computed by this function node<br>
+            <em>executable only</em>: [ PRIMITIVE, IDENTITY, LITERAL ]<br>
+            <em>executable + instances (wiring)</em>: [ ASSIGN, CONDITION, DECISION ]
         reference:
           type: string
           description: grounding reference to scientific variable ontology
@@ -151,24 +153,27 @@ components:
         - name
         - parent
         - exit
-        - vertices
+        - nodes
       properties:
-        name:
+        namespace:
+        scope:
+        occurrence_num:
+        basename:
           type: string
           description: a reference to the container that shows the original module path, scope path, and container name
+        # parent:
+        #   type: string
+        #   description: the container name for the parent container to this container
         type:
           type: string
           description: >
-            \"func_container\", \"cond_container\", \"loop_container\"
-        parent:
-          type: string
-          description: the container name for the parent container to this container
+            \"FuncContainer\", \"CondContainer\", \"LoopContainer\"
         exit:
           type: string
           description: a function unique identifier for the lambda function that computes the exit condition
-        vertices:
+        nodes:
           type: array
-          description: TODO -- not sure how to do this section
+          description: array of uids referring to variables and functions in the subgraph
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
