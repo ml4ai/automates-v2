@@ -131,7 +131,7 @@ components:
           type: string
           description: >
             states the type of function being computed by this function node<br>
-            <em>executable only</em>: [ \"PRIMITIVE\", \"IDENTITY\", \"LITERAL\" ]<br>
+            <em>executable only</em>: [ \"PASS\", \"LITERAL\" ]<br>
             <em>executable + instances (wiring)</em>: [ \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
         reference:
           type: string
