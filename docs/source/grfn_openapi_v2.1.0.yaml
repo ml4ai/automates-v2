@@ -84,21 +84,21 @@ components:
       title: <variable>
       description: A representation of a variable extracted from source code
       required:
-        - name
+        - identifier
         - uid
         - reference
       properties:
-        name:
+        identifier:
           type: string
-          description: variable basename and index extracted from source code
+          description: (name) variable basename and index extracted from source code
         uid:
           type: string
           description: variable unique identifier
         type:
           description: float32, float64, integer, string, boolean
           type: string
-        measurement_scale:
-          description: The measurement scale of this data-type binary/categorical/discrete/continuous
+        kind:
+          description: (measurement_scale) The measurement scale of this data-type binary/categorical/discrete/continuous
           type: string
         domain:
           description: >
