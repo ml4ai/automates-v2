@@ -131,7 +131,7 @@ components:
           description: >
             The type of function being computed by this \<function> node.<br>
             The following are three groups of types:<br>
-            <em>executable only</em>: [ primitive, identity, literal ]<br>
+            <em>executable only</em>: [ interface, primitive, identity, literal ]<br>
             <em>executable + instances (wiring)</em>: [ assign, condition, decision ]<br>
             <em>containers</em>: [ container, conditional, loop ]
           type: string
