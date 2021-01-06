@@ -166,9 +166,9 @@ components:
         occurrence_num:
           type: string
           description: The subgraph instance tag
-        # parent:
-        #   type: string
-        #   description: the container name for the parent container to this container
+        parent:
+          type: string
+          description: the container uid for the parent container to this container
         type:
           type: string
           description: >
