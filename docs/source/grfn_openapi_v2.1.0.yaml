@@ -32,7 +32,7 @@ components:
       properties:
         uid:
           type: string
-          description: unique identifier
+          description: GrFN unique identifier
         date_created:
           type: string
           format: date-time
@@ -90,10 +90,10 @@ components:
       properties:
         identifier:
           type: string
-          description: (name) variable basename and index extracted from source code
+          description: (name) Variable basename and index extracted from source code
         uid:
           type: string
-          description: variable unique identifier
+          description: Variable unique identifier
         type:
           description: float32, float64, integer, string, boolean
           type: string
@@ -107,7 +107,7 @@ components:
           type: string
         reference:
           type: string
-          description: grounding reference to scientific variable ontology
+          description: Grounding reference to scientific variable ontology
         # metadata
         metadata:
           description: Metadata associated with \<variable>.
@@ -126,19 +126,19 @@ components:
       properties:
         uid:
           type: string
-          description: function unique identifier
+          description: Function unique identifier
         type: # pass, literal, assignment, condition, decision
           type: string
           description: >
-            states the type of function being computed by this function node<br>
+            States the type of function being computed by this function node<br>
             <em>executable only</em>: [ \"PASS\", \"LITERAL\" ]<br>
             <em>executable + instances (wiring)</em>: [ \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
         reference:
           type: string
-          description: grounding reference to scientific variable ontology
+          description: Grounding reference to scientific variable ontology
         lambda:
           type: string
-          description: stringified pythonic version of the lambda function code
+          description: Stringified pythonic version of the lambda function code
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
@@ -151,9 +151,13 @@ components:
       description: >
         TODO
       required:
+        - uid
         - basename
         - nodes
       properties:
+        uid:
+          type: string
+          description: Subgraph unique identifier
         namespace:
           type: string
           description: The namespace path of the subgraph
