@@ -178,14 +178,15 @@ components:
             \"FuncContainer\", \"CondContainer\", \"LoopContainer\"
           type: string
         exit:
-          description: a function unique identifier for the lambda function that computes the exit condition
+          description: >
+            A function unique identifier for the lambda function that computes the exit condition
           type: string
         nodes:
-          description: array of uids referring to variables and functions in the subgraph
+          description: >
+            Array of uids referring to variables and functions in the subgraph
           type: array
           items:
             type: string
-
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
