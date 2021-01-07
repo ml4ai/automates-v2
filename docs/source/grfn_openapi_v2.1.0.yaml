@@ -31,13 +31,13 @@ components:
         - containers
       properties:
         uid:
-          type: string
           description: GrFN unique identifier
-        date_created:
           type: string
-          format: date-time
+        date_created:
           description: >
             Date and time that current GrFN was generated.
+          type: string
+          format: date-time
         variables:
           type: array
           items:
@@ -89,11 +89,11 @@ components:
         - reference
       properties:
         identifier:
-          type: string
           description: (name) Variable basename and index extracted from source code
-        uid:
           type: string
+        uid:
           description: Variable unique identifier
+          type: string
         type:
           description: float32, float64, integer, string, boolean
           type: string
@@ -106,8 +106,8 @@ components:
             \"(and (> v -infty) (< v infty))\"
           type: string
         reference:
-          type: string
           description: Grounding reference to scientific variable ontology
+          type: string
         # metadata
         metadata:
           description: Metadata associated with \<variable>.
@@ -125,20 +125,20 @@ components:
         - lambda
       properties:
         uid:
-          type: string
           description: Function unique identifier
-        type: # pass, literal, assignment, condition, decision
           type: string
+        type: # pass, literal, assignment, condition, decision
           description: >
             States the type of function being computed by this function node<br>
             <em>executable only</em>: [ \"PASS\", \"LITERAL\" ]<br>
             <em>executable + instances (wiring)</em>: [ \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
+          type: string
         reference:
-          type: string
           description: Grounding reference to scientific variable ontology
-        lambda:
           type: string
+        lambda:
           description: Stringified pythonic version of the lambda function code
+          type: string
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
@@ -156,33 +156,33 @@ components:
         - nodes
       properties:
         uid:
-          type: string
           description: Subgraph unique identifier
+          type: string
         namespace:
-          type: string
           description: The namespace path of the subgraph
+          type: string
         scope:
-          type: string
           description: The scope path of the subgraph
+          type: string
         basename:
-          type: string
           description: a reference to the container that shows the original module path, scope path, and container name
+          type: string
         occurrence_num:
-          type: string
           description: The subgraph instance tag
+          type: string
         parent:
-          type: string
           description: the container uid for the parent container to this container
-        type:
           type: string
+        type:
           description: >
             \"FuncContainer\", \"CondContainer\", \"LoopContainer\"
-        exit:
           type: string
+        exit:
           description: a function unique identifier for the lambda function that computes the exit condition
+          type: string
         nodes:
-          type: array
           description: array of uids referring to variables and functions in the subgraph
+          type: array
           items:
             type: string
 
