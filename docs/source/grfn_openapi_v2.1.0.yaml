@@ -183,6 +183,9 @@ components:
         nodes:
           type: array
           description: array of uids referring to variables and functions in the subgraph
+          items:
+            type: string
+
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
