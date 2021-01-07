@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This document outlines the structure of the CAST that will be used as a generic representation of programs when creating functions networks from programs using the University of Arizonas program analysis pipeline. \n\n Generating Python Class Structure \n TODO look into https://pypi.org/project/swagger-to/ \n\n Generating POJOs\nTODO look into https://stackoverflow.com/questions/33354557/how-to-generate-java-client-code-for-swagger-rest-api-documentation"
+  description: "This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. \n\n Generating Python Class Structure \n TODO look into https://pypi.org/project/swagger-to/ \n\n Generating POJOs\nTODO look into https://stackoverflow.com/questions/33354557/how-to-generate-java-client-code-for-swagger-rest-api-documentation"
   version: "1.0.0"
   title: "AutoMATES Common Abstract Syntax Tree (CAST) v1"
   # termsOfService: "http://swagger.io/terms/"
@@ -378,20 +378,56 @@ definitions:
   # Literal values
   List: 
     type: object
-    description: "A static representation of a list. TODO fill out"
+    description: "A static representation of a list."
+    allOf: 
+       - $ref: "#/definitions/AstNode"
+    properties:
+      values: 
+        type: array
+        description: "An ordered list of nodes matching the order of the elements in the static list definition."
+        items:
+          $ref: "#/definitions/AstNode"
     
   Tuple: 
     type: object
-    description: "A static representation of a specific type of list, a tuple. TODO fill out"
-    
+    description: "A static representation of a specific type of list, a tuple."
+    allOf: 
+       - $ref: "#/definitions/AstNode"
+    properties:
+      values: 
+        type: array
+        description: "An ordered list of nodes matching the order of the elements in the static tuple definition."
+        items:
+          $ref: "#/definitions/AstNode"
+          
   Dict: 
     type: object
-    description: "A static representation of a dictionary. TODO fill out"
-    
+    description: "A static representation of a dictionary."
+    allOf: 
+       - $ref: "#/definitions/AstNode"
+    properties:
+      keys: 
+        type: array
+        description: "An ordered list of nodes holding the key values. The corresponding position in the values field array is the value associated to the key."
+        items:
+          $ref: "#/definitions/AstNode"
+      values: 
+        type: array
+        description: "An ordered list of nodes holding the values corresponding to keys. The corresponding position in the keys field array is the key associated to the value."
+        items:
+          $ref: "#/definitions/AstNode"
+          
   Set: 
     type: object
-    description: "A static representation of a set. TODO fill out"
-    
+    description: "A static representation of a set."
+    allOf: 
+       - $ref: "#/definitions/AstNode"
+    properties:
+      values: 
+        type: array
+        description: "A list of nodes of the elements in the static set definition."
+        items:
+          $ref: "#/definitions/AstNode"
   
   String: 
     type: object
