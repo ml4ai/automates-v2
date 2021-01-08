@@ -1,14 +1,9 @@
 swagger: "2.0"
+
 info:
   description: "This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. \n\n Generating Python Class Structure \n TODO look into https://pypi.org/project/swagger-to/ \n\n Generating POJOs\nTODO look into https://stackoverflow.com/questions/33354557/how-to-generate-java-client-code-for-swagger-rest-api-documentation"
   version: "1.0.0"
   title: "AutoMATES Common Abstract Syntax Tree (CAST) v1"
-  # termsOfService: "http://swagger.io/terms/"
-  # contact:
-  #   email: "dpdicken@email.arizona.edu"
-  # license:
-  #   name: "Apache 2.0"
-  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 
 paths: {}
 
@@ -445,5 +440,5 @@ definitions:
        - $ref: "#/definitions/AstNode"
     properties:
       val: 
-        type: number
+        type: double
   
