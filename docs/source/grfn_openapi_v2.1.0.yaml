@@ -165,7 +165,8 @@ components:
           description: The scope path of the subgraph
           type: string
         basename:
-          description: a reference to the container that shows the original module path, scope path, and container name
+          description: >
+            A reference to the container that shows the original module path, scope path, and container name
           type: string
         occurrence_num:
           description: The subgraph instance tag
