@@ -7,3 +7,12 @@
   - Create a target (starts with `${SOURCEDIR}/`)
   - Add target to apidocs line
 - Run `$ make apidocs`
+
+
+# On the CI side (e.g., Travis)
+
+From the /docs/ directory:
+- mkdir build
+- make apidocs  # rebuilds the .html files under /docs/source
+- make html     # populates build/
+
