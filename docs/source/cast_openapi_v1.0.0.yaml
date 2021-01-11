@@ -1,449 +1,459 @@
-swagger: "2.0"
+openapi: 3.0.0
+
 info:
-  description: "This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. \n\n Generating Python Class Structure \n TODO look into https://pypi.org/project/swagger-to/ \n\n Generating POJOs\nTODO look into https://stackoverflow.com/questions/33354557/how-to-generate-java-client-code-for-swagger-rest-api-documentation"
+  description: |
+    This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. 
+    
+     __Generating Class Structure__
+     
+     To automatically generate Python or Java models corresponding to this document, you can use [swagger-codegen](https://swagger.io/tools/swagger-codegen/). We can use this to generate client code based off of this spec that will also generate the class structure.
+     
+     1. Install via the method described for your operating system [here](https://github.com/swagger-api/swagger-codegen#Prerequisites). Make sure to install a version after 3.0 that will support openapi 3.
+     2. Run swagger-codegen with the options in the example below. The URL references where the yaml for this documentation is stored on github. Make sure to replace CURRENT_VERSION with the correct version. To generate Java classes rather, change the `-l python` to `-l java`. Change the value to the `-o` option to the desired output location. 
+         ```
+         swagger-codegen generate -l python -o ./client -i https://raw.githubusercontent.com/ml4ai/automates-v2/master/docs/source/cast_openapi_v{CURRENT_VERSION}.yaml
+         ```
+     3. Once it executes, the client code will be generated at your specified location. For python, the classes will be located in `$OUTPUT_PATH/swagger_client/models/`. For java, they will be located in `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
+      
+    
   version: "1.0.0"
   title: "AutoMATES Common Abstract Syntax Tree (CAST) v1"
-  # termsOfService: "http://swagger.io/terms/"
-  # contact:
-  #   email: "dpdicken@email.arizona.edu"
-  # license:
-  #   name: "Apache 2.0"
-  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 
 paths: {}
 
-definitions:
+components:
+  schemas:
   
-  AstNode:
-    description: "Generic base class for all AST nodes"
-    type: object
-  
-  Module:
-    type: object
-    description: "Represents a section of code found from the evaluated program"
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      body:
-        type: array
-        description: "The ordered list of nodes found in the body of the module. This will hold function definitions, control statement nodes (If/Loop), or expressions."
-        items: 
-          $ref: "#/definitions/AstNode"
-  
-  # Class definitions
-  ClassDef:
-    type: object
-    description: "Represents an if control statement and maintains the capacity to represent elif / else blocks."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      name:
-        type: string
-        description: "The raw string name of the class definition."
-      bases:
-        type: array
-        description: "A list of the base classes."
-        items:
-          type: string
-      funcs:
-        type: array
-        description: "The ordered list of the function definitions within the class."
-        items:
-          $ref: "#/definitions/AstNode"
-      fields:
-        type: array
-        description: "The list of fields found defined in the class."
-        items:
-          $ref: "#/definitions/Var"
-
-  # Control flow structures
-  If:
-    type: object
-    description: "Represents an if control statement and maintains the capacity to represent elif / else blocks."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      expr:
-        type: object
-        description: "The expression evaluated for this clause of the control statement."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"
-      body:
-        type: array
-        description: "A list of nodes representing the expressions of the body controlled by the expr."
-        items:
-          $ref: "#/definitions/AstNode"
-      orelse:
-        type: object
-        description: "This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold another node of type If. If this is the else clause of the statement, . If there are no further statements for this If statement, this will be null."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"
-
-  
-  Loop:
-    type: object
-    description: "Represents a loop control statement. The body of the loop is executed until the expression evaluates to false."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      expr:
-        type: object
-        description: "The expr to evaluate that controls the loop."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"
-      body:
-        type: array
-        description: "The ordered list of nodes representing the body of the loop."
-        items:
-          $ref: "#/definitions/AstNode"
-       
-  FunctionDef:
-    type: object
-    description: "Represents the definition of a function from the code."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      name:
-        type: object
-        $ref: "#/definitions/Name"
-      args:
-        type: array
-        description: "The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function."
-        items:
-          $ref: "#/definitions/Var"
-      body:
-        type: array
-        description: "The ordered list of nodes representing the body of the function."
-        items:
-          $ref: "#/definitions/AstNode"
-  
-  # Expression statements  
-  Expr:
-    type: object
-    description: "Represents a standalone expression found in the code."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      expr:
-        type: object
-        description: "The expression."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-      
-  Assignment:
-    type: object
-    description: "Represents the assignment of the result of the expression on the left to the value on the right."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      left:
-        type: object
-        description: "The left hand expression that generates the value to assign to."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-      right:
-        type: object
-        description: "The right hand expression that generates the value to assign."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-            
-  Call:
-    type: object
-    description: "Represents the call of a function within an expression."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      func:
-          type: object
-          description: "The function being called. This will either be a Name representing the name of the function called or it will be an attribute node representing the function being called on an object."
-          properties:
-            type:
-              $ref: "#/definitions/AstNode"  
-      arguments:
-        type: array
-        description: "An ordered list of nodes matching the order of the arguments in the function definition. Each item is an AstNode representing an expression for the value passed at its corresponding position."
-        items:
-          $ref: "#/definitions/AstNode"
-          
-  Attribute:
-    type: object
-    description: "Represents accessing the attribute of a value. This could be accessing a field or method of a class."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      value:
-        type: object
-        description: "The left side value that the attribute is being accessed from. This could simply be a Name value or a large expression."
-        properties:
-          type:
-            $ref: "#/definitions/AstNode"  
-      attr:
-        type: object
-        description: "The name of the attribute being accessed."
-        properties:
-          type:
-            $ref: "#/definitions/Name"  
-  
-  Return: 
-    type: object
-    description: "Found in function bodies and holds the expression to return."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      value:
-        type: object
-        description: "The expression computing the value to be returned."
-        properties:
-          type:
-            $ref: "#/definitions/AstNode"  
-  
-  UnaryOp:
-    type: object
-    description: "Represents an operator applied to a single value."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      op:
-        type: object
-        description: "The left hand value of the operator."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/UnaryOperator"  
-      value:
-        type: object
-        description: "The value the operator is applied to."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-
-            
-  # TODO I dont think we need to differentiate between bool op and binary op. Python does this so they can collepse many of the same boolean operation into one node (i.e. "a or b or c" is one node vs two nested nodes)
-  BinaryOp:
-    type: object
-    description: "Represents an operator applied between a left and right value."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      op:
-        type: object
-        description: "The left hand value of the operator."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/BinaryOperator"  
-      left:
-        type: object
-        description: "The left hand value of the operator."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-      right:
-        type: object
-        description: "The right hand value of the operator."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-            
-           
-  UnaryOperator:
-    type: string
-    description: "Represents all potential unary operator types."
-    enum:
-      - UAdd
-      - USub
-      - Not
-      - Invert
-  
-  BinaryOperator:
-    type: string
-    description: "Represents all potential binary operator types."
-    enum:
-      # Arithmetic operators
-      - Add
-      - Sub
-      - Mult
-      - Div
-      - FloorDiv
-      - Mod
-      - Pow
-      
-      # Binary operators
-      - LShift
-      - RShift
-      - BitOr
-      - BitXor
-      - BitAnd
-      
-      # Boolean operators
-      - And
-      - Or
-      
-      # Comparators
-      - Eq
-      - NotEq
-      - Lt
-      - Lte
-      - Gt
-      - Gte
-      - In
-      - NotIn
-      
-      
-  Subscript:
-    type: object
-    description: "Represents subscripting to access a value in a list or dict."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      value:
-        type: object
-        description: "The left expression that generates the list or dictionary to subscript."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
-      slice:
-        type: object
-        description: "The value being accessed. This could simply be a String or Num, or an expression evaluating to one."
-        properties:
-          type: 
-            type: object
-            $ref: "#/definitions/AstNode"  
+    AstNode:
+      description: "Generic base class for all AST nodes"
+      type: object
     
-  # Loop control statements
-  Break:
-    type: object
-    description: "The occurence of this node represents a break statement within the current control structure of the AST."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-  
-  Continue:
-    type: object
-    description: "The occurence of this node represents a continue statement within the current control structure of the AST."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-  
-  # Used to represent variable names and keywords found in code
-  Var:
-    type: object
-    description: "Used to represent variables in the AST."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      val: 
-        type: object
-        $ref: "#/definitions/Name"
-      type: 
-        type: object
-        $ref: "#/definitions/VarType"
+    Module:
+      type: object
+      description: | 
+        Represents a section of code found from the evaluated program
+      
+        __body__ - The ordered list of nodes found in the body of the module. This will hold function definitions, control statement nodes (If/Loop), or expressions.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        body:
+          type: array
+          items: 
+            $ref: "#/components/schemas/AstNode"
+    
+    # Class definitions
+    ClassDef:
+      type: object
+      description: |
+        Represents an if control statement and maintains the capacity to represent elif / else blocks.
         
-  VarType:
-    type: string
-    description: "Allowed variable types in the AST."
-    enum:
-      - Unknown
-      - String
-      - Number
-      - List
-      - Dict
-      - Set
-      - Tuple
-
-  Name: 
-    type: object
-    description: "Used to represent names of variables and functions."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      val: 
-        type: string    
-
-
-  # Literal values
-  List: 
-    type: object
-    description: "A static representation of a list."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      values: 
-        type: array
-        description: "An ordered list of nodes matching the order of the elements in the static list definition."
-        items:
-          $ref: "#/definitions/AstNode"
+        __name__ - The raw string name of the class definition.
+        
+        __bases__ - A list of the base classes.
+        
+        __funcs__ - The ordered list of the function definitions within the class.
+        
+        __fields__ - The list of fields found defined in the class.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        name:
+          type: string
+        bases:
+          type: array
+          items:
+            type: string
+        funcs:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/Var"
+  
+    # Control flow structures
+    If:
+      type: object
+      description: |
+        Represents an if control statement and maintains the capacity to represent elif / else blocks.
+        
+        __expr__ - The expression evaluated for this clause of the control statement.
+        
+        __body__ - A list of nodes representing the expressions of the body controlled by the expr.
+        
+        __orelse__ - This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold another node of type If. If this is the else clause of the statement, . If there are no further statements for this If statement, this will be null.
+        
+      allOf: 
+      - $ref: "#/components/schemas/AstNode"
+      properties:
+        expr:
+          $ref: "#/components/schemas/AstNode"
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+        orelse:
+          $ref: "#/components/schemas/AstNode"
+  
     
-  Tuple: 
-    type: object
-    description: "A static representation of a specific type of list, a tuple."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      values: 
-        type: array
-        description: "An ordered list of nodes matching the order of the elements in the static tuple definition."
-        items:
-          $ref: "#/definitions/AstNode"
-          
-  Dict: 
-    type: object
-    description: "A static representation of a dictionary."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      keys: 
-        type: array
-        description: "An ordered list of nodes holding the key values. The corresponding position in the values field array is the value associated to the key."
-        items:
-          $ref: "#/definitions/AstNode"
-      values: 
-        type: array
-        description: "An ordered list of nodes holding the values corresponding to keys. The corresponding position in the keys field array is the key associated to the value."
-        items:
-          $ref: "#/definitions/AstNode"
-          
-  Set: 
-    type: object
-    description: "A static representation of a set."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      values: 
-        type: array
-        description: "A list of nodes of the elements in the static set definition."
-        items:
-          $ref: "#/definitions/AstNode"
+    Loop:
+      type: object
+      description: |
+        Represents a loop control statement. The body of the loop is executed until the expression evaluates to false.
+        
+        __expr__ - The expr to evaluate that controls the loop.
+        
+        __body__ - The ordered list of nodes representing the body of the loop.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        expr:
+          $ref: "#/components/schemas/AstNode"
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+         
+    FunctionDef:
+      type: object
+      description: |
+        Represents the definition of a function from the code.
+        
+        __name__ - The name of the function.
+        
+        __args__ - The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function.
+        
+        __body__ - The ordered list of nodes representing the body of the function.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        name:
+          type: object
+          $ref: "#/components/schemas/Name"
+        args:
+          type: array
+          items:
+            $ref: "#/components/schemas/Var"
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+    
+    # Expression statements  
+    Expr:
+      type: object
+      description: | 
+        Represents a standalone expression found in the code.
+        
+        __expr__ - The expression held in this node. It could be an assignment, unary op, binary op, etc.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        expr:
+          $ref: "#/components/schemas/AstNode"  
+        
+    Assignment:
+      type: object
+      description: |
+        Represents the assignment of the result of the expression on the left to the value on the right.
+        
+        __left__ - The left hand expression that generates the value to assign to.
+        
+        __right__ - The right hand expression that generates the value to assign.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        left:
+          $ref: "#/components/schemas/AstNode"  
+        right:
+          $ref: "#/components/schemas/AstNode"  
+              
+    Call:
+      type: object
+      description: |
+        Represents the call of a function within an expression.
+        
+        __func__ - The function being called. This will either be a Name representing the name of the function called or it will be an attribute node representing the function being called on an object.
+        
+        __arguments__ - An ordered list of nodes matching the order of the arguments in the function definition. Each item is an AstNode representing an expression for the value passed at its corresponding position.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        func:
+          $ref: "#/components/schemas/AstNode"  
+        arguments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+            
+    Attribute:
+      type: object
+      description: |
+        Represents accessing the attribute of a value. This could be accessing a field or method of a class.
+        
+        __value__ - The left side value that the attribute is being accessed from. This could simply be a Name value or a large expression.
+        
+        __attr__ - The name of the attribute being accessed.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        value:
+          $ref: "#/components/schemas/AstNode"  
+        attr:
+          $ref: "#/components/schemas/Name"  
+    
+    Return: 
+      type: object
+      description: |
+        Found in function bodies and holds the expression to return.
+        
+        __ value __ - The expression computing the value to be returned.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        value:
+          $ref: "#/components/schemas/AstNode"  
+    
+    UnaryOp:
+      type: object
+      description: |
+        Represents an operator applied to a single value.
+        
+        __op__ - The unary operator being used.
+        
+        __value__ - The value the operator is applied to.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        op:
+          $ref: "#/components/schemas/UnaryOperator"  
+        value:
+          $ref: "#/components/schemas/AstNode"  
   
-  String: 
-    type: object
-    description: "Used to represent string literals."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      val: 
-        type: string    
+              
+    # TODO I dont think we need to differentiate between bool op and binary op. Python does this so they can collepse many of the same boolean operation into one node (i.e. "a or b or c" is one node vs two nested nodes)
+    BinaryOp:
+      type: object
+      description: |
+        Represents an operator applied between a left and right value.
+        
+        __op__ - The binary operator being used.
+        
+        __left__ - The left hand value of the operator.
+         
+        __right__ - The right hand value of the operator.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        op:
+          $ref: "#/components/schemas/BinaryOperator"  
+        left:
+          $ref: "#/components/schemas/AstNode"  
+        right:
+          $ref: "#/components/schemas/AstNode"  
+             
+    UnaryOperator:
+      type: string
+      description: | 
+        Represents all potential unary operator types.
+      enum:
+        - UAdd
+        - USub
+        - Not
+        - Invert
+    
+    BinaryOperator:
+      type: string
+      description: |
+        Represents all potential binary operator types.
+      enum:
+        # Arithmetic operators
+        - Add
+        - Sub
+        - Mult
+        - Div
+        - FloorDiv
+        - Mod
+        - Pow
+        
+        # Binary operators
+        - LShift
+        - RShift
+        - BitOr
+        - BitXor
+        - BitAnd
+        
+        # Boolean operators
+        - And
+        - Or
+        
+        # Comparators
+        - Eq
+        - NotEq
+        - Lt
+        - Lte
+        - Gt
+        - Gte
+        - In
+        - NotIn
+        
+        
+    Subscript:
+      type: object
+      description: |
+        Represents subscripting to access a value in a list or dict.
+        
+        __value__ - The left expression that generates the list or dictionary to subscript.
+        
+        __slice__ - The value being accessed. This could simply be a String or Num, or an expression evaluating to one.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        value:
+          $ref: "#/components/schemas/AstNode"  
+        slice:
+          $ref: "#/components/schemas/AstNode"  
       
-  Number: 
-    type: object
-    description: "Used to represent number literals of all types."
-    allOf: 
-       - $ref: "#/definitions/AstNode"
-    properties:
-      val: 
-        type: number
+    # Loop control statements
+    Break:
+      type: object
+      description: "The occurence of this node represents a break statement within the current control structure of the AST."
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+    
+    Continue:
+      type: object
+      description: "The occurence of this node represents a continue statement within the current control structure of the AST."
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+    
+    # Used to represent variable names and keywords found in code
+    Var:
+      type: object
+      description: |
+        Used to represent variables in the AST.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        val: 
+          type: object
+          $ref: "#/components/schemas/Name"
+        type: 
+          type: object
+          $ref: "#/components/schemas/VarType"
+          
+    VarType:
+      type: string
+      description: |
+        Allowed variable types in the AST.
+      enum:
+        - Unknown
+        - String
+        - Number
+        - List
+        - Dict
+        - Set
+        - Tuple
   
+    Name: 
+      type: object
+      description: |
+        Used to represent names of variables and functions.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        val: 
+          type: string    
+  
+  
+    # Literal values
+    List: 
+      type: object
+      description: |
+        A static representation of a list.
+        
+        __values__ - An ordered list of nodes matching the order of the elements in the static list definition.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        values: 
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+      
+    Tuple: 
+      type: object
+      description: |
+        A static representation of a specific type of list, a tuple.
+        
+        __values__ - An ordered list of nodes matching the order of the elements in the static tuple definition.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        values: 
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+            
+    Dict: 
+      type: object
+      description: |
+        A static representation of a dictionary.
+        
+        __keys__ - An ordered list of nodes holding the key values. The corresponding position in the values field array is the value associated to the key.
+        
+        __values__ - An ordered list of nodes holding the values corresponding to keys. The corresponding position in the keys field array is the key associated to the value.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        keys: 
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+        values: 
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+            
+    Set: 
+      type: object
+      description: |
+        A static representation of a set.
+        
+        __values__ - A list of nodes of the elements in the static set definition.
+        
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        values: 
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+    
+    String: 
+      type: object
+      description: |
+        Used to represent string literals.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        val: 
+          type: string    
+        
+    Number: 
+      type: object
+      description: |
+        Used to represent number literals of all types.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        val: 
+          type: number
+    
