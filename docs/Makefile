@@ -20,7 +20,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 
-${SOURCEDIR}/air_openapi.html: 
+${SOURCEDIR}/air_openapi.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml $@
 
 ${SOURCEDIR}/cast_openapi_v1.0.0.html:
@@ -32,9 +32,12 @@ ${SOURCEDIR}/cast_openapi_v1.0.0.html:
 ${SOURCEDIR}/grfn_openapi_v2.1.0.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.1.0.yaml $@
 
+${SOURCEDIR}/grfn_openapi_v2.2.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.2.0.yaml $@
+
 ${SOURCEDIR}/grfn_openapi_v3.0.0.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v3.0.0.yaml $@
 
-apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/cast_openapi_v1.0.0.html ${SOURCEDIR}/grfn_openapi_v2.1.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html
+apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/cast_openapi_v1.0.0.html ${SOURCEDIR}/grfn_openapi_v2.2.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
