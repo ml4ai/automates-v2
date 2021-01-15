@@ -83,8 +83,8 @@ components:
 
     ### Provenenace source types
 
-    text_extracxtion_ref:
-      title: <text_extracxtion_ref>
+    text_extraction_ref:
+      title: <text_extraction_ref>
       description: Provenance object representing document source information.
       required:
         - source_type
