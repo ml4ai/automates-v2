@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CAST JSON OpenAPI Spec - v1.0.0 &mdash; AutoMATES  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GrFN JSON OpenAPI Spec - v2.2.0" href="grfn_openapi_v2.2.0.html" />
+    <link rel="prev" title="AIR JSON OpenAPI Specification" href="air_openapi.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AutoMATES
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="air_openapi.html">AIR JSON OpenAPI Specification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CAST JSON OpenAPI Spec - v1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_openapi_v2.2.0.html">GrFN JSON OpenAPI Spec - v2.2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_openapi_v3.0.0.html">GrFN JSON OpenAPI Spec - v3.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_openapi_metadata.html">GrFN JSON OpenAPI Metadata Spec - v1.0.0</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AutoMATES</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>CAST JSON OpenAPI Spec - v1.0.0</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cast_openapi_v1.0.0.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cast-json-openapi-spec-v1-0-0">
+<h1>CAST JSON OpenAPI Spec - v1.0.0<a class="headerlink" href="#cast-json-openapi-spec-v1-0-0" title="Permalink to this headline">¶</a></h1>
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="_static/swagger-ui/swagger-ui.css" >
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+
+<div id="swagger-ui"></div>
+<script src="_static/swagger-ui/swagger-ui-bundle.js"> </script>
+<script src="_static/swagger-ui/swagger-ui-standalone-preset.js"> </script>
+<script>
+    window.onload = function() {
+
+    // Build a system
+    var spec = {"openapi": "3.0.0", "info": {"description": "This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. \n\n __Generating Class Structure__\n \n To automatically generate Python or Java models corresponding to this document, you can use [swagger-codegen](https://swagger.io/tools/swagger-codegen/). We can use this to generate client code based off of this spec that will also generate the class structure.\n \n 1. Install via the method described for your operating system [here](https://github.com/swagger-api/swagger-codegen#Prerequisites). Make sure to install a version after 3.0 that will support openapi 3.\n 2. Run swagger-codegen with the options in the example below. The URL references where the yaml for this documentation is stored on github. Make sure to replace CURRENT_VERSION with the correct version. To generate Java classes rather, change the `-l python` to `-l java`. Change the value to the `-o` option to the desired output location. \n     ```\n     swagger-codegen generate -l python -o ./client -i https://raw.githubusercontent.com/ml4ai/automates-v2/master/docs/source/cast_openapi_v{CURRENT_VERSION}.yaml\n     ```\n 3. Once it executes, the client code will be generated at your specified location. For python, the classes will be located in `$OUTPUT_PATH/swagger_client/models/`. For java, they will be located in `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`\n  \n", "version": "1.0.0", "title": "AutoMATES Common Abstract Syntax Tree (CAST) v1"}, "paths": {}, "components": {"schemas": {"AstNode": {"description": "Generic base class for all AST nodes", "type": "object"}, "Module": {"type": "object", "description": "Represents a section of code found from the evaluated program\n\n__body__ - The ordered list of nodes found in the body of the module. This will hold function definitions, control statement nodes (If/Loop), or expressions.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"body": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "ClassDef": {"type": "object", "description": "Represents an if control statement and maintains the capacity to represent elif / else blocks.\n\n__name__ - The raw string name of the class definition.\n\n__bases__ - A list of the base classes.\n\n__funcs__ - The ordered list of the function definitions within the class.\n\n__fields__ - The list of fields found defined in the class.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"name": {"type": "string"}, "bases": {"type": "array", "items": {"type": "string"}}, "funcs": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}, "fields": {"type": "array", "items": {"$ref": "#/components/schemas/Var"}}}}, "If": {"type": "object", "description": "Represents an if control statement and maintains the capacity to represent elif / else blocks.\n\n__expr__ - The expression evaluated for this clause of the control statement.\n\n__body__ - A list of nodes representing the expressions of the body controlled by the expr.\n\n__orelse__ - This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold another node of type If. If this is the else clause of the statement, . If there are no further statements for this If statement, this will be null.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"expr": {"$ref": "#/components/schemas/AstNode"}, "body": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}, "orelse": {"$ref": "#/components/schemas/AstNode"}}}, "Loop": {"type": "object", "description": "Represents a loop control statement. The body of the loop is executed until the expression evaluates to false.\n\n__expr__ - The expr to evaluate that controls the loop.\n\n__body__ - The ordered list of nodes representing the body of the loop.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"expr": {"$ref": "#/components/schemas/AstNode"}, "body": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "FunctionDef": {"type": "object", "description": "Represents the definition of a function from the code.\n\n__name__ - The name of the function.\n\n__args__ - The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function.\n\n__body__ - The ordered list of nodes representing the body of the function.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"name": {"type": "object", "$ref": "#/components/schemas/Name"}, "args": {"type": "array", "items": {"$ref": "#/components/schemas/Var"}}, "body": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "Expr": {"type": "object", "description": "Represents a standalone expression found in the code.\n\n__expr__ - The expression held in this node. It could be an assignment, unary op, binary op, etc.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"expr": {"$ref": "#/components/schemas/AstNode"}}}, "Assignment": {"type": "object", "description": "Represents the assignment of the result of the expression on the left to the value on the right.\n\n__left__ - The left hand expression that generates the value to assign to.\n\n__right__ - The right hand expression that generates the value to assign.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"left": {"$ref": "#/components/schemas/AstNode"}, "right": {"$ref": "#/components/schemas/AstNode"}}}, "Call": {"type": "object", "description": "Represents the call of a function within an expression.\n\n__func__ - The function being called. This will either be a Name representing the name of the function called or it will be an attribute node representing the function being called on an object.\n\n__arguments__ - An ordered list of nodes matching the order of the arguments in the function definition. Each item is an AstNode representing an expression for the value passed at its corresponding position.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"func": {"$ref": "#/components/schemas/AstNode"}, "arguments": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "Attribute": {"type": "object", "description": "Represents accessing the attribute of a value. This could be accessing a field or method of a class.\n\n__value__ - The left side value that the attribute is being accessed from. This could simply be a Name value or a large expression.\n\n__attr__ - The name of the attribute being accessed.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"value": {"$ref": "#/components/schemas/AstNode"}, "attr": {"$ref": "#/components/schemas/Name"}}}, "Return": {"type": "object", "description": "Found in function bodies and holds the expression to return.\n\n__ value __ - The expression computing the value to be returned.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"value": {"$ref": "#/components/schemas/AstNode"}}}, "UnaryOp": {"type": "object", "description": "Represents an operator applied to a single value.\n\n__op__ - The unary operator being used.\n\n__value__ - The value the operator is applied to.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"op": {"$ref": "#/components/schemas/UnaryOperator"}, "value": {"$ref": "#/components/schemas/AstNode"}}}, "BinaryOp": {"type": "object", "description": "Represents an operator applied between a left and right value.\n\n__op__ - The binary operator being used.\n\n__left__ - The left hand value of the operator.\n \n__right__ - The right hand value of the operator.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"op": {"$ref": "#/components/schemas/BinaryOperator"}, "left": {"$ref": "#/components/schemas/AstNode"}, "right": {"$ref": "#/components/schemas/AstNode"}}}, "UnaryOperator": {"type": "string", "description": "Represents all potential unary operator types.\n", "enum": ["UAdd", "USub", "Not", "Invert"]}, "BinaryOperator": {"type": "string", "description": "Represents all potential binary operator types.\n", "enum": ["Add", "Sub", "Mult", "Div", "FloorDiv", "Mod", "Pow", "LShift", "RShift", "BitOr", "BitXor", "BitAnd", "And", "Or", "Eq", "NotEq", "Lt", "Lte", "Gt", "Gte", "In", "NotIn"]}, "Subscript": {"type": "object", "description": "Represents subscripting to access a value in a list or dict.\n\n__value__ - The left expression that generates the list or dictionary to subscript.\n\n__slice__ - The value being accessed. This could simply be a String or Num, or an expression evaluating to one.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"value": {"$ref": "#/components/schemas/AstNode"}, "slice": {"$ref": "#/components/schemas/AstNode"}}}, "Break": {"type": "object", "description": "The occurence of this node represents a break statement within the current control structure of the AST.", "allOf": [{"$ref": "#/components/schemas/AstNode"}]}, "Continue": {"type": "object", "description": "The occurence of this node represents a continue statement within the current control structure of the AST.", "allOf": [{"$ref": "#/components/schemas/AstNode"}]}, "Var": {"type": "object", "description": "Used to represent variables in the AST.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"val": {"type": "object", "$ref": "#/components/schemas/Name"}, "type": {"type": "object", "$ref": "#/components/schemas/VarType"}}}, "VarType": {"type": "string", "description": "Allowed variable types in the AST.\n", "enum": ["Unknown", "String", "Number", "List", "Dict", "Set", "Tuple"]}, "Name": {"type": "object", "description": "Used to represent names of variables and functions.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"val": {"type": "string"}}}, "List": {"type": "object", "description": "A static representation of a list.\n\n__values__ - An ordered list of nodes matching the order of the elements in the static list definition.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"values": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "Tuple": {"type": "object", "description": "A static representation of a specific type of list, a tuple.\n\n__values__ - An ordered list of nodes matching the order of the elements in the static tuple definition.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"values": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "Dict": {"type": "object", "description": "A static representation of a dictionary.\n\n__keys__ - An ordered list of nodes holding the key values. The corresponding position in the values field array is the value associated to the key.\n\n__values__ - An ordered list of nodes holding the values corresponding to keys. The corresponding position in the keys field array is the key associated to the value.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"keys": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}, "values": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "Set": {"type": "object", "description": "A static representation of a set.\n\n__values__ - A list of nodes of the elements in the static set definition.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"values": {"type": "array", "items": {"$ref": "#/components/schemas/AstNode"}}}}, "String": {"type": "object", "description": "Used to represent string literals.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"val": {"type": "string"}}}, "Number": {"type": "object", "description": "Used to represent number literals of all types.\n", "allOf": [{"$ref": "#/components/schemas/AstNode"}], "properties": {"val": {"type": "number"}}}}}};
+    const ui = SwaggerUIBundle({
+        spec: spec,
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+    })
+
+    window.ui = ui
+    }
+</script>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="grfn_openapi_v2.2.0.html" class="btn btn-neutral float-right" title="GrFN JSON OpenAPI Spec - v2.2.0" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="air_openapi.html" class="btn btn-neutral float-left" title="AIR JSON OpenAPI Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Clayton T. Morrison and Paul D. Hein
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
