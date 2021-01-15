@@ -175,8 +175,69 @@ components:
         out_variable_ids:
           description: Array of instance_ids for all output \<variable>s
           type: array
-          items: # variable_instance_id's
+          items:
             type: string
+
+    composite_type:
+      title: <composite_type>
+      description: TODO
+      required:
+        - id
+        # - built_in
+        - name
+      properties:
+        id:
+          description: Unique identifier.
+          type: string
+        # built_in:
+        #   description: TODO
+        #   type: boolean
+        name::
+          description: Name of the data type
+          type: string
+        fields:
+          description: >
+            Array of field-name (string) paired with optional type-name (string).
+            When no type specified, the type-name is empty-string.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+        metadata:
+          description: Metadata associated with the \<type> declaration.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    object:
+      title: <object>
+      description: >
+        An object an instance of a \<type> where fields are instantiated
+        as persistent storage with associated values.
+        Each field is represented by a variable.
+      properties:
+        id:
+          description: Unique identifier.
+          type: string
+        type:
+          description: TODO
+          type: string
+        instance_ids:
+          description: >
+            Array of field instance_ids
+          type: array
+          items:
+            type: string
+        field_instances:
+          description: >
+            Array of pairs of \<field_operation>: \<field instance_id>, \<operation_spec>
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+        metadata:
+          type: array
+          description: Metadata associated with the \<object> instance.
+          items:
+            $ref: '#/components/schemas/metadata'
 
     instance:
       title: <instance>
