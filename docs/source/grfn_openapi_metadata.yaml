@@ -28,6 +28,7 @@ components:
       required:
         - type
         - attributes
+        - provenance
       properties:
         type:
           description: Type of metadata.
@@ -45,13 +46,13 @@ components:
       description: Provenance of metadata.
       required:
         - method
-        - date_time
+        - timestamp
       properties:
         method:
           description: >
             The (top-level) inference method (with version) used to derive data.
           type: string
-        date_time:
+        timestamp:
           description: >
             Date and time that metadata was generated.
           type: string
@@ -62,7 +63,7 @@ components:
             (TODO: add additional source types)
           type: array
           items:
-            $ref: '#/components/schemas/text_document_source_ref'
+            $ref: '#/components/schemas/text_extraction_ref'
 
     attribute:
       title: <attribute>
@@ -82,8 +83,8 @@ components:
 
     ### Provenenace source types
 
-    text_document_source_ref:
-      title: <text_document_source_ref>
+    text_extracxtion_ref:
+      title: <text_extracxtion_ref>
       description: Provenance object representing document source information.
       required:
         - source_type
@@ -209,10 +210,10 @@ components:
 
     ### <variable> | <function>
 
-    text-definition:
+    text_definition:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <variable,function>.<text-definition>
+      title: <variable,function>.<text_definition>
       description: >
         host: { \<variable>, \<function> } <br>
         Definition of host derived from a text source.<br>
@@ -222,6 +223,8 @@ components:
       properties:
         type:
           default: "text-definition"
+        text_extraction_ref:
+          $ref: '#/components/schemas/text_extraction_ref'
         attributes:
           description: Array of \<attribute> attribute-value pairs.
           type: array
