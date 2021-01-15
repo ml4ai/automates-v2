@@ -38,6 +38,9 @@ ${SOURCEDIR}/grfn_openapi_v2.2.0.html:
 ${SOURCEDIR}/grfn_openapi_v3.0.0.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v3.0.0.yaml $@
 
-apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/cast_openapi_v1.0.0.html ${SOURCEDIR}/grfn_openapi_v2.2.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html
+${SOURCEDIR}/grfn_openapi_v3.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_metadata.yaml $@
+
+apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/cast_openapi_v1.0.0.html ${SOURCEDIR}/grfn_openapi_v2.2.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html ${SOURCEDIR}/grfn_openapi_metadata.yaml
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
