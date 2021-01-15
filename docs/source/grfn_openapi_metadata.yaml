@@ -164,6 +164,17 @@ components:
         - uid
         - global_reference_id
       properties:
+        uid:
+          description: Unique identifier of the \<document_reference>
+          type: string
+        global_reference_id:
+          description: >
+            Identifier of source document.<br>
+            Rank preference of identifier type:<br>
+            (1) DOI (digital object identifier) recognized by COSMOS<br>
+            (2) PMID (Pubmed ID) or other DOI<br>
+            (3) aske_id (ASKE unique identifier)
+          type: string
         cosmos_id:
           description: TODO
           type: string
@@ -175,6 +186,25 @@ components:
           type: string
         automates_version_number:
           description: TODO
+          type: string
+
+    ### <type>
+
+    type_alias:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <type>.<type_alias>
+      description: >
+        host: \<type>
+        Alias name of a \<type>. <br>
+        (E.g., using C typedef as alternate alias name to a \<type>).
+      required:
+        - alias
+      properties:
+        type:
+          default: "type_alias"
+        alias:
+          description: Alias name
           type: string
 
     ### <variable> | <function>
