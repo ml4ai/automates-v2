@@ -24,7 +24,7 @@ components:
         A <grfn_def> corresponds to a namespace.
       required:
         - uid
-        - date_created
+        - timestamp
         - functions
         - variables
         - edges
@@ -33,7 +33,7 @@ components:
         uid:
           description: GrFN unique identifier
           type: string
-        date_created:
+        timestamp:
           description: >
             Date and time that current GrFN was generated.
           type: string
@@ -41,7 +41,9 @@ components:
         types:
           type: array
           items:
-            $ref: '#/components/schemas/type'
+            oneOf:
+              - $ref: '#/components/schemas/type'
+              - $ref: '#/components/schemas/type__composite'
         objects:
           type: array
           items:
@@ -113,17 +115,17 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
-    type_composite:
+    type__composite:
       allOf:
         - $ref: '#/components/schemas/type'
-      title: <type_composite>
+      title: <type>:<composite>
       description: A structured type with named field attributes.
       required:
         - fields
       properties:
         metatype:
           type: string
-          default: "type_composite"
+          default: "composite"
         fields:
           description: Array of named fields.
           type: array
@@ -183,7 +185,7 @@ components:
           type: string
         data_type:
           description: >
-            float, float32, float64, integer, string, boolean, etc.<br>
+            object, float, float32, float64, integer, string, boolean, etc.<br>
             TODO: Define GrFN execution model
           type: string
 

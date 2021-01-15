@@ -28,6 +28,7 @@ components:
       required:
         - type
         - attributes
+        - provenance
       properties:
         type:
           description: Type of metadata.
@@ -45,13 +46,13 @@ components:
       description: Provenance of metadata.
       required:
         - method
-        - date_time
+        - timestamp
       properties:
         method:
           description: >
             The (top-level) inference method (with version) used to derive data.
           type: string
-        date_time:
+        timestamp:
           description: >
             Date and time that metadata was generated.
           type: string
@@ -62,7 +63,7 @@ components:
             (TODO: add additional source types)
           type: array
           items:
-            $ref: '#/components/schemas/text_document_source_ref'
+            $ref: '#/components/schemas/text_extraction_ref'
 
     attribute:
       title: <attribute>
@@ -82,8 +83,8 @@ components:
 
     ### Provenenace source types
 
-    text_document_source_ref:
-      title: <text_document_source_ref>
+    text_extraction_ref:
+      title: <text_extraction_ref>
       description: Provenance object representing document source information.
       required:
         - source_type
@@ -164,6 +165,17 @@ components:
         - uid
         - global_reference_id
       properties:
+        uid:
+          description: Unique identifier of the \<document_reference>
+          type: string
+        global_reference_id:
+          description: >
+            Identifier of source document.<br>
+            Rank preference of identifier type:<br>
+            (1) DOI (digital object identifier) recognized by COSMOS<br>
+            (2) PMID (Pubmed ID) or other DOI<br>
+            (3) aske_id (ASKE unique identifier)
+          type: string
         cosmos_id:
           description: TODO
           type: string
@@ -177,12 +189,31 @@ components:
           description: TODO
           type: string
 
-    ### <variable> | <function>
+    ### <type>
 
-    text-definition:
+    type_alias:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <variable,function>.<text-definition>
+      title: <type>.<type_alias>
+      description: >
+        host: \<type>
+        Alias name of a \<type>. <br>
+        (E.g., using C typedef as alternate alias name to a \<type>).
+      required:
+        - alias
+      properties:
+        type:
+          default: "type_alias"
+        alias:
+          description: Alias name
+          type: string
+
+    ### <variable> | <function>
+
+    text_definition:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable,function>.<text_definition>
       description: >
         host: { \<variable>, \<function> } <br>
         Definition of host derived from a text source.<br>
@@ -192,6 +223,8 @@ components:
       properties:
         type:
           default: "text-definition"
+        text_extraction_ref:
+          $ref: '#/components/schemas/text_extraction_ref'
         attributes:
           description: Array of \<attribute> attribute-value pairs.
           type: array
