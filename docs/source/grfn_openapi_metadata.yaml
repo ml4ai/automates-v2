@@ -1,0 +1,236 @@
+openapi: 3.0.0
+
+info:
+  title: GrFN JSON Metadata spec
+  description: >
+    AutoMATES Grounded Function Network (GrFN) JSON Metadata schema specification
+  contact:
+    name: Clayton T. Morrison
+    email: claytonm@arizona.edu
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+
+paths: {}
+
+components:
+
+  schemas:
+
+    ### metadata
+
+    metadata:
+      title: <metadata>
+      description: >
+        Typed metadata consisting of an array of attribute-value pairs.
+        \<grfn> is grounded through metadata.
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          description: Type of metadata.
+          type: string
+        provenance:
+          $ref: '#/components/schemas/provenance'
+        # attributes:
+        #   description: Array of \<attribute> attribute-value pairs.
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/attribute'
+
+    provenance:
+      title: <provenance>
+      description: Provenance of metadata.
+      required:
+        - method
+        - date_time
+      properties:
+        method:
+          description: >
+            The (top-level) inference method (with version) used to derive data.
+          type: string
+        date_time:
+          description: >
+            Date and time that metadata was generated.
+          type: string
+          format: date-time
+        sources:
+          description: >
+            Array of sources.
+            (TODO: add additional source types)
+          type: array
+          items:
+            $ref: '#/components/schemas/text_document_source_ref'
+
+    attribute:
+      title: <attribute>
+      description: An attribute-value pair.
+      required:
+        - name
+        - value
+      properties:
+        type:
+          default: "attribute"
+        name:
+          description: The name of the attribute.
+          type: string
+        value:
+          description: The value of the attribute.
+          type: string
+
+    ### Provenenace source types
+
+    text_document_source_ref:
+      title: <text_document_source_ref>
+      description: Provenance object representing document source information.
+      required:
+        - source_type
+        - document_reference_uid
+        - text_location
+      properties:
+        source_type:
+          type: string
+          default: "text_document_source"
+        document_reference_uid:
+          description: uid of \<document_reference>
+          type: string
+        text_location:
+          $ref: '#/components/schemas/text_location'
+
+    text_location:
+      title: <text_location>
+      description: Coordinates of text spans
+      properties:
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/text_span_ref'
+
+    text_span_ref:
+      title: <text_span_ref>
+      description: Reference coordinates to a span of text
+      required:
+        - page
+        - block
+        - span
+      properties:
+        page:
+          type: integer
+        block:
+          type: integer
+        span:
+          $ref: '#/components/schemas/text_span'
+
+    text_span:
+      title: <text_span>
+      description: Span of text
+      required:
+        - char_begin
+        - char_end
+      properties:
+        char_begin:
+          description: Character coordinate within a text block where span begins
+          type: integer
+        char_end:
+          description: Character coordinate within a text block where span ends
+          type: integer
+
+    ### <grfn>
+
+    textual_document_reference:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <grfn>.<textual_document_reference>
+      description: >
+        host: \<grfn> <br>
+        A reference to a textual document (e.g., documentation, scientific publication, etc.).
+      required:
+        - documents
+      properties:
+        type:
+          default: "textual_document_reference"
+        documents:
+          description: List of document references
+          type: array
+          items:
+            $ref: '#/components/schemas/document_reference'
+
+    document_reference:
+      title: <document_reference>
+      description: Document reference.
+      required:
+        - uid
+        - global_reference_id
+      properties:
+        cosmos_id:
+          description: TODO
+          type: string
+        cosmos_version_number:
+          description: TODO
+          type: string
+        automates_id:
+          description: TODO
+          type: string
+        automates_version_number:
+          description: TODO
+          type: string
+
+    ### <variable> | <function>
+
+    text-definition:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable,function>.<text-definition>
+      description: >
+        host: { \<variable>, \<function> } <br>
+        Definition of host derived from a text source.<br>
+        Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
+      required:
+        - attributes
+      properties:
+        type:
+          default: "text-definition"
+        attributes:
+          description: Array of \<attribute> attribute-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
+    ### <variable>
+
+    measurement_scale:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<measurement_scale>
+      description: >
+        host: \<variable> <br>
+        The measurement scale of \<variable> value.<br>
+      required:
+        - measurement_scale
+      properties:
+        type:
+          default: "measurement_scale"
+        measurement_scale:
+          description: >
+            Values: \"binary\", \"categorical\", \"continuous\"
+          type: string
+          enum: [ BINARY, categorical, continuous ]
+
+    value_domain:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<value_domain>
+      description: >
+        host: \<variable> <br>
+        Expression of the possible values data can take, as interval.<br>
+      required:
+        - value_domain
+      properties:
+        type:
+          default: "value_domain"
+        value_domain:
+          description: >
+            Example\: \"(and (> v -infty) (< v infty))\"
+          type: string
