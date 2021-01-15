@@ -14,8 +14,7 @@ Welcome to AutoMATES's documentation!
    cast_openapi_v1.0.0
    grfn_openapi_v2.2.0
    grfn_openapi_v3.0.0
-   sample
-   modules
+   grfn_openapi_metadata
 
 
 Indices and tables
