@@ -77,7 +77,7 @@ components:
 
     hyper_edge:
       title: <hyper_edge>
-      description: GrFN hyper_edge
+      description: GrFN hyper_edge  
       required:
       - inputs
       - function
