@@ -25,6 +25,7 @@ components:
       required:
         - uid
         - timestamp
+        - identifier
         - functions
         - variables
         - edges
@@ -38,6 +39,9 @@ components:
             Date and time that current GrFN was generated.
           type: string
           format: date-time
+        identifier:
+          description: >
+            Identifier for top-level subgraph
         types:
           type: array
           items:
