@@ -29,7 +29,7 @@ components:
         - functions
         - variables
         - edges
-        - containers
+        - subgraphs
       properties:
         uid:
           description: GrFN unique identifier
@@ -219,7 +219,7 @@ components:
       required:
         - uid
         - type
-        - reference
+        # - reference
         - lambda
       properties:
         uid:
@@ -232,9 +232,9 @@ components:
             <em>compound object reference</em>: [ \"EXTRACT\", \"PACK\" ] <br>
             <em>executable + instances (wiring)</em>: [ \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
           type: string
-        reference:
-          description: Grounding reference to scientific variable ontology
-          type: string
+        # reference:
+        #   description: Grounding reference to scientific variable ontology
+        #   type: string
         lambda:
           description: Stringified pythonic version of the lambda function code
           type: string
@@ -251,11 +251,19 @@ components:
         TODO
       required:
         - uid
+        - parent
         - basename
         - nodes
       properties:
         uid:
           description: Subgraph unique identifier
+          type: string
+        parent:
+          description: the container uid for the parent container to this container
+          type: string
+        basename:
+          description: >
+            A reference to the container that shows the original module path, scope path, and container name
           type: string
         namespace:
           description: The namespace path of the subgraph
@@ -263,15 +271,8 @@ components:
         scope:
           description: The scope path of the subgraph
           type: string
-        basename:
-          description: >
-            A reference to the container that shows the original module path, scope path, and container name
-          type: string
         occurrence_num:
           description: The subgraph instance tag
-          type: string
-        parent:
-          description: the container uid for the parent container to this container
           type: string
         type:
           description: >

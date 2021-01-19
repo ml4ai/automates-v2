@@ -1,0 +1,131 @@
+openapi: 3.0.0
+
+info:
+  title: GrFN Intersection Graph (GIG)
+  description: Specification of the GrFN Intersection Graph.
+  contact:
+    name: Clayton T. Morrison
+    email: claytonm@email.arizona.edu
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+
+paths: {}
+
+components:
+
+  schemas:
+
+    grfn_intersection_graph:
+      title: <grfn_intersection_graph>
+      description: TODO
+      required:
+        - uid
+        - timestamp
+        - grfns
+        - nodes
+        - edges
+      properties:
+        uid:
+          description: Unique identifier or the top-level \<grfn_intersection_graph>
+          type: string
+        timestamp:
+          description: TODO
+          type: string
+          format: date-time
+        grfns:
+          description: >
+            Array of uids for GrFN that are being intersected.
+            The order of the uids specifies the ordering of all GrFN components.
+          type: array
+          items:
+            type: string
+        nodes:
+          description: TODO
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/abstract_path_node'
+              - $ref: '#/components/schemas/shared_variables_node'
+        edges:
+          description: TODO
+          type: array
+          items:
+            $ref: '#/components/schemas/edge'
+
+    abstract_path_node:
+      title: <abstract_path_node>
+      description: >
+        Abstract path node representing
+        a set of paths between input(s) and output(s)
+        among two (or more) GrFNs.<br>
+        Ordering of path_sets corresponds to ordering of GrFNs
+        specified at the top level: \<grfn_intersection_graph>.grfns<br>
+        Every non-empty path_set represents overlap between the
+        GrFNs positionally corresponding to those path_sets.
+      required:
+        - uid
+        - path_sets
+      properties:
+        uid:
+          description: uid for \<abstract_path_node>
+          type: string
+        path_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/path_set'
+
+    path_set:
+      title: <path_set>
+      description: An array of \<path>s.
+      required:
+        - paths
+      properties:
+        paths:
+          type: array
+          items:
+            $ref: '#/components/schemas/path'
+
+    path:
+      title: <path>
+      description: An array of variable node uids from a source GrFN
+      required:
+        - path
+      properties:
+        path:
+          type: array
+          items:
+            type: string
+
+    shared_variables_node:
+      title: <shared_variables_node>
+      description: >
+        Array of variable node uids.<br>
+        Ordering of uids corresponds to ordering of GrFNs
+        specified at the top level: \<grfn_intersection_graph>.grfns<br>
+      required:
+        - uid
+        - variables
+      properties:
+        uid:
+          description: uid for \<shared_variables_node>
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+
+    edge:
+      title: <edge>
+      description: >
+        Defines a directed edge from one node to another.
+        Nodes are of type \<abstract_path_node> or \<shared_variables_node>
+      required:
+        - source
+        - destination
+      properties:
+        source:
+          type: string
+        destination:
+          type: string

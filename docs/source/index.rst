@@ -10,11 +10,12 @@ Welcome to AutoMATES's documentation!
    :maxdepth: 2
    :caption: Contents
 
-   air_openapi
-   cast_openapi_v1.0.0
-   grfn_openapi_v2.2.0
-   grfn_openapi_v3.0.0
-   grfn_openapi_metadata
+   air
+   cast_v1.0.0
+   grfn_v2.2.0
+   grfn_v3.0.0
+   grfn_metadata
+   gfrn_intersection_graph
 
 
 Indices and tables

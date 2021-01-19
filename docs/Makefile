@@ -19,28 +19,32 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
+${SOURCEDIR}/air.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air.yaml $@
 
-${SOURCEDIR}/air_openapi.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/air_openapi.yaml $@
+${SOURCEDIR}/cast_v1.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/cast_v1.0.0.yaml $@
 
-${SOURCEDIR}/cast_openapi_v1.0.0.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/cast_openapi_v1.0.0.yaml $@
+${SOURCEDIR}/grfn_v2.2.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_v2.2.0.yaml $@
 
-# ${SOURCEDIR}/grfn_openapi.html:
-# 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
+${SOURCEDIR}/grfn_v3.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_v3.0.0.yaml $@
 
-${SOURCEDIR}/grfn_openapi_v2.1.0.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.1.0.yaml $@
+${SOURCEDIR}/grfn_metadata.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_metadata.yaml $@
 
-${SOURCEDIR}/grfn_openapi_v2.2.0.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.2.0.yaml $@
+${SOURCEDIR}/grfn_intersection_graph.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gfrn_intersection_graph.yaml $@
 
-${SOURCEDIR}/grfn_openapi_v3.0.0.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v3.0.0.yaml $@
-
-${SOURCEDIR}/grfn_openapi_metadata.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_metadata.yaml $@
-
-apidocs: ${SOURCEDIR}/air_openapi.html ${SOURCEDIR}/cast_openapi_v1.0.0.html ${SOURCEDIR}/grfn_openapi_v2.2.0.html ${SOURCEDIR}/grfn_openapi_v3.0.0.html ${SOURCEDIR}/grfn_openapi_metadata.html
+apidocs: ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
+
+
+# DEPRECATED
+# ${SOURCEDIR}/grfn_openapi.html:
+# 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi.yaml $@
+# ${SOURCEDIR}/grfn_openapi_v2.1.0.html:
+# 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_openapi_v2.1.0.yaml $@
+
