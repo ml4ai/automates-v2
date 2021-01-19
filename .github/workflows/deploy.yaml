@@ -33,6 +33,7 @@ jobs:
         pip install -r requirements.txt
 
         pushd docs > /dev/null
+          mkdir -p build
           make apidocs
           make html
         popd > /dev/null
