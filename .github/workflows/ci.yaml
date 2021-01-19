@@ -31,6 +31,6 @@ jobs:
             graphviz libgraphviz-dev doxygen
         pip3 install --upgrade setuptools
         pip3 install wheel
-        pip3 install -e .
+        pip3 install -r requirements.txt
         make apidocs
         make html
