@@ -1,4 +1,4 @@
-GrFN JSON Metadata Spec
+GrFN Metadata JSON Spec
 =======================
 
 .. raw:: html
