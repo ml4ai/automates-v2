@@ -15,6 +15,7 @@ Welcome to AutoMATES's documentation!
    grfn_openapi_v2.2.0
    grfn_openapi_v3.0.0
    grfn_openapi_metadata
+   gfrn_intersection_graph
 
 
 Indices and tables
