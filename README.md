@@ -1,4 +1,4 @@
-# AutoMATES-v2
+<h1 align="center">AutoMATES-v2</h1>
 AutoMATES: Automated Model Assembly from Text, Equations, and Software
 
 
