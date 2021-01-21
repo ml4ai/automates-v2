@@ -85,7 +85,7 @@ components:
 
     text_extraction:
       title: <text_extraction>
-      description: Provenance object representing document source information.
+      description: Representation of text extraction.
       required:
         - source_type
         - document_reference_uid
@@ -289,7 +289,7 @@ components:
         - attributes
       properties:
         type:
-          default: "text-definition"
+          default: "text_definition"
         text_extraction:
           $ref: '#/components/schemas/text_extraction'
         attributes:
@@ -302,8 +302,22 @@ components:
     text_parameter:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <variable,function>.<text_parameter>
-      description: TODO
+      title: <variable>.<text_parameter>
+      description: >
+        host: \<variable> <br>
+        Association of parameter values extracted from text to host \<variable>.
+      required:
+        - attributes
+      properties:
+        type:
+          default: "text_parameter"
+        text_extraction:
+          $ref: '#/components/schemas/text_extraction'
+        attributes:
+          description: Array of \<attribute> attribute-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
 
     ### <variable>
 
