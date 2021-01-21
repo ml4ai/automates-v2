@@ -57,35 +57,35 @@ components:
             Date and time that metadata was generated.
           type: string
           format: date-time
-        sources:
-          description: >
-            Array of sources.
-            (TODO: add additional source types)
-          type: array
-          items:
-            $ref: '#/components/schemas/text_extraction_ref'
+        # sources:
+        #   description: >
+        #     Array of sources.
+        #     (TODO: add additional source types)
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/text_extraction_ref'
 
-    attribute:
-      title: <attribute>
-      description: An attribute-value pair.
-      required:
-        - name
-        - value
-      properties:
-        type:
-          default: "attribute"
-        name:
-          description: The name of the attribute.
-          type: string
-        value:
-          description: The value of the attribute.
-          type: string
+    # attribute:
+    #   title: <attribute>
+    #   description: An attribute-value pair.
+    #   required:
+    #     - name
+    #     - value
+    #   properties:
+    #     type:
+    #       default: "attribute"
+    #     name:
+    #       description: The name of the attribute.
+    #       type: string
+    #     value:
+    #       description: The value of the attribute.
+    #       type: string
 
-    ### Provenenace source types
+    ### Text extraction
 
-    text_extraction_ref:
-      title: <text_extraction_ref>
-      description: Provenance object representing document source information.
+    text_extraction:
+      title: <text_extraction>
+      description: Representation of text extraction.
       required:
         - source_type
         - document_reference_uid
@@ -138,12 +138,79 @@ components:
           description: Character coordinate within a text block where span ends
           type: integer
 
-    ### <grfn>
+    ### ANY
 
-    textual_document_reference:
+    code_span:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <grfn>.<textual_document_reference>
+      title: <ANY>.<code_span>
+      description: >
+        Reference to a source code span (sub-line, line, block).
+      properties:
+        type:
+          default: "code_span"
+        code_type:
+          description: >
+            The role the the code reference in the span plays.
+          type: string
+          enum: [ IDENTIFIER, CODE_BLOCK ]
+        code_file_reference_id:
+          description: uid for the source code file \<code_file_reference>
+          type: string
+        line_begin:
+          description: The line number where the identifier name string occurs
+          type: integer
+        line_end:
+          description: The line number where the identifier name string occurs
+          type: integer
+        col_begin:
+          description: The start column of the identifier name string instance
+          type: integer
+        col_end:
+          description: The end column of the identifier name string instance
+          type: integer
+
+    ### <grfn>
+
+    code_collection_reference:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <grfn>.<code_collection_reference>
+      description: Reference to a code collection (i.e., repository)
+      required:
+        - global_reference_id
+        - files
+      properties:
+        type:
+          default: "code_collection_reference"
+        global_reference_id:
+          description: >
+            URL (e.g., GitHub url), or aske_id
+          type: string
+        files:
+          description:: TODO
+          type: array
+          items:
+            - $ref: '#/components/schemas/code_file_reference'
+
+    code_file_reference:
+      title: <code_file_reference>
+      description: The reference to a specific file within a code collection
+      properties:
+        uid:
+          description: uid for \<code_file_reference>
+          type: string
+        name:
+          description: File name
+          type: string
+        path:
+          description: Assume starting from root of code collection
+          type: string
+
+    textual_document_references:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <grfn>.<textual_document_references>
       description: >
         host: \<grfn> <br>
         A reference to a textual document (e.g., documentation, scientific publication, etc.).
@@ -151,15 +218,15 @@ components:
         - documents
       properties:
         type:
-          default: "textual_document_reference"
+          default: "textual_document_references"
         documents:
           description: List of document references
           type: array
           items:
-            $ref: '#/components/schemas/document_reference'
+            $ref: '#/components/schemas/textual_document_reference'
 
-    document_reference:
-      title: <document_reference>
+    textual_document_reference:
+      title: <textual_document_reference>
       description: Document reference.
       required:
         - uid
@@ -222,9 +289,30 @@ components:
         - attributes
       properties:
         type:
-          default: "text-definition"
-        text_extraction_ref:
-          $ref: '#/components/schemas/text_extraction_ref'
+          default: "text_definition"
+        text_extraction:
+          $ref: '#/components/schemas/text_extraction'
+        attributes:
+          description: Array of \<attribute> attribute-value pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
+
+    # are these test-based, or are they parameter-code-based ?
+    text_parameter:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<text_parameter>
+      description: >
+        host: \<variable> <br>
+        Association of parameter values extracted from text to host \<variable>.
+      required:
+        - attributes
+      properties:
+        type:
+          default: "text_parameter"
+        text_extraction:
+          $ref: '#/components/schemas/text_extraction'
         attributes:
           description: Array of \<attribute> attribute-value pairs.
           type: array
@@ -249,7 +337,7 @@ components:
           description: >
             Values: \"binary\", \"categorical\", \"continuous\"
           type: string
-          enum: [ BINARY, categorical, continuous ]
+          enum: [ BINARY, CATEGORICAL, CONTINUOUS ]
 
     value_domain:
       allOf:

@@ -25,7 +25,6 @@ components:
       required:
         - uid
         - timestamp
-        - identifier
         - functions
         - variables
         - edges
@@ -39,9 +38,6 @@ components:
             Date and time that current GrFN was generated.
           type: string
           format: date-time
-        identifier:
-          description: >
-            Identifier for top-level subgraph
         types:
           type: array
           items:
@@ -77,7 +73,7 @@ components:
 
     hyper_edge:
       title: <hyper_edge>
-      description: GrFN hyper_edge  
+      description: GrFN hyper_edge
       required:
       - inputs
       - function
@@ -150,6 +146,11 @@ components:
           type: string
         type:
           type: string
+        metadata:
+          type: array
+          description: Metadata associated with the \<object> instance.
+          items:
+            $ref: '#/components/schemas/metadata'
 
     object:
       title: <object>
@@ -290,7 +291,7 @@ components:
             type: string
         # metadata
         metadata:
-          description: Metadata associated with \<grfn>.
+          description: Metadata associated with \<subgraph>.
           type: array
           items:
             $ref: '#/components/schemas/metadata'
