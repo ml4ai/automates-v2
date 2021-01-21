@@ -143,13 +143,13 @@ components:
             Only used in loop type.
             Unique identifier for the lambda function that computes the exit condition.
           type: string
-        instance_ids:
-          description: >
-            Array of all instance_ids for <variable> and \<function>
-            instances in this \<function_network>.
-          type: array
-          items:
-            type: string
+        # instance_ids:
+        #   description: >
+        #     Array of all instance_ids for <variable> and \<function>
+        #     instances in this \<function_network>.
+        #   type: array
+        #   items:
+        #     type: string
         metadata:
           type: array
           description: Metadata associated with the \<function>.
