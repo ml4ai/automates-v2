@@ -111,7 +111,7 @@ components:
     #       items:
     #         $ref: '#/components/schemas/text_span_ref'
 
-    text_span_ref_cosmos_coordinates:
+    text_span_ref:
       title: <text_span_ref>
       description: >
         COSMOS within-document reference coordinates to a span of text.
