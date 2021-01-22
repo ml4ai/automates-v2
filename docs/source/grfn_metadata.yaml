@@ -100,7 +100,7 @@ components:
         # text_location:
         #   $ref: '#/components/schemas/text_location'
         text_spans:
-          $ref: '#/components/schemas/text_span_ref_cosmos_coordinates'
+          $ref: '#/components/schemas/text_span_ref'
 
     # text_location:
     #   title: <text_location>
@@ -111,7 +111,7 @@ components:
     #       items:
     #         $ref: '#/components/schemas/text_span_ref'
 
-    text_span_ref_cosmos_coordinates:
+    text_span_ref:
       title: <text_span_ref>
       description: >
         COSMOS within-document reference coordinates to a span of text.
@@ -213,7 +213,7 @@ components:
     textual_document_reference_set:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <grfn>.<textual_document_references>
+      title: <grfn>.<textual_document_reference_set>
       description: >
         host: \<grfn> <br>
         A reference to a textual document (e.g., documentation, scientific publication, etc.).
