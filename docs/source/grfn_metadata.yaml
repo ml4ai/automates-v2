@@ -65,21 +65,21 @@ components:
         #   items:
         #     $ref: '#/components/schemas/text_extraction_ref'
 
-    # attribute:
-    #   title: <attribute>
-    #   description: An attribute-value pair.
-    #   required:
-    #     - name
-    #     - value
-    #   properties:
-    #     type:
-    #       default: "attribute"
-    #     name:
-    #       description: The name of the attribute.
-    #       type: string
-    #     value:
-    #       description: The value of the attribute.
-    #       type: string
+    attribute:
+      title: <attribute>
+      description: An attribute-value pair.
+      required:
+        - name
+        - value
+      properties:
+        type:
+          default: "attribute"
+        name:
+          description: The name of the attribute.
+          type: string
+        value:
+          description: The value of the attribute.
+          type: string
 
     ### Text extraction
 
@@ -97,21 +97,24 @@ components:
         document_reference_uid:
           description: uid of \<document_reference>
           type: string
-        text_location:
-          $ref: '#/components/schemas/text_location'
+        # text_location:
+        #   $ref: '#/components/schemas/text_location'
+        text_spans:
+          $ref: '#/components/schemas/text_span_ref_cosmos_coordinates'
 
-    text_location:
-      title: <text_location>
-      description: Coordinates of text spans
-      properties:
-        spans:
-          type: array
-          items:
-            $ref: '#/components/schemas/text_span_ref'
+    # text_location:
+    #   title: <text_location>
+    #   description: Coordinates of text spans
+    #   properties:
+    #     spans:
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/text_span_ref'
 
-    text_span_ref:
+    text_span_ref_cosmos_coordinates:
       title: <text_span_ref>
-      description: Reference coordinates to a span of text
+      description: >
+        COSMOS within-document reference coordinates to a span of text.
       required:
         - page
         - block
@@ -138,7 +141,7 @@ components:
           description: Character coordinate within a text block where span ends
           type: integer
 
-    ### ANY
+    ### <ANY>.<code_span>
 
     code_span:
       allOf:
@@ -207,7 +210,7 @@ components:
           description: Assume starting from root of code collection
           type: string
 
-    textual_document_references:
+    textual_document_reference_set:
       allOf:
         - $ref: '#/components/schemas/metadata'
       title: <grfn>.<textual_document_references>
@@ -244,17 +247,24 @@ components:
             (3) aske_id (ASKE unique identifier)
           type: string
         cosmos_id:
-          description: TODO
+          description: ID of COSMOS component used to process document.
           type: string
         cosmos_version_number:
-          description: TODO
+          description: Version number of COSMOS component.
           type: string
         automates_id:
-          description: TODO
+          description: ID of AutoMATES component used to process document.
           type: string
         automates_version_number:
-          description: TODO
+          description: Version number of AutoMATES component.
           type: string
+        bibjson:
+          description: The bibjson entry for this document.<br>
+          type: bibjson
+
+    bibjson:
+      title: <bibjson>
+      description: See http://okfnlabs.org/bibjson/
 
     ### <type>
 
@@ -313,11 +323,9 @@ components:
           default: "text_parameter"
         text_extraction:
           $ref: '#/components/schemas/text_extraction'
-        attributes:
-          description: Array of \<attribute> attribute-value pairs.
-          type: array
-          items:
-            $ref: '#/components/schemas/attribute'
+        parameter_association:
+          description: Association of a parameter value with a variable.
+          $ref: '#/components/schemas/attribute'
 
     ### <variable>
 
