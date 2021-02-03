@@ -125,7 +125,7 @@ components:
       properties:
         metatype:
           type: string
-          default: "composite"
+          default: "COMPOSITE"
         fields:
           description: Array of named fields.
           type: array
@@ -163,13 +163,51 @@ components:
           description: Unique identifier object.
           type: string
         type:
-          description: uid of <object>'s <type>
+          description: uid of the \<object>'s \<type>
           type: string
+        field_refs:
+          description: >
+            Array of name-value pairs (attributes). Used to represent associations of fields (composite) or keys (dictionary) with values. Values will be strings reprenting the uids of objects representing the value.
+          type: array
+          items:
+            $ref: '#/components/schemas/attribute'
         metadata:
           type: array
           description: Metadata associated with the \<object> instance.
           items:
             $ref: '#/components/schemas/metadata'
+    
+    object__dictionary:
+      allOf:
+        - $ref: '#/components/schemas/object'
+      title: <object>:<dictionary>
+      description: >
+        Object with known keys
+      properties:
+        type:
+          type: string
+          default: "DICTIONARY"
+        known_keys:
+          description: Array of known keys (strings)
+          type: array
+          items:
+            type: string
+    
+    attribute:
+      title: <attribute>
+      description: An attribute-value pair.
+      required:
+        - name
+        - value
+      properties:
+        type:
+          default: "attribute"
+        name:
+          description: The name of the attribute.
+          type: string
+        value:
+          description: The value of the attribute.
+          type: string
 
     variable:
       title: <variable>
@@ -190,9 +228,11 @@ components:
           type: string
         data_type:
           description: >
-            object, float, float32, float64, integer, string, boolean, etc.<br>
-            TODO: Define GrFN execution model
+            Primitive data types:<br>
+            <em>Atomic</em>: \"BOOLEAN\", \"INTEGER\", \"FLOAT\", \"STRING\"<br>
+            <em>Compound</em>: \"SET\", \"SEQUENCE\", \"DICTIONARY\", \"COMPOSITE\"
           type: string
+          enum: [ BOOLEAN, INTEGER, FLOAT, STRING, SET, SEQUENCE, DICTIONARY, COMPOSITE ]
 
         # The following are moved to metadata
         # kind:
@@ -229,10 +269,11 @@ components:
         type: # pass, literal, assignment, condition, decision
           description: >
             States the type of function being computed by this function node<br>
-            <em>function interface</em> \"INTERFACE\" <br>
+            <em>Function interface</em>: \"INTERFACE\" <br>
             <em>compound object reference</em>: [ \"EXTRACT\", \"PACK\" ] <br>
             <em>executable + instances (wiring)</em>: [ \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
           type: string
+          enum: [ INTERFACE, EXTRACT, PACK, LITERAL, ASSIGN,  CONDITION, DECISION ]
         # reference:
         #   description: Grounding reference to scientific variable ontology
         #   type: string
@@ -279,6 +320,7 @@ components:
           description: >
             \"FuncContainer\", \"CondContainer\", \"LoopContainer\"
           type: string
+          enum: [ FuncContainer, CondContainer, LoopContainer ]
         exit:
           description: >
             A function unique identifier for the lambda function that computes the exit condition
