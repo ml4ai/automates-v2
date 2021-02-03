@@ -80,6 +80,28 @@ components:
         value:
           description: The value of the attribute.
           type: string
+          
+    ### Equation extraction
+    
+    equation_extraction:
+      title: <equation_extraction>
+      description: Representation of equation extraction.
+      required:
+        - source_type
+        - document_reference_uid
+        - text_location
+      properties:
+        source_type:
+          type: string
+          default: "equation_document_source"
+        document_reference_uid:
+          description: uid of \<document_reference>
+          type: string
+        # text_location:
+        #   $ref: '#/components/schemas/text_location'
+        equation_number:
+          description: Number of equation
+          type: integer
 
     ### Text extraction
 
@@ -191,10 +213,10 @@ components:
             URL (e.g., GitHub url), or aske_id
           type: string
         files:
-          description:: TODO
+          description: TODO
           type: array
           items:
-            - $ref: '#/components/schemas/code_file_reference'
+            $ref: '#/components/schemas/code_file_reference'
 
     code_file_reference:
       title: <code_file_reference>
@@ -260,53 +282,59 @@ components:
           type: string
         bibjson:
           description: The bibjson entry for this document.<br>
-          type: bibjson
+          $ref: '#/components/schemas/bibjson'
 
     bibjson:
       title: <bibjson>
       description: See http://okfnlabs.org/bibjson/
-
-    ### <type>
-
-    type_alias:
+    
+    ### <function>
+    
+    equation_definition:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <type>.<type_alias>
+      title: <function>.<equation_definition>
       description: >
-        host: \<type>
-        Alias name of a \<type>. <br>
-        (E.g., using C typedef as alternate alias name to a \<type>).
+        host: \<function> <br>
+        Definition of host derived from an equation source.<br>
+        Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
       required:
-        - alias
+        - equation_extraction
+        - equation_source
       properties:
         type:
-          default: "type_alias"
-        alias:
-          description: Alias name
+          default: "equation_definition"
+        equation_extraction:
+          $ref: '#/components/schemas/equation_extraction'
+        equation_latex_source:
+          description: Source (latex) of equation
           type: string
-
-    ### <variable> | <function>
+    
+    ### <variable>
 
     text_definition:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <variable,function>.<text_definition>
+      title: <variable>.<text_definition>
       description: >
-        host: { \<variable>, \<function> } <br>
+        host: \<variable> <br>
         Definition of host derived from a text source.<br>
         Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
       required:
-        - attributes
+        - text_extraction
+        - variable_identifier
+        - variable_definition
       properties:
         type:
           default: "text_definition"
         text_extraction:
           $ref: '#/components/schemas/text_extraction'
-        attributes:
-          description: Array of \<attribute> attribute-value pairs.
-          type: array
-          items:
-            $ref: '#/components/schemas/attribute'
+        variable_identifier:
+          description: Variable identifier
+          type: string
+        variable_definition:
+          description: Variable definition text
+          type: string
 
     # are these test-based, or are they parameter-code-based ?
     text_parameter:
@@ -317,17 +345,45 @@ components:
         host: \<variable> <br>
         Association of parameter values extracted from text to host \<variable>.
       required:
-        - attributes
+        - text_extraction
+        - variable_identifier
+        - value
       properties:
         type:
           default: "text_parameter"
         text_extraction:
           $ref: '#/components/schemas/text_extraction'
-        parameter_association:
-          description: Association of a parameter value with a variable.
-          $ref: '#/components/schemas/attribute'
-
-    ### <variable>
+        variable_identifier:
+          description: Variable identifier in text
+          type: string
+        value:
+          description: >
+            TODO: should this be typed value/object?
+          type: string
+    
+    equation_parameter:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<equation_parameter>
+      description: >
+        host: \<variable> <br>
+        Association of parameter values extracted from equations to host \<variable>.
+      required:
+        - equation_extraction
+        - varaible_identifier
+        - value
+      properties:
+        type:
+          default: "equation_parameter"
+        equation_extraction:
+          $ref: '#/components/schemas/equation_extraction'
+        variable_identifier:
+          description: Variable identifier in equation
+          type: string
+        value:
+          description: >
+            TODO: should this be typed value/object?
+          type: string
 
     measurement_scale:
       allOf:
@@ -362,4 +418,23 @@ components:
         value_domain:
           description: >
             Example\: \"(and (> v -infty) (< v infty))\"
+          type: string
+    
+    ### <type>
+
+    type_alias:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <type>.<type_alias>
+      description: >
+        host: \<type>
+        Alias name of a \<type>. <br>
+        (E.g., using C typedef as alternate alias name to a \<type>).
+      required:
+        - alias
+      properties:
+        type:
+          default: "type_alias"
+        alias:
+          description: Alias name
           type: string
