@@ -310,6 +310,30 @@ components:
           description: Source (latex) of equation
           type: string
     
+    equation_parameter:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<equation_parameter>
+      description: >
+        host: \<variable> <br>
+        Association of parameter values extracted from equations to host \<variable>.
+      required:
+        - equation_extraction
+        - varaible_identifier
+        - value
+      properties:
+        type:
+          default: "equation_parameter"
+        equation_extraction:
+          $ref: '#/components/schemas/equation_extraction'
+        variable_identifier:
+          description: Variable identifier in equation
+          type: string
+        value:
+          description: >
+            TODO: should this be typed value/object?
+          type: string
+    
     ### <variable>
 
     text_definition:
@@ -355,30 +379,6 @@ components:
           $ref: '#/components/schemas/text_extraction'
         variable_identifier:
           description: Variable identifier in text
-          type: string
-        value:
-          description: >
-            TODO: should this be typed value/object?
-          type: string
-    
-    equation_parameter:
-      allOf:
-        - $ref: '#/components/schemas/metadata'
-      title: <variable>.<equation_parameter>
-      description: >
-        host: \<variable> <br>
-        Association of parameter values extracted from equations to host \<variable>.
-      required:
-        - equation_extraction
-        - varaible_identifier
-        - value
-      properties:
-        type:
-          default: "equation_parameter"
-        equation_extraction:
-          $ref: '#/components/schemas/equation_extraction'
-        variable_identifier:
-          description: Variable identifier in equation
           type: string
         value:
           description: >
