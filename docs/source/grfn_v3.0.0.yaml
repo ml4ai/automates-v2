@@ -32,7 +32,10 @@ components:
         \<grfn> may have metadata associated with it.
         Each \<grfn> will have its own JSON file.
       required:
-        - grfn_id
+        - grfn_id    # CTM: uid ?
+        # timestamp  # CTM: from 2.2.0 - add ?
+        - types      # CMT: from 2.2.0
+        - objects    # CTM: from 2.2.0
         - variables
         - functions
         - edges
@@ -43,6 +46,19 @@ components:
         grfn_id:
           description: Unique identifier
           type: string
+        # Types
+        types:
+          description: Type definitions
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/type'
+              - $ref: '#/components/schemas/type__composite'
+        objects:
+          description: Instances of types
+          type: array
+          items:
+            $ref: '#/components/schemas/object'
         # Function Network Definitions
         variables: # node
           description: >
@@ -84,6 +100,9 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
+
+    ### Function Network Components
+
     variable:
       title: <variable>
       description: >
@@ -93,14 +112,17 @@ components:
           Case 1: set of variables: e.g., defines an array;
           Case 2: random variable: function->variable
       required:
+        - uid
         - name
-        - id
       properties:
-        name:
-          description: Variable basename and index.
-          type: string
-        id:
+        uid:
           description: Unique identifier.
+          type: string
+        object_ref:  # CTM: from 2.2.0
+          description: uid of host object (if applicable)
+          type: string
+        name:  # CTM: in 2.2.0: identifier
+          description: Variable basename and index.
           type: string
         instance_ids:
           description: >
@@ -131,12 +153,19 @@ components:
           description: >
             The type of function being computed by this \<function> node.<br>
             The following are three groups of types:<br>
-            <em>executable only</em>: [ interface, primitive, identity, literal ]<br>
-            <em>executable + instances (wiring)</em>: [ assign, condition, decision ]<br>
-            <em>containers</em>: [ container, conditional, loop ]
+            <em>Function interface</em>: \"INTERFACE\"<br>
+            <em>Compound object reference</em>: [ \"EXTRACT\", \"PACK\" ]<br>
+            <em>executable + instances (wiring)</em>: [ \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
+            #    <em>executable only</em>: [ interface, primitive, identity, literal ]<br>
+            #    <em>executable + instances (wiring)</em>: [ assign, condition, decision ]<br>
+            <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\", \"LOOP\" ]
           type: string
-        expression:
-          description: Executable expression.
+          enum: [ INTERFACE, EXTRACT, PACK, LITERAL, ASSIGN,  CONDITION, DECISION,
+                  CONTAINER, CONDITIONAL, LOOP ]
+        expression:  # CTM: formerly lambda
+          description: >
+            Executable expression.
+            Stringified pythonic version of the lambda function code
           type: string
         exit:
           description: >
@@ -178,67 +207,6 @@ components:
           items:
             type: string
 
-    composite_type:
-      title: <composite_type>
-      description: TODO
-      required:
-        - id
-        # - built_in
-        - name
-      properties:
-        id:
-          description: Unique identifier.
-          type: string
-        # built_in:
-        #   description: TODO
-        #   type: boolean
-        name::
-          description: Name of the data type
-          type: string
-        fields:
-          description: >
-            Array of field-name (string) paired with optional type-name (string).
-            When no type specified, the type-name is empty-string.
-          type: array
-          items:
-            $ref: '#/components/schemas/attribute'
-        metadata:
-          description: Metadata associated with the \<type> declaration.
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata'
-
-    object:
-      title: <object>
-      description: >
-        An object an instance of a \<type> where fields are instantiated
-        as persistent storage with associated values.
-        Each field is represented by a variable.
-      properties:
-        id:
-          description: Unique identifier.
-          type: string
-        type:
-          description: TODO
-          type: string
-        instance_ids:
-          description: >
-            Array of field instance_ids
-          type: array
-          items:
-            type: string
-        field_instances:
-          description: >
-            Array of pairs of \<field_operation>: \<field instance_id>, \<operation_spec>
-          type: array
-          items:
-            $ref: '#/components/schemas/attribute'
-        metadata:
-          type: array
-          description: Metadata associated with the \<object> instance.
-          items:
-            $ref: '#/components/schemas/metadata'
-
     instance:
       title: <instance>
       description: >
@@ -268,51 +236,92 @@ components:
             The id of a node instance.
           type: string
 
-    ### metadata
+    ### Types
 
-    metadata:
-      title: <metadata>
+    type:
+      title: <type>
+      description: Base type
+      required:
+        - uid
+        - name
+        - metatype
+      properties:
+        uid:
+          description: Unique identifier.
+          type: string
+        name:
+          description: Name of the data type
+          type: string
+        metatype:
+          description: Metatype of type.
+          type: string
+        metadata:
+          description: Metadata associated with the \<type> declaration.
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    type__composite:
+      allOf:
+        - $ref: '#/components/schemas/type'
+      title: <type>:<composite>
+      description: A structured type with named field attributes.
+      required:
+        - fields
+      properties:
+        metatype:
+          type: string
+          default: "COMPOSITE"
+        fields:
+          description: Array of named fields.
+          type: array
+          items:
+            $ref: '#/components/schemas/named_field'
+
+    named_field:
+      title: <named_field>
       description: >
-        Typed metadata consisting of an array of attribute-value pairs.
-        \<grfn> is grounded through metadata.
+        A named field, pairing the field name (string) with [optional]
+        field value type name (string).
+        When no type specified, the type name is null.
       required:
+        - name
         - type
-        - attributes
       properties:
+        name:
+          type: string
         type:
-          description: Type of metadata.
           type: string
-        provenance:
-          description: Provenance of metadata.
-          $ref: '#/components/schemas/provenance'
-        attributes:
-          description: Array of \<attribute> attribute-value pairs.
+        metadata:
           type: array
+          description: Metadata associated with the \<object> instance.
           items:
-            $ref: '#/components/schemas/attribute'
+            $ref: '#/components/schemas/metadata'
 
-    provenance:
-      title: <provenance>
-      description: Provenance of data.
-      required:
-        - method
-        - date_time
+    object:
+      title: <object>
+      description: >
+        An object an instance of a \<type> where fields are instantiated
+        as persistent storage with associated values.
+        Each field is represented by a variable.
       properties:
-        method:
-          description: >
-            The (top-level) inference method (with version) used to derive data.
+        uid:
+          description: Unique identifier object.
           type: string
-        date_time:
-          description: >
-            Date and time that current GrFN was generated.
+        type:
+          description: uid of the \<object>'s \<type>
           type: string
-          format: date-time
-        source:
+        field_refs:
           description: >
-            Array of attributes pairing source type (name) with source identifier (value).
+            Array of name-value pairs (attributes). Used to represent associations of fields (composite) or keys (dictionary) with values. Values will be strings reprenting the uids of objects representing the value.
           type: array
           items:
             $ref: '#/components/schemas/attribute'
+        metadata:
+          type: array
+          description: Metadata associated with the \<object> instance.
+          items:
+            $ref: '#/components/schemas/metadata'
 
     attribute:
       title: <attribute>
@@ -321,12 +330,158 @@ components:
         - name
         - value
       properties:
+        type:
+          default: "attribute"
         name:
           description: The name of the attribute.
           type: string
         value:
           description: The value of the attribute.
           type: string
+
+    object__dictionary:
+      allOf:
+        - $ref: '#/components/schemas/object'
+      title: <object>:<dictionary>
+      description: >
+        Object with known keys
+      properties:
+        type:
+          type: string
+          default: "DICTIONARY"
+        known_keys:
+          description: Array of known keys (strings)
+          type: array
+          items:
+            type: string
+
+    # composite_type:
+    #   title: <composite_type>
+    #   description: TODO
+    #   required:
+    #     - id
+    #     # - built_in
+    #     - name
+    #   properties:
+    #     id:
+    #       description: Unique identifier.
+    #       type: string
+    #     # built_in:
+    #     #   description: TODO
+    #     #   type: boolean
+    #     name::
+    #       description: Name of the data type
+    #       type: string
+    #     fields:
+    #       description: >
+    #         Array of field-name (string) paired with optional type-name (string).
+    #         When no type specified, the type-name is empty-string.
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/attribute'
+    #     metadata:
+    #       description: Metadata associated with the \<type> declaration.
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/metadata'
+    #
+    # object:
+    #   title: <object>
+    #   description: >
+    #     An object an instance of a \<type> where fields are instantiated
+    #     as persistent storage with associated values.
+    #     Each field is represented by a variable.
+    #   properties:
+    #     id:
+    #       description: Unique identifier.
+    #       type: string
+    #     type:
+    #       description: TODO
+    #       type: string
+    #     instance_ids:
+    #       description: >
+    #         Array of field instance_ids
+    #       type: array
+    #       items:
+    #         type: string
+    #     field_instances:
+    #       description: >
+    #         Array of pairs of \<field_operation>: \<field instance_id>, \<operation_spec>
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/attribute'
+    #     metadata:
+    #       type: array
+    #       description: Metadata associated with the \<object> instance.
+    #       items:
+    #         $ref: '#/components/schemas/metadata'
+
+    ### metadata
+
+    metadata:
+      title: <metadata>
+      description: >
+        Typed metadata consisting of an array of attribute-value pairs.
+        \<grfn> is grounded through metadata.<br>
+        See grfn_openapi_metadata
+
+    # metadata:
+    #   title: <metadata>
+    #   description: >
+    #     Typed metadata consisting of an array of attribute-value pairs.
+    #     \<grfn> is grounded through metadata.
+    #   required:
+    #     - type
+    #     - attributes
+    #   properties:
+    #     type:
+    #       description: Type of metadata.
+    #       type: string
+    #     provenance:
+    #       description: Provenance of metadata.
+    #       $ref: '#/components/schemas/provenance'
+    #     attributes:
+    #       description: Array of \<attribute> attribute-value pairs.
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/attribute'
+    #
+    # provenance:
+    #   title: <provenance>
+    #   description: Provenance of data.
+    #   required:
+    #     - method
+    #     - date_time
+    #   properties:
+    #     method:
+    #       description: >
+    #         The (top-level) inference method (with version) used to derive data.
+    #       type: string
+    #     date_time:
+    #       description: >
+    #         Date and time that current GrFN was generated.
+    #       type: string
+    #       format: date-time
+    #     source:
+    #       description: >
+    #         Array of attributes pairing source type (name) with source identifier (value).
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/attribute'
+    #
+    # attribute:
+    #   title: <attribute>
+    #   description: An attribute-value pair.
+    #   required:
+    #     - name
+    #     - value
+    #   properties:
+    #     name:
+    #       description: The name of the attribute.
+    #       type: string
+    #     value:
+    #       description: The value of the attribute.
+    #       type: string
 
     ### grfn_collection
 

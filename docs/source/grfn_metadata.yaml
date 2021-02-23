@@ -80,9 +80,9 @@ components:
         value:
           description: The value of the attribute.
           type: string
-          
+
     ### Equation extraction
-    
+
     equation_extraction:
       title: <equation_extraction>
       description: Representation of equation extraction.
@@ -287,9 +287,9 @@ components:
     bibjson:
       title: <bibjson>
       description: See http://okfnlabs.org/bibjson/
-    
+
     ### <function>
-    
+
     equation_definition:
       allOf:
         - $ref: '#/components/schemas/metadata'
@@ -309,7 +309,29 @@ components:
         equation_latex_source:
           description: Source (latex) of equation
           type: string
-    
+
+    ### <variable>
+
+    data_type:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<data_type>
+      description: >
+        host: \<variable> <br>
+        Data type associated with \<variable>.
+      required:
+        - data_type
+      properties:
+        type:
+          default: "equation_parameter"
+        data_type:
+          description: >
+            Primitive data types:<br>
+            <em>Atomic</em>: \"BOOLEAN\", \"INTEGER\", \"FLOAT\", \"STRING\"<br>
+            <em>Compound</em>: \"SET\", \"SEQUENCE\", \"DICTIONARY\", \"COMPOSITE\"
+          type: string
+          enum: [ BOOLEAN, INTEGER, FLOAT, STRING, SET, SEQUENCE, DICTIONARY, COMPOSITE ]
+
     equation_parameter:
       allOf:
         - $ref: '#/components/schemas/metadata'
@@ -333,8 +355,6 @@ components:
           description: >
             TODO: should this be typed value/object?
           type: string
-    
-    ### <variable>
 
     text_definition:
       allOf:
@@ -419,7 +439,7 @@ components:
           description: >
             Example\: \"(and (> v -infty) (< v infty))\"
           type: string
-    
+
     ### <type>
 
     type_alias:
