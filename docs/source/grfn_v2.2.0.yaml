@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   title: GrFN spec
-  description: Grounded Function Network (GrFN) schema specification
+  description: AutoMATES Grounded Function Network (GrFN)JSON schema specification
   contact:
     name: Clayton T. Morrison
     email: claytonm@email.arizona.edu
@@ -20,7 +20,7 @@ components:
     grfn:
       title: <grfn>
       description: >
-        Top-level structure.
+        Top-level GrFN structure.
         A <grfn_def> corresponds to a namespace.
       required:
         - uid
@@ -176,7 +176,7 @@ components:
           description: Metadata associated with the \<object> instance.
           items:
             $ref: '#/components/schemas/metadata'
-    
+
     object__dictionary:
       allOf:
         - $ref: '#/components/schemas/object'
@@ -192,7 +192,7 @@ components:
           type: array
           items:
             type: string
-    
+
     attribute:
       title: <attribute>
       description: An attribute-value pair.
