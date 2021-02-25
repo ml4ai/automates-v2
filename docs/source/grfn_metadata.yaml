@@ -197,6 +197,20 @@ components:
 
     ### <grfn>
 
+    grfn_creation:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <grfn>.<creation>
+      description: Metadata about the creation of a GrFN JSON file
+      required:
+        - timestamp
+      properties:
+        type:
+          default: "grfn_creation"
+        timestamp:
+          description: Creation timestamp
+          type: date_time
+
     code_collection_reference:
       allOf:
         - $ref: '#/components/schemas/metadata'
