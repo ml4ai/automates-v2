@@ -615,7 +615,7 @@ components:
           description: Unique identifier.
           type: string
         grfn_id:
-          description: The id of the source \<grfn>.
+          description: The uid of the source \<grfn>.
           type: string
         variable_nodes:
           description: Array of variable node indexed uids.
