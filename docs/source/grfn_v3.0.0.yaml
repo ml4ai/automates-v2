@@ -32,19 +32,25 @@ components:
         \<grfn> may have metadata associated with it.
         Each \<grfn> will have its own JSON file.
       required:
-        - grfn_id    # CTM: uid ?
-        # timestamp  # CTM: from 2.2.0 - add ?
-        - types      # CMT: from 2.2.0
-        - objects    # CTM: from 2.2.0
+        - uid
+        - entry_point
+        - types
+        - objects
         - variables
         - functions
-        - edges
-        - instances
-        - instance_ids
+        - hyper_edges
+        # - instances
+        # - instance_ids
+        - metadata
       properties:
         # id
-        grfn_id:
+        uid:
           description: Unique identifier
+          type: string
+        # Root function
+        entry_point:
+          description: >
+            uid for the top-level/root entry point to the GrFN
           type: string
         # Types
         types:
@@ -72,27 +78,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/function'
-        edges:
-          description: >
-            Array of all \<edge> definitions, which connect variables to function
-            input/output interfaces.
-          type: array
-          items:
-            $ref: '#/components/schemas/edge'
-        instances:
-          description: >
-            Array of all \<instance> definitions.
-          type: array
-          items:
-            $ref: '#/components/schemas/instance'
+
+        # hyper_edges:
+        #   description: >
+        #     Array of all \<hyper_edge> definitions, which connect variables to function
+        #     input/output interfaces.
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/hyper_edge'
+
+        # instances:
+        #   description: >
+        #     Array of all \<instance> definitions.
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/instance'
+
         # Top level FN Instances
-        instance_ids:
-          description: >
-            Array of all instance_ids for \<variable> and \<function>
-            instances in the \<grfn> top-level Function Network.
-          type: array
-          items:
-            type: string
+        # instance_ids:
+        #   description: >
+        #     Array of all instance_ids for \<variable> and \<function>
+        #     instances in the \<grfn> top-level Function Network.
+        #   type: array
+        #   items:
+        #     type: string
+
         # metadata
         metadata:
           description: Metadata associated with \<grfn>.
@@ -114,23 +124,31 @@ components:
       required:
         - uid
         - name
+        # - instance_ids
+        - instance_count
+        - metadata
       properties:
         uid:
           description: Unique identifier.
           type: string
-        object_ref:  # CTM: from 2.2.0
+        object_ref:
           description: uid of host object (if applicable)
           type: string
-        name:  # CTM: in 2.2.0: identifier
-          description: Variable basename and index.
-          type: string
-        instance_ids:
+        identifier:
           description: >
-            Array of all instance_ids for \<variable> and \<function>
-            instances of this \<variable>.
-          type: array
-          items:
-            type: string
+            Variable basename and index.
+            Typically derived from the source code identifier.
+          type: string
+        instance_count:
+          description: blee
+          type: integer
+        # instance_ids:
+        #   description: >
+        #     Array of all instance_ids for \<variable> and \<function>
+        #     instances of this \<variable>.
+        #   type: array
+        #   items:
+        #     type: string
         metadata:
           description: Metadata associated with the \<variable>.
           type: array
@@ -143,26 +161,47 @@ components:
         A representation of a function (transforms state).
         A \<function> is a hyperedge and a subgraph of a FN.
       required:
-        - id
+        - uid
         - type
+        - hyper_edges
+        - metadata
       properties:
-        id:
+        uid:
           description: Unique identifier.
+          type: string
+        identifier:
+          description: The name of the function
           type: string
         type:
           description: >
             The type of function being computed by this \<function> node.<br>
             The following are three groups of types:<br>
-            <em>Function interface</em>: \"INTERFACE\"<br>
             <em>Compound object reference</em>: [ \"EXTRACT\", \"PACK\" ]<br>
-            <em>executable + instances (wiring)</em>: [ \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]
-            #    <em>executable only</em>: [ interface, primitive, identity, literal ]<br>
-            #    <em>executable + instances (wiring)</em>: [ assign, condition, decision ]<br>
+            <em>executable + instances (wiring)</em>: [ \"OPERATOR\", \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]<br>
             <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\", \"LOOP\" ]
           type: string
-          enum: [ INTERFACE, EXTRACT, PACK, LITERAL, ASSIGN,  CONDITION, DECISION,
+          enum: [ EXTRACT, PACK,
+                  OPERATOR, LITERAL, ASSIGN,  CONDITION, DECISION,
                   CONTAINER, CONDITIONAL, LOOP ]
-        expression:  # CTM: formerly lambda
+        input_variables:
+          description: >
+            Array of zero or more uids for variables within the function body.<br>
+            Order of variables will match BOTH<br>
+            (1) The order of the parent \<hyper_edge> input_variable_uids<br>
+            (2) The order of the inputs to the executable expression lambda function.
+          type: array
+          items:
+            $ref: '#/components/schemas/indexed_uid'
+        output_variables:
+          description: >
+            Array of zero or more uids for variables within the function body.<br>
+            Order of variables will match BOTH<br>
+            (1) The order of the parent \<hyper_edge> output_variable_uids<br>
+            (2) The order of the outputs in the return tuple of the executable expression lambda function.
+          type: array
+          items:
+            $ref: '#/components/schemas/indexed_uid'
+        expression:
           description: >
             Executable expression.
             Stringified pythonic version of the lambda function code
@@ -172,6 +211,12 @@ components:
             Only used in loop type.
             Unique identifier for the lambda function that computes the exit condition.
           type: string
+        hyper_edges:
+          description: >
+            Array of \<hyper_edge>s representing the body of the function
+          type: array
+          items:
+            $ref: '#/components/schemas/hyper_edge'
         # instance_ids:
         #   description: >
         #     Array of all instance_ids for <variable> and \<function>
@@ -185,56 +230,73 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
-    edge:
-      title: <edge>
-      description: Function Network edge
+    hyper_edge:
+      title: <hyper_edge>
+      description: Function Network hyper edge
       required:
-        - in_variable_ids
-        - function_instance_id
-        - out_variable_ids
+        - input_variables
+        - function_uid
+        - output_variables
       properties:
-        in_variable_ids:
-          description: Array of instance_ids for all input \<variable>s
+        input_variables:
+          description: Array of indexed_uids for all input \<variable>s
           type: array
           items:
-            type: string
-        function_instance_id:
-          description: instance_id of \<function>
+            $ref: '#/components/schemas/indexed_uid'
+        function_uid:
+          description: uid of \<function>
           type: string
-        out_variable_ids:
-          description: Array of instance_ids for all output \<variable>s
+        output_variables:
+          description: Array of indexed_uids for all output \<variable>s
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/indexed_uid'
 
-    instance:
-      title: <instance>
+    indexed_uid:
+      title: <indexed_uid>
       description: >
-        Map of node_id (of either a \<variable> or \<function> node)
-          to node instance_id.
-        NOTE: both node types are included in the same pool of unique
-          node_id and instance_id's.
+        References to \<variable> instances by the base \<variable> uid
+        and the instance index.
+      required:
+        - uid
+        - index
       properties:
-        name:
-          description: >
-            The name of the code identifier used for this instance.
-            Why this is different from the original variable definition name:
-            an example: an outer scope could define a variable identifier
-            named 'x' and then x is passed as an argument to a
-            function/subroutine with a parameter 'y'; here, the parameter
-            is really an instance of 'x', and the *instance* of that variable
-            in the subroutine is named 'y'. So if this were the instance of
-            'y', then it will have the name 'y'. But the instance will be
-            linked to the variable definition for 'x'.
+        variable_uid:
+          description: \<variable> uid
           type: string
-        node_id:
-          description: >
-            The id of either a \<variable> or \<function> node defintion.
-          type: string
-        instance_id:
-          description: >
-            The id of a node instance.
-          type: string
+        index:
+          description: \<variable> instance index
+          type: integer
+
+
+    # instance:
+    #   title: <instance>
+    #   description: >
+    #     Map of node_id (of either a \<variable> or \<function> node)
+    #       to node instance_id.
+    #     NOTE: both node types are included in the same pool of unique
+    #       node_id and instance_id's.
+    #   properties:
+    #     name:
+    #       description: >
+    #         The name of the code identifier used for this instance.
+    #         Why this is different from the original variable definition name:
+    #         an example: an outer scope could define a variable identifier
+    #         named 'x' and then x is passed as an argument to a
+    #         function/subroutine with a parameter 'y'; here, the parameter
+    #         is really an instance of 'x', and the *instance* of that variable
+    #         in the subroutine is named 'y'. So if this were the instance of
+    #         'y', then it will have the name 'y'. But the instance will be
+    #         linked to the variable definition for 'x'.
+    #       type: string
+    #     node_id:
+    #       description: >
+    #         The id of either a \<variable> or \<function> node defintion.
+    #       type: string
+    #     instance_id:
+    #       description: >
+    #         The id of a node instance.
+    #       type: string
 
     ### Types
 
@@ -555,8 +617,13 @@ components:
         grfn_id:
           description: The id of the source \<grfn>.
           type: string
-        node_ids:
-          description: Array of node_ids denoting the nodes in the \<grfn>.
+        variable_nodes:
+          description: Array of variable node indexed uids.
+          type: array
+          items:
+            $ref: '#/components/schemas/indexed_uid'
+        function_nodes:
+          description: Array of function node uids.
           type: array
           items:
             type: string
