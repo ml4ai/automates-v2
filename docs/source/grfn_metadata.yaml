@@ -165,12 +165,15 @@ components:
 
     ### <ANY>.<code_span>
 
-    code_span:
+    code_span_reference:
       allOf:
         - $ref: '#/components/schemas/metadata'
-      title: <ANY>.<code_span>
+      title: <ANY>.<code_span_reference>
       description: >
         Reference to a source code span (sub-line, line, block).
+      required:
+        - code_type
+        - code_file_reference_uid
       properties:
         type:
           default: "code_span"
@@ -179,9 +182,19 @@ components:
             The role the the code reference in the span plays.
           type: string
           enum: [ IDENTIFIER, CODE_BLOCK ]
-        code_file_reference_id:
+        code_file_reference_uid:
           description: uid for the source code file \<code_file_reference>
           type: string
+          format: uuid
+        code_span:
+          $ref: '#/components/schemas/code_span'
+
+    code_span:
+      title: <code_span>
+      description: TODO
+      required:
+        - line_begin
+      properties:
         line_begin:
           description: The line number where the identifier name string occurs
           type: integer
@@ -209,7 +222,8 @@ components:
           default: "grfn_creation"
         timestamp:
           description: Creation timestamp
-          type: date_time
+          type: string
+          format: datetime
 
     code_collection_reference:
       allOf:
@@ -325,6 +339,30 @@ components:
           type: string
 
     ### <variable>
+
+    variable_code_spans:
+      allOf:
+        - $ref: '#/components/schemas/metadata'
+      title: <variable>.<code_spans>
+      description: >
+        host: \<variable> <br>
+        Array of \<code_span>s for a \<variable> definition.
+        A \<variable> instance index corresponds to the index in the code_spans array.
+      required:
+        - code_file_reference_uid
+        - code_spans
+      properties:
+        type:
+          default: "equation_parameter"
+        code_file_reference_uid:
+          description: uid for the source code file \<code_file_reference>
+          type: string
+          format: uuid
+        code_spans:
+          description: TODO
+          type: array
+          items:
+            $ref: '#/components/schemas/code_span'
 
     data_type:
       allOf:

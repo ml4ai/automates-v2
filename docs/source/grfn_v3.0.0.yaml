@@ -33,7 +33,7 @@ components:
         Each \<grfn> will have its own JSON file.
       required:
         - uid
-        - entry_point
+        # - entry_point  # Can be 1 or 0, but not more than one
         - types
         - objects
         - variables
@@ -50,7 +50,9 @@ components:
         # Root function
         entry_point:
           description: >
-            uid for the top-level/root entry point to the GrFN
+            uid for the top-level/root entry point to the GrFN.
+            There can be 1 or 0 (null) entry points, but not more than one.
+            There is a separate GrFN for each entry point.
           type: string
         # Types
         types:
