@@ -340,29 +340,29 @@ components:
 
     ### <variable>
 
-    variable_code_spans:
-      allOf:
-        - $ref: '#/components/schemas/metadata'
-      title: <variable>.<code_spans>
-      description: >
-        host: \<variable> <br>
-        Array of \<code_span>s for a \<variable> definition.
-        A \<variable> instance index corresponds to the index in the code_spans array.
-      required:
-        - code_file_reference_uid
-        - code_spans
-      properties:
-        type:
-          default: "equation_parameter"
-        code_file_reference_uid:
-          description: uid for the source code file \<code_file_reference>
-          type: string
-          format: uuid
-        code_spans:
-          description: TODO
-          type: array
-          items:
-            $ref: '#/components/schemas/code_span'
+    # variable_code_spans:
+    #   allOf:
+    #     - $ref: '#/components/schemas/metadata'
+    #   title: <variable>.<code_spans>
+    #   description: >
+    #     host: \<variable> <br>
+    #     Array of \<code_span>s for a \<variable> definition.
+    #     A \<variable> instance index corresponds to the index in the code_spans array.
+    #   required:
+    #     - code_file_reference_uid
+    #     - code_spans
+    #   properties:
+    #     type:
+    #       default: "equation_parameter"
+    #     code_file_reference_uid:
+    #       description: uid for the source code file \<code_file_reference>
+    #       type: string
+    #       format: uuid
+    #     code_spans:
+    #       description: TODO
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/code_span'
 
     data_type:
       allOf:

@@ -127,7 +127,7 @@ components:
         - uid
         - name
         # - instance_ids
-        - instance_count
+        # - instance_count
         - metadata
       properties:
         uid:
@@ -141,9 +141,7 @@ components:
             Variable basename and index.
             Typically derived from the source code identifier.
           type: string
-        instance_count:
-          description: blee
-          type: integer
+
         # instance_ids:
         #   description: >
         #     Array of all instance_ids for \<variable> and \<function>
@@ -151,6 +149,7 @@ components:
         #   type: array
         #   items:
         #     type: string
+
         metadata:
           description: Metadata associated with the \<variable>.
           type: array
@@ -193,7 +192,7 @@ components:
             (2) The order of the inputs to the executable expression lambda function.
           type: array
           items:
-            $ref: '#/components/schemas/indexed_uid'
+            type: string
         output_variables:
           description: >
             Array of zero or more uids for variables within the function body.<br>
@@ -202,7 +201,7 @@ components:
             (2) The order of the outputs in the return tuple of the executable expression lambda function.
           type: array
           items:
-            $ref: '#/components/schemas/indexed_uid'
+            type: string
         expression:
           description: >
             Executable expression.
@@ -241,34 +240,34 @@ components:
         - output_variables
       properties:
         input_variables:
-          description: Array of indexed_uids for all input \<variable>s
+          description: Array of uids for all input \<variable>s
           type: array
           items:
-            $ref: '#/components/schemas/indexed_uid'
+            type: string
         function_uid:
           description: uid of \<function>
           type: string
         output_variables:
-          description: Array of indexed_uids for all output \<variable>s
+          description: Array of uids for all output \<variable>s
           type: array
           items:
-            $ref: '#/components/schemas/indexed_uid'
+            type: string
 
-    indexed_uid:
-      title: <indexed_uid>
-      description: >
-        References to \<variable> instances by the base \<variable> uid
-        and the instance index.
-      required:
-        - uid
-        - index
-      properties:
-        variable_uid:
-          description: \<variable> uid
-          type: string
-        index:
-          description: \<variable> instance index
-          type: integer
+    # indexed_uid:
+    #   title: <indexed_uid>
+    #   description: >
+    #     References to \<variable> instances by the base \<variable> uid
+    #     and the instance index.
+    #   required:
+    #     - uid
+    #     - index
+    #   properties:
+    #     variable_uid:
+    #       description: \<variable> uid
+    #       type: string
+    #     index:
+    #       description: \<variable> instance index
+    #       type: integer
 
 
     # instance:
@@ -619,16 +618,22 @@ components:
         grfn_id:
           description: The uid of the source \<grfn>.
           type: string
-        variable_nodes:
-          description: Array of variable node indexed uids.
-          type: array
-          items:
-            $ref: '#/components/schemas/indexed_uid'
-        function_nodes:
-          description: Array of function node uids.
+        nodes:
+          description: >
+            Array of uids representing \<variable> and/or \<function> nodes.
           type: array
           items:
             type: string
+        # variable_nodes:
+        #   description: Array of variable node indexed uids.
+        #   type: array
+        #   items:
+        #     $ref: '#/components/schemas/indexed_uid'
+        # function_nodes:
+        #   description: Array of function node uids.
+        #   type: array
+        #   items:
+        #     type: string
         metadata:
           description: Metadata associated with the \<node_set>.
           type: array
