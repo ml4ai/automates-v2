@@ -64,14 +64,15 @@ components:
           items:
             $ref: '#/components/schemas/objects'
 
-        # GroMIT Structures
+        # Variables
         variables: # node
           description: >
             Array of \<variable> definitions.
           type: array
           items:
-            $ref: '#/components/schemas/variable'
+            $ref: '#/components/schemas/variables'
 
+        # Boxes
         boxes:  # hyperedge and subgraph
           description: >
             Array of \<box> definitions.
@@ -241,7 +242,7 @@ components:
         - $ref: '#/components/schemas/object'
       title: <object>:<set>
       description: >
-        An instance of a \<type>:\<set> has 0 or more elements (objects)
+        An instance of a \<type>:\<set> has 0 or more (unordered) elements (objects)
       properties:
         elements:
           description: The instance elements
@@ -305,7 +306,11 @@ components:
           items:
             type: string
 
-    ### GroMIT Components
+    ### Variables
+
+    variables:
+      oneOf:
+        - $ref: '#/components/schemas/variable'
 
     variable:
       title: <variable>
@@ -341,6 +346,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata'
+
+    ### Boxes
 
     boxes:
       oneOf:
@@ -461,7 +468,7 @@ components:
         function_type:
           description: The type of \<function>.
           type: string
-          default: "LOOP"
+          default: "Function:Loop"
         exit:
           description: >
             Only used in loop type.
@@ -478,11 +485,13 @@ components:
         function_type:
           description: This is a Predicate function.
           type: string
-          default: "Predicate"
+          default: "Function:Predicate"
         expression:
           description: >
             Executable expression that returns a truth value.
             Stringified pythonic version of the lambda function code.
+
+    ### Wirings
 
     wirings:
       oneOf:
@@ -492,6 +501,14 @@ components:
     wiring:
       title: <wiring>
       description: Top-level wiring
+      properties:
+        type:
+          description: The type of this GroMIT element
+          type: string
+          default: "Wiring"
+        wiring_type:
+          description: The type of \<wiring>
+          type: string
 
     wiring__directed:
       allOf:
@@ -503,14 +520,18 @@ components:
         - function_uid
         - output_variables
       properties:
+        wiring_type:
+          description: A directed wiring.
+          type: string
+          default: "Wiring:Directed"
         input_variables:
           description: Array of uids for all input \<variable>s
           type: array
           items:
             type: string
             format: uid
-        function_uid:
-          description: uid of \<function>
+        box_uid:
+          description: uid of \<box>
           type: string
           format: uid
         output_variables:
