@@ -1,15 +1,15 @@
 openapi: 3.0.0
 
 info:
-  title: GrFN JSON spec
-  description: AutoMATES Grounded Function Network (GrFN) JSON schema specification
+  title: GroMIT JSON spec
+  description: ASKE-E Grounded Model
   contact:
     name: Clayton T. Morrison
     email: claytonm@arizona.edu
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 3.0.0
+  version: 0.0.1
 
 paths: {}
 
@@ -17,15 +17,15 @@ components:
 
   schemas:
 
-    ### grfn
+    ### gromit
 
-    grfn:
-      title: <grfn>
+    gromit:
+      title: <gromit>
       description: >
-        Top-level GrFN structure.
-        A \<grfn> corresponds to a namespace.
-        \<grfn> may have metadata associated with it.
-        Each \<grfn> will have its own JSON file.
+        Top-level GroMIT structure.
+        A \<gromit> corresponds to a namespace.
+        \<gromit> may have metadata associated with it.
+        Each \<gromit> will have its own JSON file.
       required:
         - uid
         # - entry_point  # Can be 1 or 0, but not more than one
@@ -45,9 +45,9 @@ components:
         # Root function
         entry_point:
           description: >
-            uid for the top-level/root entry point to the GrFN.
+            uid for the top-level/root entry point to the GroMIT.
             There can be 1 or 0 (null) entry points, but not more than one.
-            There is a separate GrFN for each entry point.
+            There is a separate GroMIT for each entry point.
           type: string
           format: uid
 
@@ -58,7 +58,10 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/type'
+              - $ref: '#/components/schemas/type__set'
+              - $ref: '#/components/schemas/type__sequence'
               - $ref: '#/components/schemas/type__composite'
+              - $ref: '#/components/schemas/type__dictionary'
         objects:
           description: Instances of types
           type: array
@@ -81,7 +84,7 @@ components:
 
         # metadata
         metadata:
-          description: Metadata associated with \<grfn>.
+          description: Metadata associated with \<gromit>.
           type: array
           items:
             $ref: '#/components/schemas/metadata'
@@ -103,15 +106,32 @@ components:
         name:
           description: Name of the \<type>
           type: string
-        metatype:
-          description: Designation of the type (metatype) of this type.
-          type: string
-          default: "BASE_TYPE"
+          default: "BaseType"
         metadata:
           description: Metadata associated with the \<type> declaration.
           type: array
           items:
             $ref: '#/components/schemas/metadata'
+
+    type__set:
+      allOf:
+        - $ref: '#/components/schemas/type'
+      title: <type>:<set>
+      description: A set of elements.
+      properties:
+        name:
+          type: string
+          default: "Set"
+
+    type__sequence:
+      allOf:
+        - $ref: '#/components/schemas/type'
+      title: <type>:<sequence>
+      description: A sequence of elements.
+      properties:
+        name:
+          type: string
+          default: "Sequence"
 
     type__composite:
       allOf:
@@ -121,9 +141,9 @@ components:
       required:
         - fields
       properties:
-        metatype:
+        name:
           type: string
-          default: "COMPOSITE"
+          default: "Composite"
         fields:
           description: Array of named fields (named attributes).
           type: array
@@ -153,6 +173,24 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
+    type__dictionary:
+      allOf:
+        - $ref: '#/components/schemas/type__composite'
+      title: <type>:<dictionary>
+      description: >
+        Object with known keys
+      required:
+        - known_keys
+      properties:
+        name:
+          type: string
+          default: "Dictionary"
+        known_keys:
+          description: Array of known keys (strings)
+          type: array
+          items:
+            type: string
+
     object:
       title: <object>
       description: >
@@ -169,7 +207,7 @@ components:
           description: uid of the \<object>'s \<type>
           type: string
           format: uid
-        field_values:
+        field_bingings:
           description: >
             Array of named fields paired with values (field_value).
             Used to represent associations of fields (composite) or
@@ -177,16 +215,16 @@ components:
             reprenting the uids of objects representing the value.
           type: array
           items:
-            $ref: '#/components/schemas/field_value'
+            $ref: '#/components/schemas/field_binding'
         metadata:
           type: array
           description: Metadata associated with the \<object> instance.
           items:
             $ref: '#/components/schemas/metadata'
 
-    field_value:
-      title: <field_value>
-      description: A named field-value pair.
+    field_binding:
+      title: <field_binding>
+      description: Binding a value to a named field.
       required:
         - name
         - value
@@ -200,29 +238,14 @@ components:
             TODO: Generalize representation of value (object?)
           type: string
 
-    object__dictionary:
-      allOf:
-        - $ref: '#/components/schemas/object'
-      title: <object>:<dictionary>
-      description: >
-        Object with known keys
-      properties:
-        type:
-          type: string
-          default: "DICTIONARY"
-        known_keys:
-          description: Array of known keys (strings)
-          type: array
-          items:
-            type: string
-
     ### Function Network Components
 
     variable:
       title: <variable>
       description: >
         A representation of a variable.
-        A \<variable> can represent an abstraction by reference to an \<object> (e.g., representing a set, array, struct).
+        A \<variable> can represent an abstraction by reference to an
+        \<object> (e.g., representing a set, array, struct).
       # Case 1: set of variables: e.g., defines an array;
       # Case 2: random variable: function->variable
       required:
@@ -234,15 +257,18 @@ components:
           description: Unique identifier.
           type: string
           format: uid
-        object_ref:
-          description: uid of object.
-          type: string
-          format: uid
         name:
           description: >
             Variable basename.
-            Typically derived from the source code identifier.
+            (When derived from source code, often corresponds to
+            source code identifier.)
           type: string
+        object_ref:
+          description: >
+            Used when the \<variable> is associated with an object.
+            uid of the \<object>.
+          type: string
+          format: uid
         metadata:
           description: Metadata associated with the \<variable>.
           type: array
@@ -253,8 +279,7 @@ components:
       title: <function>
       description: >
         A representation of a function (transforms state).
-        A \<function> is a hyperedge between \<variable>s
-        and a subgraph of a Function Network (FN).
+        A \<function> is a hyperedge between \<variables> and a subgraph of a Function Network (FN).
       required:
         - uid
         - type
@@ -351,25 +376,24 @@ components:
     metadata:
       title: <metadata>
       description: >
-        Typed metadata consisting of an array of attribute-value pairs.
-        \<grfn> is grounded through metadata.<br>
-        See grfn_openapi_metadata
+        Typed metadata.
+        \<gromit> is grounded through metadata.<br>
 
 
-    ### grfn_collection
+    ### gromit_collection
 
-    grfn_collection:
-      title: <grfn_collection>
+    gromit_collection:
+      title: <gromit_collection>
       description: >
-        A collection of 1 or more \<grfn>.
-        \<node_set>s denote arbitrary subsets of \<grfn>.
-        A collection with an \<alignment> will have at least two \<grfn>.
-        Each \<grfn_collection> will have its own JSON file.
+        A collection of 1 or more \<gromit>.
+        \<node_set>s denote arbitrary subsets of \<gromit>.
+        A collection with an \<alignment> will have at least two \<gromit>.
+        Each \<gromit_collection> will have its own JSON file.
       required:
-        - grfns
+        - gromits
       properties:
-        grfns:
-          description: Array of \<grfn> ids.
+        gromits:
+          description: Array of \<gromit> ids.
           type: array
           items:
             type: string
@@ -387,30 +411,30 @@ components:
       title: <alignment>
       description: >
         A mapping of elements (node_ids or \<node_sets>)
-        from one \<grfn> (grfn_1) to another (grfn_2).
+        from one \<gromit> (gromit_1) to another (gromit_2).
         The elements in the map are paired by their array index.
       required:
-          - grfn_1
-          - grfn_1_elements
-          - grfn_2
-          - grfn_2_elements
+          - gromit_1
+          - gromit_1_elements
+          - gromit_2
+          - gromit_2_elements
       properties:
-        grfn_1:
-          description: uid for <grfn> source 1
-          type: string  # grfn_id
+        gromit_1:
+          description: uid for <gromit> source 1
+          type: string  # gromit_id
           format: uid
-        grfn_1_elements:
-          description: Array of uids for node_id or node_set_id from \<grfn> source 1
+        gromit_1_elements:
+          description: Array of uids for node_id or node_set_id from \<gromit> source 1
           type: array
           items:
             type: string # node_id or node_set_id
             format: uid
-        grfn_2:
-          description: grfn_id for \<grfn> source 2
-          type: string  # grfn_id
+        gromit_2:
+          description: gromit_id for \<gromit> source 2
+          type: string  # gromit_id
           format: uid
-        grfn_2_elements:
-          description: Array of uids for node_id or node_set_id from \<grfn> source 2
+        gromit_2_elements:
+          description: Array of uids for node_id or node_set_id from \<gromit> source 2
           type: array
           items:
             type: string # node_id or node_set_id
@@ -419,20 +443,20 @@ components:
     node_set:
       title: <node_set>
       description: >
-        A collection of FN node_ids from a source \<grfn>, used to denote to an
-        arbitrary subset of the GrFN FN.
+        A collection of FN node_ids from a source \<gromit>, used to denote to an
+        arbitrary subset of the GroMIT FN.
         A \<node_set> may have metadata associated with it.
       required:
         - node_set_id
-        - grfn_id
+        - gromit_id
         - nodes
       properties:
         node_set_id:
           description: Unique identifier.
           type: string
           format: uid
-        grfn_id:
-          description: The uid of the source \<grfn>.
+        gromit_id:
+          description: The uid of the source \<gromit>.
           type: string
           format: uid
         nodes:
