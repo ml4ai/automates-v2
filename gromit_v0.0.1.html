@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>GroMET JSON Spec - v0.0.1 &mdash; AutoMATES  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="GrFN Intersection Graph JSON Spec" href="gfrn_intersection_graph.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> AutoMATES
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="air.html">AIR JSON Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cast_v1.0.0.html">CAST JSON Spec - v1.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_v2.2.0.html">GrFN JSON Spec - v2.2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_v3.0.0.html">GrFN JSON Spec - v3.0.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="grfn_metadata.html">GrFN Metadata JSON Spec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gfrn_intersection_graph.html">GrFN Intersection Graph JSON Spec</a></li>
+</ul>
+<p class="caption"><span class="caption-text">ASKE-E Model Exchange</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GroMET JSON Spec - v0.0.1</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AutoMATES</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>GroMET JSON Spec - v0.0.1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gromit_v0.0.1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gromet-json-spec-v0-0-1">
+<h1>GroMET JSON Spec - v0.0.1<a class="headerlink" href="#gromet-json-spec-v0-0-1" title="Permalink to this headline">¶</a></h1>
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="_static/swagger-ui/swagger-ui.css" >
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+
+<div id="swagger-ui"></div>
+<script src="_static/swagger-ui/swagger-ui-bundle.js"> </script>
+<script src="_static/swagger-ui/swagger-ui-standalone-preset.js"> </script>
+<script>
+    window.onload = function() {
+
+    // Build a system
+    var spec = {"openapi": "3.0.0", "info": {"title": "GroMIT JSON spec", "description": "ASKE-E Grounded Model", "contact": {"name": "Clayton T. Morrison", "email": "claytonm@arizona.edu"}, "license": {"name": "Apache 2.0", "url": "http://www.apache.org/licenses/LICENSE-2.0.html"}, "version": "0.0.1"}, "paths": {}, "components": {"schemas": {"gromit": {"title": "<gromit>", "description": "Top-level GroMIT structure. A \\<gromit> corresponds to a namespace. \\<gromit> may have metadata associated with it. Each \\<gromit> will have its own JSON file.\n", "required": ["uid", "types", "objects", "variables", "functions", "hyper_edges", "metadata"], "properties": {"uid": {"description": "Unique identifier", "type": "string", "format": "uid"}, "entry_point": {"description": "uid for the top-level/root entry point to the GroMIT. There can be 1 or 0 (null) entry points, but not more than one. There is a separate GroMIT for each entry point.\n", "type": "string", "format": "uid"}, "types": {"description": "Type definitions", "type": "array", "items": {"oneOf": [{"$ref": "#/components/schemas/type"}, {"$ref": "#/components/schemas/type__set"}, {"$ref": "#/components/schemas/type__sequence"}, {"$ref": "#/components/schemas/type__composite"}, {"$ref": "#/components/schemas/type__dictionary"}]}}, "objects": {"description": "Instances of types", "type": "array", "items": {"$ref": "#/components/schemas/object"}}, "variables": {"description": "Array of \\<variable> definitions.\n", "type": "array", "items": {"$ref": "#/components/schemas/variable"}}, "functions": {"description": "Array of \\<function> definitions.\n", "type": "array", "items": {"$ref": "#/components/schemas/function"}}, "metadata": {"description": "Metadata associated with \\<gromit>.", "type": "array", "items": {"$ref": "#/components/schemas/metadata"}}}}, "type": {"title": "<type>", "description": "Base type", "required": ["uid", "name", "metatype"], "properties": {"uid": {"description": "Unique identifier.", "type": "string", "format": "uid"}, "name": {"description": "Name of the \\<type>", "type": "string", "default": "BaseType"}, "metadata": {"description": "Metadata associated with the \\<type> declaration.", "type": "array", "items": {"$ref": "#/components/schemas/metadata"}}}}, "type__set": {"allOf": [{"$ref": "#/components/schemas/type"}], "title": "<type>:<set>", "description": "A set of elements.", "properties": {"name": {"type": "string", "default": "Set"}}}, "type__sequence": {"allOf": [{"$ref": "#/components/schemas/type"}], "title": "<type>:<sequence>", "description": "A sequence of elements.", "properties": {"name": {"type": "string", "default": "Sequence"}}}, "type__composite": {"allOf": [{"$ref": "#/components/schemas/type"}], "title": "<type>:<composite>", "description": "A structured type with named field attributes.", "required": ["fields"], "properties": {"name": {"type": "string", "default": "Composite"}, "fields": {"description": "Array of named fields (named attributes).", "type": "array", "items": {"$ref": "#/components/schemas/named_field"}}}}, "named_field": {"title": "<named_field>", "description": "A named field, pairing the field name (string) with [optional] field value type name (string). When no type specified, the type name is null.\n", "required": ["name", "type"], "properties": {"name": {"description": "Name of the field.", "type": "string"}, "type": {"description": "uid of the the \\<type> of the field.", "type": "string", "format": "uid"}, "metadata": {"type": "array", "description": "Metadata associated with the \\<object> instance.", "items": {"$ref": "#/components/schemas/metadata"}}}}, "type__dictionary": {"allOf": [{"$ref": "#/components/schemas/type__composite"}], "title": "<type>:<dictionary>", "description": "Object with known keys\n", "required": ["known_keys"], "properties": {"name": {"type": "string", "default": "Dictionary"}, "known_keys": {"description": "Array of known keys (strings)", "type": "array", "items": {"type": "string"}}}}, "object": {"title": "<object>", "description": "An object is an instance of a \\<type>. If the object has fields, they are \"instantiated\" (as persistent storage with associated values). Each field is represented by a \\<variable>.\n", "properties": {"uid": {"description": "Unique identifier.", "type": "string", "format": "uid"}, "type": {"description": "uid of the \\<object>'s \\<type>", "type": "string", "format": "uid"}, "field_bingings": {"description": "Array of named fields paired with values (field_value). Used to represent associations of fields (composite) or keys (dictionary) with values. Values will be strings reprenting the uids of objects representing the value.\n", "type": "array", "items": {"$ref": "#/components/schemas/field_binding"}}, "metadata": {"type": "array", "description": "Metadata associated with the \\<object> instance.", "items": {"$ref": "#/components/schemas/metadata"}}}}, "field_binding": {"title": "<field_binding>", "description": "Binding a value to a named field.", "required": ["name", "value"], "properties": {"name": {"description": "The name of the field.", "type": "string"}, "value": {"description": "The value bound to the field.<br> TODO: Generalize representation of value (object?)\n", "type": "string"}}}, "variable": {"title": "<variable>", "description": "A representation of a variable. A \\<variable> can represent an abstraction by reference to an \\<object> (e.g., representing a set, array, struct).\n", "required": ["uid", "name", "metadata"], "properties": {"uid": {"description": "Unique identifier.", "type": "string", "format": "uid"}, "name": {"description": "Variable basename. (When derived from source code, often corresponds to source code identifier.)\n", "type": "string"}, "object_ref": {"description": "Used when the \\<variable> is associated with an object. uid of the \\<object>.\n", "type": "string", "format": "uid"}, "metadata": {"description": "Metadata associated with the \\<variable>.", "type": "array", "items": {"$ref": "#/components/schemas/metadata"}}}}, "function": {"title": "<function>", "description": "A representation of a function (transforms state). A \\<function> is a hyperedge between \\<variables> and a subgraph of a Function Network (FN).\n", "required": ["uid", "type", "hyper_edges", "metadata"], "properties": {"uid": {"description": "Unique identifier.", "type": "string", "format": "uid"}, "identifier": {"description": "The name of the function", "type": "string"}, "type": {"description": "The type of function being computed by this \\<function> node.<br> The following are three groups of types:<br> <em>Compound object reference</em>: [ \\\"EXTRACT\\\", \\\"PACK\\\" ]<br> <em>executable + instances (wiring)</em>: [ \\\"OPERATOR\\\", \\\"LITERAL\\\", \\\"ASSIGN\\\", \\\"CONDITION\\\", \\\"DECISION\\\" ]<br> <em>containers</em>: [ \\\"CONTAINER\\\", \\\"CONDITIONAL\\\", \\\"LOOP\\\" ]\n", "type": "string", "enum": ["EXTRACT", "PACK", "OPERATOR", "LITERAL", "ASSIGN", "CONDITION", "DECISION", "CONTAINER", "CONDITIONAL", "LOOP"]}, "input_variables": {"description": "Array of zero or more uids for variables within the function body.<br> Order of variables will match BOTH:<br> (1) The order of the parent \\<hyper_edge> input variable uids<br> (2) The order of the inputs to the executable expression lambda function.\n", "type": "array", "items": {"type": "string", "format": "uid"}}, "output_variables": {"description": "Array of zero or more uids for variables within the function body.<br> Order of variables will match BOTH:<br> (1) The order of the parent \\<hyper_edge> output variable uids<br> (2) The order of the outputs in the return tuple of the executable expression lambda function.\n", "type": "array", "items": {"type": "string", "format": "uid"}}, "expression": {"description": "Executable expression. Stringified pythonic version of the lambda function code\n", "type": "string"}, "exit": {"description": "Only used in loop type. Unique identifier for the lambda function that computes the exit condition.\n", "type": "string"}, "hyper_edges": {"description": "Array of \\<hyper_edge>s representing the body of the function\n", "type": "array", "items": {"$ref": "#/components/schemas/hyper_edge"}}, "metadata": {"type": "array", "description": "Metadata associated with the \\<function>.", "items": {"$ref": "#/components/schemas/metadata"}}}}, "hyper_edge": {"title": "<hyper_edge>", "description": "Function Network directed hyper edge", "required": ["input_variables", "function_uid", "output_variables"], "properties": {"input_variables": {"description": "Array of uids for all input \\<variable>s", "type": "array", "items": {"type": "string", "format": "uid"}}, "function_uid": {"description": "uid of \\<function>", "type": "string", "format": "uid"}, "output_variables": {"description": "Array of uids for all output \\<variable>s", "type": "array", "items": {"type": "string", "format": "uid"}}}}, "metadata": {"title": "<metadata>", "description": "Typed metadata. \\<gromit> is grounded through metadata.<br>\n"}, "gromit_collection": {"title": "<gromit_collection>", "description": "A collection of 1 or more \\<gromit>. \\<node_set>s denote arbitrary subsets of \\<gromit>. A collection with an \\<alignment> will have at least two \\<gromit>. Each \\<gromit_collection> will have its own JSON file.\n", "required": ["gromits"], "properties": {"gromits": {"description": "Array of \\<gromit> ids.", "type": "array", "items": {"type": "string", "format": "uid"}}, "alignments": {"type": "array", "items": {"$ref": "#/components/schemas/alignment"}}, "node_sets": {"type": "array", "items": {"$ref": "#/components/schemas/node_set"}}}}, "alignment": {"title": "<alignment>", "description": "A mapping of elements (node_ids or \\<node_sets>) from one \\<gromit> (gromit_1) to another (gromit_2). The elements in the map are paired by their array index.\n", "required": ["gromit_1", "gromit_1_elements", "gromit_2", "gromit_2_elements"], "properties": {"gromit_1": {"description": "uid for <gromit> source 1", "type": "string", "format": "uid"}, "gromit_1_elements": {"description": "Array of uids for node_id or node_set_id from \\<gromit> source 1", "type": "array", "items": {"type": "string", "format": "uid"}}, "gromit_2": {"description": "gromit_id for \\<gromit> source 2", "type": "string", "format": "uid"}, "gromit_2_elements": {"description": "Array of uids for node_id or node_set_id from \\<gromit> source 2", "type": "array", "items": {"type": "string", "format": "uid"}}}}, "node_set": {"title": "<node_set>", "description": "A collection of FN node_ids from a source \\<gromit>, used to denote to an arbitrary subset of the GroMIT FN. A \\<node_set> may have metadata associated with it.\n", "required": ["node_set_id", "gromit_id", "nodes"], "properties": {"node_set_id": {"description": "Unique identifier.", "type": "string", "format": "uid"}, "gromit_id": {"description": "The uid of the source \\<gromit>.", "type": "string", "format": "uid"}, "nodes": {"description": "Array of uids representing \\<variable> and/or \\<function> nodes.\n", "type": "array", "items": {"type": "string", "format": "uid"}}, "metadata": {"description": "Metadata associated with the \\<node_set>.", "type": "array", "items": {"$ref": "#/components/schemas/metadata"}}}}}}};
+    const ui = SwaggerUIBundle({
+        spec: spec,
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+        ],
+        plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+    })
+
+    window.ui = ui
+    }
+</script>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gfrn_intersection_graph.html" class="btn btn-neutral float-left" title="GrFN Intersection Graph JSON Spec" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Clayton T. Morrison and Paul D. Hein.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
