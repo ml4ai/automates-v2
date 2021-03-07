@@ -123,7 +123,7 @@ components:
           type: string
           default: "Set"
 
-    type__set:
+    type__sequence:
       allOf:
         - $ref: '#/components/schemas/type'
       title: <type>:<sequence>
