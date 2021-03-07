@@ -21,7 +21,7 @@ Welcome to AutoMATES's documentation!
    :maxdepth: 2
    :caption: ASKE-E Model Exchange
  
-   gromit_v1.0.0
+   gromit_v0.0.1
 
 
 Indices and tables

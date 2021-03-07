@@ -1,5 +1,5 @@
-GroMET JSON Spec - v1.0.0
+GroMET JSON Spec - v0.0.1
 =========================
 
 .. raw:: html
-  :file: gromit_v1.0.0.html
+  :file: gromit_v0.0.1.html
