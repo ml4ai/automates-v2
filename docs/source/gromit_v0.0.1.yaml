@@ -23,7 +23,7 @@ components:
       title: <gromit>
       description: >
         Top-level GroMIT structure.
-        A \<gromit> corresponds to a namespace.
+        A \<gromit> defines a namespace.
         \<gromit> may have metadata associated with it.
         Each \<gromit> will have its own JSON file.
       required:
@@ -32,8 +32,7 @@ components:
         - types
         - objects
         - variables
-        - functions
-        - hyper_edges
+        - boxes
         - metadata
       properties:
         # id
@@ -56,31 +55,29 @@ components:
           description: Type definitions
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/type'
-              - $ref: '#/components/schemas/type__set'
-              - $ref: '#/components/schemas/type__sequence'
-              - $ref: '#/components/schemas/type__composite'
-              - $ref: '#/components/schemas/type__dictionary'
+            $ref: '#/components/schemas/types'
+
+        # Objects
         objects:
           description: Instances of types
           type: array
           items:
-            $ref: '#/components/schemas/object'
+            $ref: '#/components/schemas/objects'
 
-        # Function Network Definitions
+        # GroMIT Structures
         variables: # node
           description: >
             Array of \<variable> definitions.
           type: array
           items:
             $ref: '#/components/schemas/variable'
-        functions:  # hyperedge and subgraph
+
+        boxes:  # hyperedge and subgraph
           description: >
-            Array of \<function> definitions.
+            Array of \<box> definitions.
           type: array
           items:
-            $ref: '#/components/schemas/function'
+            $ref: '#/components/schemas/boxes'
 
         # metadata
         metadata:
@@ -91,11 +88,20 @@ components:
 
     ### Types
 
+    types:
+      oneOf:
+        - $ref: '#/components/schemas/type'
+        - $ref: '#/components/schemas/type__set'
+        - $ref: '#/components/schemas/type__sequence'
+        - $ref: '#/components/schemas/type__composite'
+        - $ref: '#/components/schemas/type__dictionary'
+
     type:
       title: <type>
       description: Base type
       required:
         - uid
+        - type
         - name
         - metatype
       properties:
@@ -103,6 +109,10 @@ components:
           description: Unique identifier.
           type: string
           format: uid
+        type:
+          description: The type of this GroMIT element
+          type: string
+          default: "Type"
         name:
           description: Name of the \<type>
           type: string
@@ -185,29 +195,79 @@ components:
         name:
           type: string
           default: "Dictionary"
-        known_keys:
-          description: Array of known keys (strings)
-          type: array
-          items:
-            type: string
+
+    ### Objects
+
+    objects:
+      oneOf:
+        - $ref: '#/components/schemas/object'
+        - $ref: '#/components/schemas/object__set'
+        - $ref: '#/components/schemas/object__sequence'
+        - $ref: '#/components/schemas/object__composite'
+        - $ref: '#/components/schemas/object__dictionary'
 
     object:
       title: <object>
       description: >
-        An object is an instance of a \<type>.
-        If the object has fields, they are "instantiated"
-        (as persistent storage with associated values).
-        Each field is represented by a \<variable>.
+        An object is an instance of a \<type> and may "evaluate" to a value.
+      required:
+        - uid
+        - type
+        - object_type
       properties:
         uid:
           description: Unique identifier.
           type: string
           format: uid
         type:
-          description: uid of the \<object>'s \<type>
+          description: The type of this GroMIT element
+          type: string
+          default: "Object"
+        object_type:
+          description: uid of the \<object>'s \<type>.
           type: string
           format: uid
-        field_bingings:
+        value:
+          description: The value that the \<object> represents.
+          type: string
+        metadata:
+          type: array
+          description: Metadata associated with the \<object> instance.
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    object__set:
+      allOf:
+        - $ref: '#/components/schemas/object'
+      title: <object>:<set>
+      description: >
+        An instance of a \<type>:\<set> has 0 or more elements (objects)
+      properties:
+        elements:
+          description: The instance elements
+          type: array
+          items:
+            $ref: '#/components/schemas/objects'
+
+    object__sequence:
+      allOf:
+        - $ref: '#/components/schemas/object__set'
+      title: <object>:<sequence>
+      description: >
+        An instance of a \<type>:\<sequence>, where elements are ordered
+
+    object__composite:
+      allOf:
+        - $ref: '#/components/schemas/object'
+      title: <object>:<composite>
+      description: >
+        An object of a \<type>:\<composite> has fields that are "instantiated"
+        (as persistent storage with associated values).
+      properties:
+        object_type:
+          type: string
+          default: "Composite"
+        field_bindings:
           description: >
             Array of named fields paired with values (field_value).
             Used to represent associations of fields (composite) or
@@ -216,11 +276,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/field_binding'
-        metadata:
-          type: array
-          description: Metadata associated with the \<object> instance.
-          items:
-            $ref: '#/components/schemas/metadata'
 
     field_binding:
       title: <field_binding>
@@ -238,7 +293,25 @@ components:
             TODO: Generalize representation of value (object?)
           type: string
 
-    ### Function Network Components
+    object__dictionary:
+      allOf:
+        - $ref: '#/components/schemas/object__composite'
+      title: <object>:<dictionary>
+      description: >
+        An object instance of a \<type>:\<dictionary>.
+      required:
+        - known_keys
+      properties:
+        object_type:
+          type: string
+          default: "Dictionary"
+        known_keys:
+          description: Array of known keys (strings)
+          type: array
+          items:
+            type: string
+
+    ### GroMIT Components
 
     variable:
       title: <variable>
@@ -275,24 +348,52 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
-    function:
-      title: <function>
+    boxes:
+      oneOf:
+        - $ref: '#/components/schemas/box'
+        - $ref: '#/components/schemas/box__function'
+        - $ref: '#/components/schemas/box__predicate'
+
+    box:
+      title: <box>
       description: >
-        A representation of a function (transforms state).
-        A \<function> is a hyperedge between \<variables> and a subgraph of a Function Network (FN).
+        A box.
       required:
         - uid
         - type
-        - hyper_edges
         - metadata
       properties:
         uid:
           description: Unique identifier.
           type: string
           format: uid
-        identifier:
-          description: The name of the function
+        name:
+          description: The name of the \<box>
           type: string
+        type:
+          description: The type of the \<box>
+          type: string
+        wiring:
+          description: Array of \<wiring>s "in" the \<box>
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/wiring'
+              - $ref: '#/components/schemas/wiring__directed'
+        metadata:
+          type: array
+          description: Metadata associated with the \<box>.
+          items:
+            $ref: '#/components/schemas/metadata'
+
+    box__function:
+      allOf:
+        - $ref: '#/components/schemas/box'
+      title: <box>:<function>
+      description: >
+        A representation of a function (transforms state).
+        A \<function> is wired by a directed hyperedge between \<variables>; a \<function> may also contain a subgraph (of a Function Network (FN)).
+      properties:
         type:
           description: >
             The type of function being computed by this \<function> node.<br>
@@ -306,7 +407,7 @@ components:
                   CONTAINER, CONDITIONAL, LOOP ]
         input_variables:
           description: >
-            Array of zero or more uids for variables within the function body.<br>
+            Array of zero or more uids for variables <em>within</em> the function body.<br>
             Order of variables will match BOTH:<br>
             (1) The order of the parent \<hyper_edge> input variable uids<br>
             (2) The order of the inputs to the executable expression lambda function.
@@ -316,7 +417,7 @@ components:
             format: uid
         output_variables:
           description: >
-            Array of zero or more uids for variables within the function body.<br>
+            Array of zero or more uids for variables <em>within</em> the function body.<br>
             Order of variables will match BOTH:<br>
             (1) The order of the parent \<hyper_edge> output variable uids<br>
             (2) The order of the outputs in the return tuple of the executable expression lambda function.
@@ -334,20 +435,27 @@ components:
             Only used in loop type.
             Unique identifier for the lambda function that computes the exit condition.
           type: string
-        hyper_edges:
-          description: >
-            Array of \<hyper_edge>s representing the body of the function
-          type: array
-          items:
-            $ref: '#/components/schemas/hyper_edge'
-        metadata:
-          type: array
-          description: Metadata associated with the \<function>.
-          items:
-            $ref: '#/components/schemas/metadata'
 
-    hyper_edge:
-      title: <hyper_edge>
+    box__predicate:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <box>:<predicate>
+      description: >
+        A representation of a predicate: asserts a relation is True
+      properties:
+        expression:
+          description: >
+            Executable expression that returns a truth value.
+            Stringified pythonic version of the lambda function code.
+
+    wiring:
+      title: <wiring>
+      description: Top-level wiring
+
+    wiring__directed:
+      allOf:
+        - $ref: '#/components/schemas/wiring'
+      title: <wiring>:<directed>
       description: Function Network directed hyper edge
       required:
         - input_variables
@@ -443,8 +551,8 @@ components:
     node_set:
       title: <node_set>
       description: >
-        A collection of FN node_ids from a source \<gromit>, used to denote to an
-        arbitrary subset of the GroMIT FN.
+        A collection of GroMIT node_ids from a source \<gromit>,
+        used to denote to an arbitrary subset of the GroMIT.
         A \<node_set> may have metadata associated with it.
       required:
         - node_set_id
