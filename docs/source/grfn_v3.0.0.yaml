@@ -241,7 +241,6 @@ components:
         name:
           description: >
             Variable basename.
-          # and index.
             Typically derived from the source code identifier.
           type: string
         metadata:
