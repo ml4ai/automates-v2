@@ -37,7 +37,10 @@ ${SOURCEDIR}/grfn_metadata.html:
 ${SOURCEDIR}/grfn_intersection_graph.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gfrn_intersection_graph.yaml $@
 
-apidocs: ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html
+${SOURCEDIR}/gromit_v1.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromit_v1.0.0.yaml $@
+
+apidocs: ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html ${SOURCEDIR}/gromit_v1.0.0.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
 
