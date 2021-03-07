@@ -377,9 +377,7 @@ components:
           description: Array of \<wiring>s "in" the \<box>
           type: array
           items:
-            oneOf:
-              - $ref: '#/components/schemas/wiring'
-              - $ref: '#/components/schemas/wiring__directed'
+            $ref: '#/components/schemas/wirings'
         metadata:
           type: array
           description: Metadata associated with the \<box>.
@@ -447,6 +445,11 @@ components:
           description: >
             Executable expression that returns a truth value.
             Stringified pythonic version of the lambda function code.
+
+    wirings:
+      oneOf:
+        - $ref: '#/components/schemas/wiring'
+        - $ref: '#/components/schemas/wiring__directed'
 
     wiring:
       title: <wiring>
