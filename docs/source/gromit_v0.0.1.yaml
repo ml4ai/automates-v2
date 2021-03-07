@@ -264,9 +264,6 @@ components:
         An object of a \<type>:\<composite> has fields that are "instantiated"
         (as persistent storage with associated values).
       properties:
-        object_type:
-          type: string
-          default: "Composite"
         field_bindings:
           description: >
             Array of named fields paired with values (field_value).
@@ -302,9 +299,6 @@ components:
       required:
         - known_keys
       properties:
-        object_type:
-          type: string
-          default: "Dictionary"
         known_keys:
           description: Array of known keys (strings)
           type: array
@@ -351,8 +345,10 @@ components:
     boxes:
       oneOf:
         - $ref: '#/components/schemas/box'
+        - $ref: '#/components/schemas/box__relation'
         - $ref: '#/components/schemas/box__function'
-        - $ref: '#/components/schemas/box__predicate'
+        - $ref: '#/components/schemas/box__function__loop'
+        - $ref: '#/components/schemas/box__function__predicate'
 
     box:
       title: <box>
@@ -371,7 +367,11 @@ components:
           description: The name of the \<box>
           type: string
         type:
-          description: The type of the \<box>
+          description: The type of this GroMIT element
+          type: string
+          default: "Box"
+        box_type:
+          description: The type of \<box>
           type: string
         wiring:
           description: Array of \<wiring>s "in" the \<box>
@@ -384,6 +384,26 @@ components:
           items:
             $ref: '#/components/schemas/metadata'
 
+    box__relation:
+      allOf:
+        - $ref: '#/components/schemas/box'
+      title: <box>:<relation>
+      description: A relation.
+      properties:
+        box_type:
+          type: string
+          default: "Relation"
+        arguments:
+          description: >
+            Array of one or more uids for variables <em>within</em> the relation box.<br>
+            Order of variables will match BOTH:<br>
+            (1) The order of the parent \<hyper_edge> input variable uids<br>
+            (2) The order of the inputs to the executable expression lambda function.
+          type: array
+          items:
+            type: string
+            format: uid
+
     box__function:
       allOf:
         - $ref: '#/components/schemas/box'
@@ -392,20 +412,23 @@ components:
         A representation of a function (transforms state).
         A \<function> is wired by a directed hyperedge between \<variables>; a \<function> may also contain a subgraph (of a Function Network (FN)).
       properties:
-        type:
+        box_type:
+          type: string
+          default: "Function"
+        function_type:
           description: >
             The type of function being computed by this \<function> node.<br>
             The following are three groups of types:<br>
             <em>Compound object reference</em>: [ \"EXTRACT\", \"PACK\" ]<br>
             <em>executable + instances (wiring)</em>: [ \"OPERATOR\", \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]<br>
-            <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\", \"LOOP\" ]
+            <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\" ]
           type: string
           enum: [ EXTRACT, PACK,
                   OPERATOR, LITERAL, ASSIGN,  CONDITION, DECISION,
-                  CONTAINER, CONDITIONAL, LOOP ]
+                  CONTAINER, CONDITIONAL ]
         input_variables:
           description: >
-            Array of zero or more uids for variables <em>within</em> the function body.<br>
+            Array of zero or more uids for variables <em>within</em> the function box.<br>
             Order of variables will match BOTH:<br>
             (1) The order of the parent \<hyper_edge> input variable uids<br>
             (2) The order of the inputs to the executable expression lambda function.
@@ -415,7 +438,7 @@ components:
             format: uid
         output_variables:
           description: >
-            Array of zero or more uids for variables <em>within</em> the function body.<br>
+            Array of zero or more uids for variables <em>within</em> the function box.<br>
             Order of variables will match BOTH:<br>
             (1) The order of the parent \<hyper_edge> output variable uids<br>
             (2) The order of the outputs in the return tuple of the executable expression lambda function.
@@ -428,19 +451,34 @@ components:
             Executable expression.
             Stringified pythonic version of the lambda function code
           type: string
+
+    box__function__loop:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <box>:<function_loop>
+      description: A function that loops.
+      properties:
+        function_type:
+          description: The type of \<function>.
+          type: string
+          default: "LOOP"
         exit:
           description: >
             Only used in loop type.
             Unique identifier for the lambda function that computes the exit condition.
           type: string
 
-    box__predicate:
+    box__function__predicate:
       allOf:
         - $ref: '#/components/schemas/box__function'
-      title: <box>:<predicate>
+      title: <box>:<function_predicate>
       description: >
         A representation of a predicate: asserts a relation is True
       properties:
+        function_type:
+          description: This is a Predicate function.
+          type: string
+          default: "Predicate"
         expression:
           description: >
             Executable expression that returns a truth value.
@@ -488,7 +526,7 @@ components:
       title: <metadata>
       description: >
         Typed metadata.
-        \<gromit> is grounded through metadata.<br>
+        \<gromit> is grounded through metadata.
 
 
     ### gromit_collection
