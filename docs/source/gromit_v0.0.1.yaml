@@ -370,27 +370,6 @@ components:
         name:
           description: The name of the \<box>
           type: string
-        wiring:
-          description: Array of \<wiring>s "in" the \<box>
-          type: array
-          items:
-            oneOf:
-              - $ref: '#/components/schemas/wiring'
-              - $ref: '#/components/schemas/wiring__directed'
-        metadata:
-          type: array
-          description: Metadata associated with the \<box>.
-          items:
-            $ref: '#/components/schemas/metadata'
-
-    box__function:
-      allOf:
-        - $ref: '#/components/schemas/box'
-      title: <box>:<function>
-      description: >
-        A representation of a function (transforms state).
-        A \<function> is wired by a directed hyperedge between \<variables>; a \<function> may also contain a subgraph (of a Function Network (FN)).
-      properties:
         type:
           description: The type of the \<box>
           type: string
