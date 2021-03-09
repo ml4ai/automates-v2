@@ -272,7 +272,7 @@ components:
           description: >
             The type of function being computed by this \<function> node.<br>
             The following are three groups of types:<br>
-            <em>Compound object reference</em>: [ \"EXTRACT\", \"PACK\" ]<br>
+            <em>Object accessors (getter/setter)</em>: [ \"EXTRACT\", \"PACK\" ]<br>
             <em>executable + instances (wiring)</em>: [ \"OPERATOR\", \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]<br>
             <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\", \"LOOP\" ]
           type: string
