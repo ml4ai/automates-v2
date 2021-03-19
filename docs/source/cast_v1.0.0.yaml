@@ -25,9 +25,30 @@ components:
   schemas:
   
     AstNode:
-      description: "Generic base class for all AST nodes"
+      description: | 
+        Generic base class for all AST nodes. Every node holds a list of source refs to relate to where it was found in the original code.
       type: object
-    
+      properties:
+        source_refs:
+          type: array
+          items: 
+            $ref: "#/components/schemas/SourceRef"
+
+    SourceRef:
+      description: |
+        Represents a location in source code.
+      properties:
+        source_file_name:
+          type: string
+        col_start:
+          type: number
+        col_end:
+          type: number
+        row_start:
+          type: number
+        row_end:
+          type: number
+
     Module:
       type: object
       description: | 
