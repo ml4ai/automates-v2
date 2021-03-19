@@ -33,10 +33,14 @@ components:
       description: | 
         Represents a section of code found from the evaluated program
       
+        name - Name of the enclosing module
+
         __body__ - The ordered list of nodes found in the body of the module. This will hold function definitions, control statement nodes (If/Loop), or expressions.
       allOf: 
          - $ref: "#/components/schemas/AstNode"
       properties:
+        name:
+          type: string
         body:
           type: array
           items: 
@@ -46,8 +50,8 @@ components:
     ClassDef:
       type: object
       description: |
-        Represents an if control statement and maintains the capacity to represent elif / else blocks.
-        
+        Represents the definition of a class. Holds the name of the class, its fields, and its associated functions.
+
         __name__ - The raw string name of the class definition.
         
         __bases__ - A list of the base classes.
@@ -83,7 +87,7 @@ components:
         
         __body__ - A list of nodes representing the expressions of the body controlled by the expr.
         
-        __orelse__ - This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold another node of type If. If this is the else clause of the statement, . If there are no further statements for this If statement, this will be null.
+        __orelse__ - This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold one node of type If. If this is the else clause of the statement, all of the nodes of the else body well be held in order in the list. If there are no further statements for this If statement, this will be empty.
         
       allOf: 
       - $ref: "#/components/schemas/AstNode"
@@ -95,7 +99,9 @@ components:
           items:
             $ref: "#/components/schemas/AstNode"
         orelse:
-          $ref: "#/components/schemas/AstNode"
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
   
     
     Loop:
@@ -124,7 +130,7 @@ components:
         
         __name__ - The name of the function.
         
-        __args__ - The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function.
+        __func_args__ - The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function.
         
         __body__ - The ordered list of nodes representing the body of the function.
         
@@ -134,7 +140,7 @@ components:
         name:
           type: object
           $ref: "#/components/schemas/Name"
-        args:
+        func_args:
           type: array
           items:
             $ref: "#/components/schemas/Var"
@@ -236,8 +242,6 @@ components:
         value:
           $ref: "#/components/schemas/AstNode"  
   
-              
-    # TODO I dont think we need to differentiate between bool op and binary op. Python does this so they can collepse many of the same boolean operation into one node (i.e. "a or b or c" is one node vs two nested nodes)
     BinaryOp:
       type: object
       description: |
@@ -353,14 +357,17 @@ components:
       type: string
       description: |
         Allowed variable types in the AST.
-      enum:
-        - Unknown
-        - String
-        - Number
-        - List
-        - Dict
-        - Set
-        - Tuple
+
+        Allowed predefined types:
+          - Unknown
+          - String
+          - Number
+          - List
+          - Dict
+          - Set
+          - Tuple
+
+        OR it holds the name of a ClassDef name.
   
     Name: 
       type: object
@@ -369,7 +376,7 @@ components:
       allOf: 
          - $ref: "#/components/schemas/AstNode"
       properties:
-        val: 
+        name  : 
           type: string    
   
   
@@ -444,7 +451,7 @@ components:
       allOf: 
          - $ref: "#/components/schemas/AstNode"
       properties:
-        val: 
+        string: 
           type: string    
         
     Number: 
@@ -454,6 +461,15 @@ components:
       allOf: 
          - $ref: "#/components/schemas/AstNode"
       properties:
-        val: 
+        number: 
           type: number
     
+    Boolean: 
+      type: object
+      description: |
+        Used to represent boolean literals.
+      allOf: 
+         - $ref: "#/components/schemas/AstNode"
+      properties:
+        boolean: 
+          type: boolean
