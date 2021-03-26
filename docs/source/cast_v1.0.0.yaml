@@ -159,8 +159,7 @@ components:
          - $ref: "#/components/schemas/AstNode"
       properties:
         name:
-          type: object
-          $ref: "#/components/schemas/Name"
+          type: string
         func_args:
           type: array
           items:
