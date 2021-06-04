@@ -16,6 +16,7 @@ Welcome to AutoMATES's documentation!
    grfn_v3.0.0
    grfn_metadata
    gfrn_intersection_graph
+   grfn_api_v1.0.0
 
 .. toctree::
    :maxdepth: 2

@@ -1,0 +1,262 @@
+swagger: "2.0"
+info:
+  description: "This document describes the API for interacting with AutoMATES GrFN."
+  version: "1.0.0"
+  title: "AutoMATES GrFN"
+  termsOfService: ""
+  contact:
+    email: "claytonm@arizona.edu"
+  license:
+    name: "Modified Apache 2.0"
+    url: "https://github.com/ml4ai/automates/blob/master/LICENSE.txt"
+host: "TODOhost"
+basePath: "/v1"
+tags:
+- name: "translate"
+  description: "Calls to interact with GrFN translation"
+  # externalDocs:
+  #   description: "Find out more"
+  #   url: "http://swagger.io"
+- name: "extract_dynamics"
+  description: "Calls to interact with model dynamics of a GrFN"
+- name: "execute"
+  description: "Calls to execute GrFN models"
+  # externalDocs:
+  #   description: "Find out more about our store"
+  #   url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /translate:
+    post:
+      tags:
+      - "translate"
+      summary: "Translate to GrFN json for given source files"
+      description: ""
+      operationId: "translate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object representing the source code to translate GrFN from"
+        required: true
+        schema:
+          $ref: "#/definitions/Source"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/GrFNResult"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
+  /extract_dynamics:
+    post:
+      tags:
+      - "extract_dynamics"
+      summary: "Given a GrFN, searches for potential portions of the GrFN that represent the model dynamics and returns a list of these sub graphs."
+      description: ""
+      operationId: "extract_dynamics"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object representing the GrFN to find model dynamics within"
+        required: true
+        schema:
+          type: "object"
+          properties: 
+            grfn:
+              description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+              type: "object"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/GrFNResult"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /execute:
+    post:
+      tags:
+      - "execute"
+      summary: "Executes a GrFN with given inputs and provides the results."
+      description: ""
+      operationId: "execute"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object containing GrFN json and describing inputs for execution"
+        required: true
+        schema:
+          $ref: "#/definitions/Execution"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ExecutionResult"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
+
+# securityDefinitions:
+#   petstore_auth:
+#     type: "oauth2"
+#     authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+#     flow: "implicit"
+#     scopes:
+#       write:pets: "modify pets in your account"
+#       read:pets: "read your pets"
+#   api_key:
+#     type: "apiKey"
+#     name: "api_key"
+#     in: "header"
+    
+definitions:
+
+  Source:
+    type: "object"
+    properties:
+      files:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            file_name:
+              type: "string"
+            file_type: 
+              type: "string"
+            base64_encoding: 
+              type: "string"
+      source_language:
+        description: "Specifies the source language for all supplied files. For a particular language, all files provided should be compilable from flat directory with a single compile command for the language. I.e. given c, all of the files given must be compilable via \"gcc file1.c file2.c ... fileN.c\""
+        type: "string"
+        enum:
+          - c
+          - fortran
+          - python
+          
+  GrFNResult:
+    type: "object"
+    properties:
+      grfn:
+        description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+        type: "object"
+      execution_inputs:
+        type: "array"
+        items: 
+          type: "object"
+          properties:
+            variable_identifier: 
+              type: "string"
+            variable_type:
+              type: "string"
+              enum:
+                - int
+                - float
+                - string
+                - list
+            required:
+              description: "Indicates if a value for this input is required to execute the GrFN"
+              type: "boolean"
+      execution_outputs:
+        type: "array"
+        items: 
+          type: "object"
+          properties:
+            variable_identifier: 
+              type: "string"
+            variable_type:
+              type: "string"
+              enum:
+                - int
+                - float
+                - string
+                - list   
+  Execution:
+    type: "object"
+    properties:
+      inputs:
+        type: "array"
+        items:
+          type: "object"
+          properties: 
+            variable_identifier: 
+              type: "string"
+            value: 
+              description: "The arrays of this item should match the type of the variable. All value arrays of input variables must be the same length for vectorized execution to work."
+              type: "array"
+              items:
+                type: "object"
+      grfn:
+        description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+        type: "object"
+        
+  ExecutionResult:
+    type: "object"
+    properties:
+      outputs:
+        type: "array"
+        items:
+          type: "object"
+          properties: 
+            variable_name: 
+              type: "string"
+            results: 
+              type: "array"
+              items:
+                type: "string"
+    
+  
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        description: "success or describes the encountered error"
+        type: "string"
+        
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

@@ -37,6 +37,9 @@ ${SOURCEDIR}/grfn_metadata.html:
 ${SOURCEDIR}/grfn_intersection_graph.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gfrn_intersection_graph.yaml $@
 
+${SOURCEDIR}/grfn_api_v1.0.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/grfn_api_v1.0.0.yaml $@
+
 ${SOURCEDIR}/gromet_v0.0.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_v0.0.1.yaml $@
 
