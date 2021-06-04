@@ -7,8 +7,8 @@ info:
   contact:
     email: "claytonm@arizona.edu"
   license:
-    name: "TODO Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    name: "Modified Apache 2.0"
+    url: "https://github.com/ml4ai/automates/blob/master/LICENSE.txt"
 host: "TODOhost"
 basePath: "/v1"
 tags:
@@ -32,7 +32,7 @@ paths:
     post:
       tags:
       - "translate"
-      summary: "Translate the GrFN json for given source files"
+      summary: "Translate to GrFN json for given source files"
       description: ""
       operationId: "translate"
       consumes:
@@ -48,11 +48,15 @@ paths:
           $ref: "#/definitions/Source"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/GrFNResult"
-        "405":
+        "400":
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
           schema:
             $ref: "#/definitions/ApiResponse"
       # security:
@@ -63,7 +67,7 @@ paths:
     post:
       tags:
       - "extract_dynamics"
-      summary: "Given a grfn, searches for potential portions of the grfn that represent the model dynamics and returns a list of these sub graphs."
+      summary: "Given a GrFN, searches for potential portions of the GrFN that represent the model dynamics and returns a list of these sub graphs."
       description: ""
       operationId: "extract_dynamics"
       consumes:
@@ -73,7 +77,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Object representing the GrFN to find model dynamics in"
+        description: "Object representing the GrFN to find model dynamics within"
         required: true
         schema:
           type: "object"
@@ -83,20 +87,24 @@ paths:
               type: "object"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/GrFNResult"
-        "405":
+        "400":
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
           schema:
             $ref: "#/definitions/ApiResponse"
   /execute:
     post:
       tags:
       - "execute"
-      summary: "Executes a grfn with given inputs and provides the results."
+      summary: "Executes a GrFN with given inputs and provides the results."
       description: ""
       operationId: "execute"
       consumes:
@@ -115,8 +123,12 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/ExecutionResult"
-        "405":
+        "400":
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
           schema:
             $ref: "#/definitions/ApiResponse"
       # security:
@@ -154,7 +166,7 @@ definitions:
             base64_encoding: 
               type: "string"
       source_language:
-        description: "Specifies the source language for all supplied files. Can be"
+        description: "Specifies the source language for all supplied files. For a particular language, all files provided should be compilable from flat directory with a single compile command for the language. I.e. given c, all of the files given must be compilable via \"gcc file1.c file2.c ... fileN.c\""
         type: "string"
         enum:
           - c
@@ -167,12 +179,12 @@ definitions:
       grfn:
         description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
         type: "object"
-      inputs:
+      execution_inputs:
         type: "array"
         items: 
           type: "object"
           properties:
-            variable_name: 
+            variable_identifier: 
               type: "string"
             variable_type:
               type: "string"
@@ -181,12 +193,15 @@ definitions:
                 - float
                 - string
                 - list
-      outputs:
+            required:
+              description: "Indicates if a value for this input is required to execute the GrFN"
+              type: "boolean"
+      execution_outputs:
         type: "array"
         items: 
           type: "object"
           properties:
-            variable_name: 
+            variable_identifier: 
               type: "string"
             variable_type:
               type: "string"
@@ -203,12 +218,13 @@ definitions:
         items:
           type: "object"
           properties: 
-            variable_name: 
+            variable_identifier: 
               type: "string"
             value: 
+              description: "The arrays of this item should match the type of the variable. All value arrays of input variables must be the same length for vectorized execution to work."
               type: "array"
               items:
-                type: "string"
+                type: "object"
       grfn:
         description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
         type: "object"
