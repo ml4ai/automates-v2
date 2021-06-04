@@ -17,8 +17,8 @@ tags:
   # externalDocs:
   #   description: "Find out more"
   #   url: "http://swagger.io"
-- name: "extract_dynamics"
-  description: "Calls to interact with model dynamics of a GrFN"
+- name: "extract"
+  description: "Calls to interact with a GrFN and extract information"
 - name: "execute"
   description: "Calls to execute GrFN models"
   # externalDocs:
@@ -63,10 +63,10 @@ paths:
       # - petstore_auth:
       #   - "write:pets"
       #   - "read:pets"
-  /extract_dynamics:
+  /extract/dynamics:
     post:
       tags:
-      - "extract_dynamics"
+      - "extract"
       summary: "Given a GrFN, searches for potential portions of the GrFN that represent the model dynamics and returns a list of these sub graphs."
       description: ""
       operationId: "extract_dynamics"
@@ -100,6 +100,45 @@ paths:
           description: "Internal error"
           schema:
             $ref: "#/definitions/ApiResponse"
+  /extract/variable_io:
+    post:
+      tags:
+      - "extract"
+      summary: "Determine the input/output variable information for a GrFN."
+      description: ""
+      operationId: "extract_variable_io"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The GrFN we are detecting variable IO information in."
+        required: true
+        schema:
+          type: "object"
+          properties: 
+            grfn:
+              description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+              type: "object"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/VariableIO"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
   /execute:
     post:
       tags:
@@ -179,6 +218,13 @@ definitions:
       grfn:
         description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
         type: "object"
+      variable_io:
+        type: "object"
+        $ref: "#/definitions/VariableIO"
+        
+  VariableIO:
+    type: "object"
+    properties:
       execution_inputs:
         type: "array"
         items: 
