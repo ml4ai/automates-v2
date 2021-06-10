@@ -1,4 +1,4 @@
-GrFN API JSON Spec - v1.0.0
+GrFN API Spec - v1.0.0
 =======================
 
 .. raw:: html
