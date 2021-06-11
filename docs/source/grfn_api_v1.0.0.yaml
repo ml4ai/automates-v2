@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "This document describes the API for interacting with AutoMATES GrFN."
   version: "1.0.0"
-  title: "AutoMATES GrFN"
+  title: "AutoMATES API Details"
   termsOfService: ""
   contact:
     email: "claytonm@arizona.edu"
