@@ -32,7 +32,7 @@ paths:
     post:
       tags:
       - "translate"
-      summary: "Translate to GrFN json for given source files"
+      summary: "Translate to GrFN or GroMEt json for given source files"
       description: ""
       operationId: "translate"
       consumes:
@@ -42,7 +42,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Object representing the source code to translate GrFN from"
+        description: "Object representing the source code and documentation to translate into GrFN or GroMEt"
         required: true
         schema:
           $ref: "#/definitions/Source"
@@ -139,7 +139,7 @@ paths:
       # - petstore_auth:
       #   - "write:pets"
       #   - "read:pets"
-  /execute:
+  /execute/grfn:
     post:
       tags:
       - "execute"
@@ -174,6 +174,48 @@ paths:
       # - petstore_auth:
       #   - "write:pets"
       #   - "read:pets"
+  /execute/gromet_experiment:
+    post:
+      tags:
+      - "execute"
+      summary: "Executes a GroMEt experiment."
+      description: ""
+      operationId: "gromet_experiment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Object containing GroMEt json and describing expirement conditions."
+        required: true
+        schema:
+          type: "object"
+          properties:
+              experiment:
+                # type: object
+                $ref: "#/definitions/ExperimentSpec"
+              gromet:
+                  type: object
+                  description: ""
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ExperimentResults"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
 
 # securityDefinitions:
 #   petstore_auth:
@@ -193,7 +235,18 @@ definitions:
   Source:
     type: "object"
     properties:
-      files:
+      source_code_files:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            file_name:
+              type: "string"
+            file_type: 
+              type: "string"
+            base64_encoding: 
+              type: "string"
+      documentation_files:
         type: "array"
         items:
           type: "object"
@@ -205,12 +258,17 @@ definitions:
             base64_encoding: 
               type: "string"
       source_language:
-        description: "Specifies the source language for all supplied files. For a particular language, all files provided should be compilable from flat directory with a single compile command for the language. I.e. given c, all of the files given must be compilable via \"gcc file1.c file2.c ... fileN.c\""
+        description: "Specifies the source language for all supplied source code files. For a particular language, all files provided should be compilable from flat directory with a single compile command for the language. I.e. given c, all of the files given must be compilable via \"gcc file1.c file2.c ... fileN.c\""
         type: "string"
         enum:
           - c
           - fortran
           - python
+      output_model:
+        type: "string"
+        enum: 
+          - GROMET
+          - GRFN
           
   GrFNResult:
     type: "object"
@@ -303,6 +361,99 @@ definitions:
         description: "success or describes the encountered error"
         type: "string"
         
+  Measure: 
+    type: "object"
+    properties:
+      measure_id:
+        type: "string"
+        description: "UID of this measure object."
+      source:
+        type: "string"
+        description: "UID of either the Port or Junction source for this measure"
+      interval:
+        description: ""
+        type: "object"
+        properties:
+          type:
+            type: "string"
+            enum:
+            - TIME_POINTS
+            - TUPLE
+          items:
+            type: "array"
+            items: 
+              type: "number"
+      type:
+        type: "string"
+        enum:
+        - M:instance
+        - M:interval
+        - M:steady_state
+
+  Fold:
+    type: "object"
+    properties:
+      args:
+        type: "array"
+        items:
+          description: "Each item is either a UID string representing the UID of a measure for input or is another Fold object to calculate as input."
+          type: object
+      expression:
+        type: "object"
+        description: "A GroMEt expression object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py#L457"
+        
+  ParameterAssignment:
+    type: "object"
+    properties:
+      value:
+        type: "string"
+      value_type:
+        type: "string"
+      source:
+        type: "string"
+        description: "UID of the source Port or Junction"
+    
+      
+  ExperimentSpec:
+    type: "object"
+    properties:
+      gromet:
+        type: "object"
+        description: "A GroMEt object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py"
+        
+      measures:
+        type: "array"
+        items:
+          $ref: "#/definitions/Measure"
+          
+      folds:
+        type: "array"
+        items:
+          $ref: "#/definitions/Fold"
+              
+      parameters:
+        type: "array"
+        items:
+          type: "object"
+          $ref: "#/definitions/ParameterAssignment"
+
+  ExperimentResult:
+    type: "object"
+    properties:
+      measure_uid:
+        description: "The UID of the measure these results correspond to."
+        type: "string"
+      results:
+        description: "A list of results for the inputs of the measure."
+        type: "array"
+        items:
+          type: "object"
+      
+  ExperimentResults:
+    type: "array"
+    items:
+      $ref: "#/definitions/ExperimentResult"
+      
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
