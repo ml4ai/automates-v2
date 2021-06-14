@@ -1,4 +1,4 @@
-GrFN API Spec - v1.0.0
+AutoMATES API Spec - v1.0.0
 =======================
 
 .. raw:: html
