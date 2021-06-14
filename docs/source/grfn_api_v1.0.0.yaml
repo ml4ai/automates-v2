@@ -366,10 +366,10 @@ definitions:
     properties:
       measure_id:
         type: "string"
-        description: "UID of this measure object."
+        description: "UID of this Measure object."
       source:
         type: "string"
-        description: "UID of either the Port or Junction source for this measure"
+        description: "UID of either the Port or Junction source for this Measure"
       interval:
         description: ""
         type: "object"
@@ -396,7 +396,7 @@ definitions:
       args:
         type: "array"
         items:
-          description: "Each item is either a UID string representing the UID of a measure for input or is another Fold object to calculate as input."
+          description: "Each item is either a UID string representing the UID of a Measure for input or is another Fold object to calculate as input."
           type: object
       expression:
         type: "object"
@@ -441,10 +441,10 @@ definitions:
     type: "object"
     properties:
       measure_uid:
-        description: "The UID of the measure these results correspond to."
+        description: "The UID of the Measure these results correspond to."
         type: "string"
       results:
-        description: "A list of results for the inputs of the measure."
+        description: "A list of results for the inputs of the Measure."
         type: "array"
         items:
           type: "object"
