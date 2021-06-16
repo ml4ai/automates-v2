@@ -9,8 +9,8 @@ info:
   license:
     name: "Modified Apache 2.0"
     url: "https://github.com/ml4ai/automates/blob/master/LICENSE.txt"
-host: "TODOhost"
-basePath: "/v1"
+host: "hopper.sista.arizona.edu"
+basePath: "/api/v1/"
 tags:
 - name: "translate"
   description: "Calls to interact with GrFN translation"
@@ -50,7 +50,7 @@ paths:
         "200":
           description: "Successful operation"
           schema:
-            $ref: "#/definitions/GrFNResult"
+            $ref: "#/definitions/ModelResult"
         "400":
           description: "Invalid input"
           schema:
@@ -91,7 +91,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/GrFNResult"
+              $ref: "#/definitions/ModelResult"
         "400":
           description: "Invalid input"
           schema:
@@ -194,11 +194,7 @@ paths:
           type: "object"
           properties:
               experiment:
-                # type: object
                 $ref: "#/definitions/ExperimentSpec"
-              gromet:
-                  type: object
-                  description: ""
       responses:
         "200":
           description: "successful operation"
@@ -270,11 +266,11 @@ definitions:
           - GROMET
           - GRFN
           
-  GrFNResult:
+  ModelResult:
     type: "object"
     properties:
-      grfn:
-        description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+      model:
+        description: "Either a GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html or a gromet model as defined https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
         type: "object"
       variable_io:
         type: "object"
