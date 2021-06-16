@@ -16,13 +16,12 @@ Welcome to AutoMATES's documentation!
    grfn_v3.0.0
    grfn_metadata
    gfrn_intersection_graph
-   grfn_api_v1.0.0
 
 .. toctree::
    :maxdepth: 2
-   :caption: ASKE-E Model Exchange
+   :caption: ASKE-E AutoMATES API
  
-   gromet_v0.0.1
+   grfn_api_v1.0.0
 
 
 Indices and tables
