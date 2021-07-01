@@ -139,6 +139,45 @@ paths:
       # - petstore_auth:
       #   - "write:pets"
       #   - "read:pets"
+  /extract/gromet/variable_io:
+    post:
+      tags:
+      - "extract"
+      summary: "Determine the input/output variable information for a GroMEt."
+      description: ""
+      operationId: "extract_gromet_variable_io"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The GroMet we are detecting variable IO information in."
+        required: true
+        schema:
+          type: "object"
+          properties: 
+            gromet:
+              description: "A GroMet object"
+              type: "object"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/GroMEtIO"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
   /execute/grfn:
     post:
       tags:
@@ -194,12 +233,12 @@ paths:
           type: "object"
           properties:
               experiment:
-                $ref: "#/definitions/ExperimentSpec"
+                $ref: "#/definitions/GroMEtExecution"
       responses:
         "200":
           description: "successful operation"
           schema:
-            $ref: "#/definitions/ExperimentResults"
+            $ref: "#/definitions/GroMEtExecutionResult"
         "400":
           description: "Invalid input"
           schema:
@@ -276,6 +315,41 @@ definitions:
         type: "object"
         $ref: "#/definitions/VariableIO"
         
+  GroMEtIO:
+    type: object
+    properties:
+      inputs:
+        type: array
+        items: 
+          type: object
+          properties:
+            gromet_identifier: 
+              type: string
+            type:
+              type: string
+              enum:
+                - int
+                - float
+                - string
+                - list
+            required:
+              description: "Indicates if a value for this input is required to execute the GroMEt"
+              type: boolean
+      outputs:
+        type: array
+        items: 
+          type: object
+          properties:
+            gromet_identifier: 
+              type: string
+            type:
+              type: string
+              enum:
+                - int
+                - float
+                - string
+                - list   
+  
   VariableIO:
     type: "object"
     properties:
@@ -310,6 +384,7 @@ definitions:
                 - float
                 - string
                 - list   
+                
   Execution:
     type: "object"
     properties:
