@@ -344,7 +344,6 @@ definitions:
               items:
                 type: "string"
     
-  
   ApiResponse:
     type: "object"
     properties:
@@ -357,98 +356,162 @@ definitions:
         description: "success or describes the encountered error"
         type: "string"
         
-  Measure: 
-    type: "object"
+  GroMEtExecution:
+    type: object
     properties:
-      measure_id:
-        type: "string"
-        description: "UID of this Measure object."
-      source:
-        type: "string"
-        description: "UID of either the Port or Junction source for this Measure"
-      interval:
-        description: ""
-        type: "object"
+      definition:
+        type: object
         properties:
-          type:
-            type: "string"
-            enum:
-            - TIME_POINTS
-            - TUPLE
-          items:
-            type: "array"
-            items: 
-              type: "number"
-      type:
-        type: "string"
-        enum:
-        - M:instance
-        - M:interval
-        - M:steady_state
-
-  Fold:
-    type: "object"
-    properties:
-      args:
-        type: "array"
+          type: 
+            type: string
+            description: "The type of GroMEt this is. For AutoMATEs purposes, this will be a function network."
+          source: 
+            type: string
+            description: "The json string of the GroMEt model to execute. It will have the following structure: '{ \"model\": \" GroMEt Model String \" }'"
+      start:
+        type: integer
+        description: "The starting value for our domain parameter."
+      end:
+        type: integer
+        description: "The ending value for our domain parameter."
+      step:
+        type: integer
+        description: "The step size to calculate all execution points between start and end for our domain parameter."
+      domain_parameter:
+        type: string
+        description: "The GroMEt UID (source Port or Junction) of the domain parameter to be controlled by start/end/step."
+      parameters:
+        description: "A map of GroMEt UIDs (source Port or Junction) to their initial value for execution."
+        type: object
+        additionalProperties:
+          type: integer
+      outputs:
+        description: "A list of GroMEt UIDs (exit Port or Junction) for the final values to observe after execution."
+        type: array
         items:
-          description: "Each item is either a UID string representing the UID of a Measure for input or is another Fold object to calculate as input."
-          type: object
-      expression:
-        type: "object"
-        description: "A GroMEt expression object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py#L457"
-        
-  ParameterAssignment:
-    type: "object"
+          type: string
+
+  GroMEtExecutionResult:
+    type: object
     properties:
-      value:
-        type: "string"
-      value_type:
-        type: "string"
-      source:
-        type: "string"
-        description: "UID of the source Port or Junction"
+      status: 
+        description: "If the execution succedded or failed."
+        type: string
+        enum: 
+        - "success"
+        - "failure"
+      result:
+        description: "Results for the requested outputs and domain parameter."
+        type: object
+        properties:
+          values:
+            description: "A map of GroMEt UIDs (exit Port or Junction) to their result values. For each output specified in outputs in the input message, the key will be the GroMEt UID and the value will be the list of its results."
+            type: object
+            additionalProperties:
+              type: array
+              items:
+                type: number
+          domain_parameter:
+            description: "The resulting values from execution for the described domain parameter in the input."
+            type: array
+            items:
+              type: integer
+
+
+  # NOTE For the initial ASKE demo, we wont use this complex of a message for
+  # gromet executions. We might change back to this into the future.
+  # Measure: 
+  #   type: "object"
+  #   properties:
+  #     measure_id:
+  #       type: "string"
+  #       description: "UID of this Measure object."
+  #     source:
+  #       type: "string"
+  #       description: "UID of either the Port or Junction source for this Measure"
+  #     interval:
+  #       description: ""
+  #       type: "object"
+  #       properties:
+  #         type:
+  #           type: "string"
+  #           enum:
+  #           - TIME_POINTS
+  #           - TUPLE
+  #         items:
+  #           type: "array"
+  #           items: 
+  #             type: "number"
+  #     type:
+  #       type: "string"
+  #       enum:
+  #       - M:instance
+  #       - M:interval
+  #       - M:steady_state
+
+  # Fold:
+  #   type: "object"
+  #   properties:
+  #     args:
+  #       type: "array"
+  #       items:
+  #         description: "Each item is either a UID string representing the UID of a Measure for input or is another Fold object to calculate as input."
+  #         type: object
+  #     expression:
+  #       type: "object"
+  #       description: "A GroMEt expression object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py#L457"
+        
+  # ParameterAssignment:
+  #   type: "object"
+  #   properties:
+  #     value:
+  #       type: "string"
+  #     value_type:
+  #       type: "string"
+  #     source:
+  #       type: "string"
+  #       description: "UID of the source Port or Junction"
     
       
-  ExperimentSpec:
-    type: "object"
-    properties:
-      gromet:
-        type: "object"
-        description: "A GroMEt object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py"
+  # ExperimentSpec:
+  #   type: "object"
+  #   properties:
+  #     gromet:
+  #       type: "object"
+  #       description: "A GroMEt object as defined here: https://github.com/ml4ai/automates/blob/e99c0d0c5479c2ac35e884c2837db4569a0662bf/scripts/gromet/gromet.py"
         
-      measures:
-        type: "array"
-        items:
-          $ref: "#/definitions/Measure"
+  #     measures:
+  #       type: "array"
+  #       items:
+  #         $ref: "#/definitions/Measure"
           
-      folds:
-        type: "array"
-        items:
-          $ref: "#/definitions/Fold"
+  #     folds:
+  #       type: "array"
+  #       items:
+  #         $ref: "#/definitions/Fold"
               
-      parameters:
-        type: "array"
-        items:
-          type: "object"
-          $ref: "#/definitions/ParameterAssignment"
+  #     parameters:
+  #       type: "array"
+  #       items:
+  #         type: "object"
+  #         $ref: "#/definitions/ParameterAssignment"
 
-  ExperimentResult:
-    type: "object"
-    properties:
-      measure_uid:
-        description: "The UID of the Measure these results correspond to."
-        type: "string"
-      results:
-        description: "A list of results for the inputs of the Measure."
-        type: "array"
-        items:
-          type: "object"
+  # ExperimentResult:
+  #   type: "object"
+  #   properties:
+  #     measure_uid:
+  #       description: "The UID of the Measure these results correspond to."
+  #       type: "string"
+  #     results:
+  #       description: "A list of results for the inputs of the Measure."
+  #       type: "array"
+  #       items:
+  #         type: "object"
       
-  ExperimentResults:
-    type: "array"
-    items:
-      $ref: "#/definitions/ExperimentResult"
+  # ExperimentResults:
+  #   type: "array"
+  #   items:
+  #     $ref: "#/definitions/ExperimentResult"
       
 externalDocs:
   description: "Find out more about Swagger"
