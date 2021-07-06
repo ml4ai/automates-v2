@@ -139,6 +139,46 @@ paths:
       # - petstore_auth:
       #   - "write:pets"
       #   - "read:pets"
+  /extract/expr_trees:
+    post:
+      tags:
+      - "extract"
+      summary: "Determine the individual expression trees for GrFN lambdas."
+      description: ""
+      operationId: "extract_expr_trees"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "The GrFN we are finding expr tree information in."
+        required: true
+        schema:
+          type: "object"
+          properties: 
+            grfn:
+              description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
+              type: "object"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "object"
+            $ref: "#/definitions/ExpressionTreeResult"
+        "400":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "500":
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      # security:
+      # - petstore_auth:
+      #   - "write:pets"
+      #   - "read:pets"
   /extract/gromet/variable_io:
     post:
       tags:
@@ -491,6 +531,73 @@ definitions:
             type: array
             items:
               type: integer
+
+  ExpressionTreeResult:
+    type: array
+    items:
+      type: object
+      properties:
+        func_node_uid: 
+          description: "The uid of the lambda node from grfn this expr tree relates to."
+          type: string
+        nodes: 
+          description: "The list of node objects under this func_node_uid of a lambda node from GrFN."
+          type: array
+          items:
+            type: object
+            required: [uid, type, children]
+            properties:
+              uid:
+                description: "Unique identifier for this node in the expr tree."
+                type: string
+              type:
+                description: "The type of this node."
+                type: string
+                enum:
+                - DEFINITION
+                - OPERATOR
+                - VALUE
+                - VARIABLE
+              children:
+                description: "A list of uids for the children of this expr. These children can be found and referenced under the same node list they were found in."
+                type: array
+                items:
+                  type: string
+
+
+              operator:
+                description:  |
+                  When the node is type OPERATOR, defines what type of operator this is. 
+                  This value of this field will be
+                  
+                    * ACCESS
+                    * PACK
+                    * RETURN
+                    * IfExpr
+                    * Call (will be in format of "<func_name>()" )
+                    * Any python binary op, unary op, boolean op, or comparator op
+                
+                type: string
+
+              definition:
+                description: "When this node is type DEFINITION, holds the definition type."
+                type: string
+                enum:
+                - LAMBDA
+                - ARGUMENTS
+                
+              identifier:
+                description: "When this node is type VARIABLE, holds the identifier of the GrFN variable."
+                type: string
+                
+              grfn_uid:
+                description: "When this node is type VARIABLE, holds the uid of the GrFN variable."
+                type: string
+                
+              value:
+                description: "When this node is type VALUE, holds a literal value for use in the expression tree."
+                type: number
+
 
 
   # NOTE For the initial ASKE demo, we wont use this complex of a message for
