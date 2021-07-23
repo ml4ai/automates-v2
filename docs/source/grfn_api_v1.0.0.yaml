@@ -165,7 +165,6 @@ paths:
         "200":
           description: "Successful operation"
           schema:
-            type: "object"
             $ref: "#/definitions/ExpressionTreeResult"
         "400":
           description: "Invalid input"
@@ -417,6 +416,9 @@ definitions:
           properties:
             variable_identifier: 
               type: "string"
+            default:
+              description: True if this variables output is provided by default when the GrFN is executed, False if you need to explicitily specify this variable id for output.
+              type: "boolean"
             variable_type:
               type: "string"
               enum:
@@ -440,6 +442,11 @@ definitions:
               type: "array"
               items:
                 type: "object"
+      outputs:
+        description: "A list of GrFN variable UIDs to capture for output outside of the default output variables"
+        type: "array"
+        items:
+          type: "string"
       grfn:
         description: "A GrFN object as defined here https://ml4ai.github.io/automates-v2/grfn_v3.0.0.html"
         type: "object"
