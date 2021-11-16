@@ -22,6 +22,7 @@ Welcome to AutoMATES's documentation!
    :caption: ASKE-E AutoMATES API
  
    grfn_api_v1.0.0
+   gromet_v0.0.1
 
 
 Indices and tables
