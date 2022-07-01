@@ -16,7 +16,7 @@ Welcome to the SKEMA documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Older ASKE APIs
+   :caption: (Legacy ASKE APIs)
 
    air
    cast_v1.0.0
