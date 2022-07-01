@@ -2,7 +2,7 @@ openapi: 3.0.0
 
 info:
   description: |
-    This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the University of Arizonas program analysis pipeline. 
+    This document outlines the structure of the CAST that will be used as a generic representation of the semantics of a program written in any language. This will be used when creating functions networks from programs using the SKEMA Program Analysis pipeline.
     
      __Generating Class Structure__
      
@@ -17,7 +17,7 @@ info:
       
     
   version: "1.2.0"
-  title: "AutoMATES Common Abstract Syntax Tree (CAST) v1"
+  title: "SKEMA Common Abstract Syntax Tree (CAST)"
 
 paths: {}
 

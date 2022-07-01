@@ -24,7 +24,7 @@ components:
       title: <metadata>
       description: >
         Typed metadata consisting of an array of attribute-value pairs.
-        \<grfn> is grounded through metadata.
+        \<gromet> is grounded through metadata.
       required:
         - type
         - attributes
