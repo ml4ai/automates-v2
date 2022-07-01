@@ -1,5 +1,7 @@
 # Adding a new OpenAPI doc
 
+- Ensure you have sphinx; if not, `pip install sphinx`.
+
 - Create .yaml file in source/
 - Create .rst file in source/
 - Add file item to source/index.rst
@@ -8,6 +10,10 @@
   - Add target to apidocs line
 - Run `$ make apidocs`
 
+Protip: use
+```cat -e -t -v Makefile```
+to ensure that all recipes start with `^I` (tab).
+See: https://stackoverflow.com/questions/16931770/makefile4-missing-separator-stop
 
 # On the CI side (e.g., Travis)
 
