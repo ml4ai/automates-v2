@@ -42,7 +42,10 @@ components:
 
     GrometFNCollection:
       description: |
-        TODO
+        A collection of Function Networks (FNs).
+        When derived from program, the FNs are typically structured hierarchically,
+        which a root FN (that has a Module Outer Box), and then has a set of Function
+        Boxes that have contents that are themselves FNs.
       type: object
       properties:
         function_networks:
@@ -52,7 +55,7 @@ components:
 
     GrometFN:
       description: |
-        TODO
+        A Function Network (FN).
       type: object
       properties:
 
