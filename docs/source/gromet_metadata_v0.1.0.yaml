@@ -1,16 +1,16 @@
 openapi: 3.0.0
 
 info:
-  title: GrFN JSON Metadata spec
+  title: GroMEt JSON Metadata spec
   description: >
-    AutoMATES Grounded Function Network (GrFN) JSON Metadata schema specification
+    SKEMA Grounded Model Exchange (GroMEt) JSON Metadata schema specification
   contact:
     name: Clayton T. Morrison
-    email: claytonm@arizona.edu
+    email: claytonm@email.arizona.edu
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: 1.0.0
+  version: 0.1.0
 
 paths: {}
 

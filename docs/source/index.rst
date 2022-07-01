@@ -3,12 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to AutoMATES's documentation!
-=====================================
+Welcome to the SKEMA documentation!
+===================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents
+   :caption: ASKEM
+
+   cast_v1.2.0
+   gromet_v0.1.0
+   gromet_metadata_v0.1.0
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Older ASKE APIs
 
    air
    cast_v1.0.0
@@ -16,11 +24,6 @@ Welcome to AutoMATES's documentation!
    grfn_v3.0.0
    grfn_metadata
    gfrn_intersection_graph
-
-.. toctree::
-   :maxdepth: 2
-   :caption: ASKE-E AutoMATES API
- 
    grfn_api_v1.0.0
    gromet_v0.0.1
 

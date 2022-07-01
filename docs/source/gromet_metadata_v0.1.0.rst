@@ -1,5 +1,5 @@
-GrFN Metadata JSON Spec
-=======================
+GroMEt Metadata JSON Spec
+=========================
 
 .. raw:: html
-  :file: grfn_metadata.html
+  :file: gromet_metadata_v0.1.0.html
