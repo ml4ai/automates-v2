@@ -19,9 +19,9 @@ sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'AutoMATES'
-copyright = '2020, Clayton T. Morrison and Paul D. Hein'
-author = 'Clayton T. Morrison and Paul D. Hein'
+project = 'SKEMA'
+copyright = '2022, Clayton T. Morrison'
+author = 'Clayton T. Morrison'
 
 
 # -- General configuration ---------------------------------------------------
