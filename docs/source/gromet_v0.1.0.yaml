@@ -32,13 +32,17 @@ info:
 
 
   version: "0.1.0"
-  title: "SKEMA Grounded Model Exchange (GroMEt) Schema for Function Networks"
+  title: "Grounded Model Exchange (GroMEt) Schema for Function Networks"
 
 paths: {}
 
 components:
 
   schemas:
+
+    GrometMetadata:
+      description: Metadata
+      type: object
 
     GrometFNCollection:
       description: |
@@ -52,6 +56,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GrometFN"
+        metadata:
+          $ref: "#/components/schemas/GrometMetadata"
 
     GrometFN:
       description: |
@@ -296,6 +302,9 @@ components:
           items:
             $ref: "#/components/schemas/GrometWire"
 
+        metadata:
+          $ref: "#/components/schemas/GrometMetadata"
+
     GrometWire:
       description: FN Wire
       type: object
@@ -307,6 +316,9 @@ components:
           $ref: "#/components/schemas/GrometPort"
           # description: The target Port of the Wire.
 
+        metadata:
+          $ref: "#/components/schemas/GrometMetadata"
+
     GrometPort:
       description: FN Port
       type: object
@@ -315,12 +327,17 @@ components:
           $ref: "#/components/schemas/GrometBox"
           # description: The Box the Port belongs to.
 
+        metadata:
+          $ref: "#/components/schemas/GrometMetadata"
+
     GrometBox:
       description: |
         FN Box
       properties:
         name:
           type: string
+        metadata:
+          $ref: "#/components/schemas/GrometMetadata"
 
     GrometFunctionType:
       type: string
@@ -331,6 +348,20 @@ components:
         - Module       # Function with no Outer Ports, no contents
         - PrimitiveOp  # Function with no contents
         - LiteralVlaue # Function with single return value (Port) and a value
+
+    GrometLiteralValue:
+      description: |
+        Gromet Literal Value.
+      type: object
+      properties:
+        value_type:
+          type: string
+          description: The type of the value
+        value:
+          type: string
+          description: |
+            The value as a string.
+            To get the literal value, interpret string according to value_type.
 
     GrometBoxFunction:
       description: |
@@ -346,6 +377,9 @@ components:
           type: number
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
+        value:
+          $ref: "#/components/schemas/GrometLiteralValue"
+          # description: Only present when function_type = LiteralValue
 
     GrometBoxLoop:
       description: |
