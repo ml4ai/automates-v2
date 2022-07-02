@@ -471,10 +471,11 @@ components:
         - Tuple
         - Map
 
-
 ###############################################################################################
+# The following are left-over from < 1.2 because the GCC pipeline still
+#    depends on these and needs update
 
-    List: 
+    List:
       type: object
       description: |
         A static representation of a list.
