@@ -374,7 +374,7 @@ components:
           $ref: "#/components/schemas/GrometFunctionType"
           # description: The type of the GrometBoxFunction.
         contents:
-          type: number
+          type: integer
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
         value:
@@ -401,12 +401,12 @@ components:
       type: object
       properties:
         condition:
-          type: number
+          type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the loop condition Predicate of the Loop.
         body:
-          type: number
+          type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the body (Function) of the Loop.
@@ -426,17 +426,17 @@ components:
       type: object
       properties:
         condition:
-          type: number
+          type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the conditional condition.
         body_if:
-          type: number
+          type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the body (Function) of IF-branch of the conditional.
         body_else:
-          type: number
+          type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the body (Function) of ELSE-branch of the conditional.
