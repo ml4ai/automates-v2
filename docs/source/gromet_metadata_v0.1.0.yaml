@@ -22,7 +22,7 @@ info:
        To generate Java classes rather, change the `-l python` to `-l java`.
        Change the value to the `-o` option to the desired output location.
        ```
-       swagger-codegen generate -l python -o ./client -i https://raw.githubusercontent.com/ml4ai/automates-v2/master/docs/source/gromet_metadata_v{CURRENT_VERSION}}.yaml
+       swagger-codegen generate -l python -o ./client -i https://raw.githubusercontent.com/ml4ai/automates-v2/master/docs/source/gromet_metadata_v{CURRENT_VERSION}.yaml
        ```
     3. Once it executes, the client code will be generated at your specified
        location.
