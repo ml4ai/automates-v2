@@ -40,7 +40,7 @@ components:
 
   schemas:
 
-    GrometMetadata:
+    Metadata:
       description: Metadata
       type: object
 
@@ -57,7 +57,7 @@ components:
           items:
             $ref: "#/components/schemas/GrometFN"
         metadata:
-          $ref: "#/components/schemas/GrometMetadata"
+          $ref: "#/components/schemas/Metadata"
 
     GrometFN:
       description: |
@@ -303,7 +303,7 @@ components:
             $ref: "#/components/schemas/GrometWire"
 
         metadata:
-          $ref: "#/components/schemas/GrometMetadata"
+          $ref: "#/components/schemas/Metadata"
 
     GrometWire:
       description: FN Wire
@@ -317,7 +317,7 @@ components:
           # description: The target Port of the Wire.
 
         metadata:
-          $ref: "#/components/schemas/GrometMetadata"
+          $ref: "#/components/schemas/Metadata"
 
     GrometPort:
       description: FN Port
@@ -328,7 +328,7 @@ components:
           # description: The Box the Port belongs to.
 
         metadata:
-          $ref: "#/components/schemas/GrometMetadata"
+          $ref: "#/components/schemas/Metadata"
 
     GrometBox:
       description: |
@@ -337,7 +337,7 @@ components:
         name:
           type: string
         metadata:
-          $ref: "#/components/schemas/GrometMetadata"
+          $ref: "#/components/schemas/Metadata"
 
     FunctionType:
       type: string
