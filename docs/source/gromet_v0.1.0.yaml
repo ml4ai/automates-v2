@@ -339,7 +339,7 @@ components:
         metadata:
           $ref: "#/components/schemas/GrometMetadata"
 
-    GrometFunctionType:
+    FunctionType:
       type: string
       enum:
         - Function     # Function with any number of input and output Ports and FN contents.
@@ -349,9 +349,8 @@ components:
         - PrimitiveOp  # Function with no contents
         - LiteralVlaue # Function with single return value (Port) and a value
 
-    GrometLiteralValue:
-      description: |
-        Gromet Literal Value.
+    LiteralValue:
+      description: Literal Value.
       type: object
       properties:
         value_type:
@@ -371,14 +370,14 @@ components:
       type: object
       properties:
         function_type:
-          $ref: "#/components/schemas/GrometFunctionType"
+          $ref: "#/components/schemas/FunctionType"
           # description: The type of the GrometBoxFunction.
         contents:
           type: integer
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
         value:
-          $ref: "#/components/schemas/GrometLiteralValue"
+          $ref: "#/components/schemas/LiteralValue"
           # description: Only present when function_type = LiteralValue
 
     GrometBoxLoop:
