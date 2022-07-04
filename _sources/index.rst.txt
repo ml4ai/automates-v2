@@ -11,7 +11,7 @@ Welcome to the SKEMA documentation!
    :caption: ASKEM
 
    cast_v1.2.0
-   gromet_v0.1.0
+   gromet_FN_v0.1.0
    gromet_metadata_v0.1.0
 
 .. toctree::
