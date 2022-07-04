@@ -33,7 +33,10 @@ info:
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
     4. (In SKEMA context)
-       Place the generated classes under <AutoMATES>/automates/model_assembly/gromet/model/
+       Place the generated classes under
+       ```
+       <AutoMATES>/automates/model_assembly/gromet/model/
+       ```
 
   contact:
     name: Clayton T. Morrison
