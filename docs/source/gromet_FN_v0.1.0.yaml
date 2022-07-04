@@ -1,7 +1,7 @@
 openapi: 3.0.0
 
 info:
-  title: "Grounded Model Exchange (GroMEt) Schema for Function Networks"
+  title: "Grounded Model Exchange (GroMEt) schema for Function Networks"
   description: |
     This document defines the GroMEt Function Network data model.
     Note that Metadata is defined in separate spec.

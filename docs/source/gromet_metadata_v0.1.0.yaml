@@ -1,9 +1,9 @@
 openapi: 3.0.0
 
 info:
-  title: GroMEt JSON Metadata spec
+  title: GroMEt Metadata spec
   description: |
-    Grounded Model Exchange (GroMEt) JSON Metadata schema specification
+    Grounded Model Exchange (GroMEt) Metadata schema specification
 
     __Using Swagger to Generate Class Structure__
 
