@@ -11,8 +11,8 @@ info:
     To automatically generate Python or Java models corresponding to this
     document, you can use
     [swagger-codegen](https://swagger.io/tools/swagger-codegen/).
-    We can use this to generate client code based off of this spec that
-    will also generate the class structure.
+    This can be used to generate the client code based off of this spec,
+    and in the process this will generate the data model class structure.
 
     1. Install via the method described for your operating system
        [here](https://github.com/swagger-api/swagger-codegen#Prerequisites).
@@ -32,11 +32,11 @@ info:
        For java, they will be located in
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
-    4. (In SKEMA context)
-       Place the generated classes under
-       ```
-       <AutoMATES>/automates/model_assembly/gromet/model/
-       ```
+    If generating GroMEt schema data model classes in SKEMA (AutoMATES), then
+    afer generating the above, follow the instructions here:
+    ```
+    <automates>/automates/model_assembly/gromet/model/README.md
+    ```
 
   contact:
     name: Clayton T. Morrison

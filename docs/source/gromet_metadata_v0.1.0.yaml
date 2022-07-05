@@ -31,11 +31,12 @@ info:
        For java, they will be located in
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
-    4. (In SKEMA context)
-       Place the generated classes under
-       ```
-       <AutoMATES>/automates/model_assembly/gromet/metadata/
-       ```
+    If generating GroMEt Metadata schema data model classes in SKEMA (AutoMATES),
+    then afer generating the above, follow the instructions here:
+    ```
+    <automates>/automates/model_assembly/gromet/metadata/README.md
+    ```
+
   contact:
     name: Clayton T. Morrison
     email: claytonm@email.arizona.edu
