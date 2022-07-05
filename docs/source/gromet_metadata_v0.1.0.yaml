@@ -295,7 +295,7 @@ components:
           $ref: '#/components/schemas/bibjson'
 
     bibjson:
-      title: <bibjson>
+      # title: <bibjson>
       description: See http://okfnlabs.org/bibjson/
 
     ### Functions
