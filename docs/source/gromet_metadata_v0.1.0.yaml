@@ -158,8 +158,8 @@ components:
     SourceCodeReference:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <ANY>.<code_span_reference>
-      description: >
+      title: <ANY>.SourceCodeReference
+      description: |
         Reference to a source code span (sub-line, line, block).
       required:
         - code_type
@@ -191,7 +191,7 @@ components:
     GrometCreation:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <grfn>.<creation>
+      title: <GrometFNCollection>.GrometCreation
       description: Metadata about the creation of a GroMEt JSON file
       required:
         - timestamp
@@ -207,7 +207,7 @@ components:
     CodeCollection:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <grfn>.<code_collection_reference>
+      title: <GrometFNCollection>.CodeCollection
       description: Reference to a code collection (i.e., repository)
       required:
         - global_reference_id
@@ -245,7 +245,7 @@ components:
     TextualDocumentCollection:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <grfn>.<textual_document_reference_set>
+      title: <GrometFNCollection>.TextualDocumentCollection
       description: >
         A collection of textual document references
         (e.g., documentation, scientific publication, etc.).
@@ -303,7 +303,7 @@ components:
     EquationDefinition:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <function>.<equation_definition>
+      title: <ANY>.EquationDefinition
       description: >
         Association of an EquationExtraction with a GroMEt component
         (e.g., a GroMEt FN Function Box).
@@ -370,7 +370,7 @@ components:
     EquationParameter:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <variable>.<equation_parameter>
+      title: <PortOutput>.EquationParameter
       description: |
         Association of parameter values extracted from equations to host Port.
       required:
@@ -388,13 +388,13 @@ components:
         value:
           $ref: "#/components/schemas/LiteralValue"
 
+    # Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
     TextDefinition:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <variable>.<text_definition>
+      title: <PortOutput>.TextDefinition
       description: |
-        Definition of host derived from a text source.<br>
-        Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
+        Definition of host derived from a text source.
       required:
         - text_extraction
         - variable_identifier
@@ -415,7 +415,7 @@ components:
     TextParameter:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      # title: <variable>.<text_parameter>
+      title: <PortOutput>.TextParameter
       description: |
         Association of parameter values extracted from text to host Port.
       required:
