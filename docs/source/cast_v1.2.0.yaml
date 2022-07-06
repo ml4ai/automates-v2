@@ -442,7 +442,7 @@ components:
          - $ref: "#/components/schemas/AstNode"
       properties:
         value_type  :
-          $ref      : string  
+          type      : string
         value       :
           type      : object
         source_code_data_type:
