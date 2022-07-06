@@ -65,6 +65,10 @@ components:
         Boxes that have contents that are themselves FNs.
       type: object
       properties:
+        name:
+          type: string
+          description: |
+            The name of the Function Network Collection.
         function_networks:
           type: array
           items:
@@ -77,6 +81,10 @@ components:
         A Function Network (FN).
       type: object
       properties:
+
+        name:
+          type: string
+          desciption: The name of the Function Network
 
         # Outer Box
         B:
@@ -322,6 +330,8 @@ components:
       description: FN Wire
       type: object
       properties:
+        name:
+          type: string
         src:
           $ref: "#/components/schemas/GrometPort"
           # description: The source Port of the Wire.
@@ -336,6 +346,8 @@ components:
       description: FN Port
       type: object
       properties:
+        name:
+          type: string
         box:
           $ref: "#/components/schemas/GrometBox"
           # description: The Box the Port belongs to.
