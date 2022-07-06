@@ -373,7 +373,7 @@ components:
         - Predicate    # Expression who's return value (Port) is Boolean
         - Module       # Function with no Outer Ports, no contents
         - PrimitiveOp  # Function with no contents
-        - LiteralVlaue # Function with single return value (Port) and a value
+        - LiteralValue # Function with single return value (Port) and a value
 
     LiteralValue:
       description: Literal Value.
@@ -383,9 +383,9 @@ components:
           type: string
           description: The type of the value
         value:
-          type: string
+          type: object
           description: |
-            The value as a string.
+            The value as an object representing the value.
             To get the literal value, interpret string according to value_type.
 
     GrometBoxFunction:
