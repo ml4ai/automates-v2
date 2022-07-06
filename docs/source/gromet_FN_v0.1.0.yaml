@@ -84,7 +84,8 @@ components:
 
         name:
           type: string
-          desciption: The name of the Function Network
+          desciption: |
+            The name of the Function Network
 
         # Outer Box
         B:
