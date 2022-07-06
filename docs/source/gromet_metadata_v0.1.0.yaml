@@ -186,6 +186,36 @@ components:
           description: The end column of the identifier name string instance
           type: integer
 
+    SourceCodeDataType:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <LiteralValue>.SourceCodeDataType
+      description: |
+        Information derived by Program Analysis inferring the literal value data type.
+      required:
+        - code_type
+        - code_file_reference_uid
+        - line_begin
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_data_type"
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        data_type:
+          type: string
+          description: |
+            The source code data type as named by the source language.
+            E.g., "int_8", "Float64", etc...
+
     ### Gromet
 
     GrometCreation:
