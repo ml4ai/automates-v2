@@ -386,7 +386,7 @@ components:
           type: object
           description: |
             The value as an object representing the value.
-            To get the literal value, interpret string according to value_type.
+            Interpret the value object according to the value_type.
 
     GrometBoxFunction:
       description: |
