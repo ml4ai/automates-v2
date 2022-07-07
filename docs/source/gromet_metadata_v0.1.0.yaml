@@ -189,7 +189,7 @@ components:
     SourceCodeDataType:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <LiteralValue>.SourceCodeDataType
+      title: <BoxLiteralValue>.SourceCodeDataType
       description: |
         Information derived by Program Analysis inferring the literal value data type.
       required:
