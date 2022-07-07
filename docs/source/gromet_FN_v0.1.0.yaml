@@ -88,239 +88,239 @@ components:
             The name of the Function Network
 
         # Outer Box
-        B:
+        b:
           type: array
           description: |
-            B: The FN Outer Box (although not enforced, there is always only 1).
+            b: The FN Outer Box (although not enforced, there is always only 1).
           items:
             $ref: "#/components/schemas/GrometBoxFunction"
-        OPI:
+        opi:
           type: array
           description: |
-            OPI: The Outer Port Inputs of the FN Outer Box (B)
+            opi: The Outer Port Inputs of the FN Outer Box (b)
           items:
             $ref: "#/components/schemas/GrometPort"
-        OPO:
+        opo:
           type: array
           description: |
-            OPO: The Outer Port Outputs of the FN Outer Box (B)
+            opo: The Outer Port Outputs of the FN Outer Box (b)
           items:
             $ref: "#/components/schemas/GrometPort"
-        WOPIO:
+        wopio:
           type: array
           description: |
-            WOPIO: The Wires
-            from (src) Outer Box Outer Port Inputs (OPI)
-            to (tgt) Outer Box Outer Port Outputs (OPO).
+            wopio: The Wires
+            from (src) Outer Box Outer Port Inputs (opi)
+            to (tgt) Outer Box Outer Port Outputs (opo).
             (AKA: Passthrough.)
           items:
             $ref: "#/components/schemas/GrometWire"
 
         # Functions
-        BF:
+        bf:
           type: array
           description: |
-            BF: The GrometBoxFunctions within this GrometFN.
+            bf: The GrometBoxFunctions within this GrometFN.
           items:
             $ref: "#/components/schemas/GrometBoxFunction"
-        PIF:
+        pif:
           type: array
           description: |
-            PIF: The Port Inputs of the GrometBoxFunctions (BF).
+            pif: The Port Inputs of the GrometBoxFunctions (bf).
           items:
             $ref: "#/components/schemas/GrometPort"
-        POF:
+        pof:
           type: array
           description: |
-            POF: The Port Outputs of the GrometBoxFunctions (BF).
+            pof: The Port Outputs of the GrometBoxFunctions (bf).
           items:
             $ref: "#/components/schemas/GrometPort"
-        WFOPI:
+        wfopi:
           type: array
           description: |
-            WFOPI: The Wires
-            from (src) Outer Box Outer Port Inputs (OPI)
-            to (tgt) GrometBoxFunctions Port Inputs (PIF)
+            wfopi: The Wires
+            from (src) Outer Box Outer Port Inputs (opi)
+            to (tgt) GrometBoxFunctions Port Inputs (pif)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WFL:
+        wfl:
           type: array
           description: |
-            WFL: The Wires
-            from (src) GrometBoxFunctions Port Outputs (POF)
-            to (tgt) GrometBoxLoops Port Inputs (PIL)
+            wfl: The Wires
+            from (src) GrometBoxFunctions Port Outputs (pof)
+            to (tgt) GrometBoxLoops Port Inputs (pil)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WFF:
+        wff:
           type: array
           description: |
-            WFF: The Wires
-            from (src) GrometBoxFunctions Port Outputs (POF)
-            to (tgt) GrometBoxFunctions Port Inputs (PIF)
+            wff: The Wires
+            from (src) GrometBoxFunctions Port Outputs (pof)
+            to (tgt) GrometBoxFunctions Port Inputs (pif)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WFC:
+        wfc:
           type: array
           description: |
-            WFC: The Wires
-            from (src) GrometBoxFunctions Port Outputs (POF)
-            to (tgt) GrometBoxConditionals Port Inputs (PIC)
+            wfc: The Wires
+            from (src) GrometBoxFunctions Port Outputs (pof)
+            to (tgt) GrometBoxConditionals Port Inputs (pic)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WFOPO:
+        wfopo:
           type: array
           description: |
-            WFOPO: The Wires
-            from (src) GrometBoxFunctions Port Outputs (POF)
-            to (tgt) Outer Box Outer Port Outputs (OPO)
+            wfopo: The Wires
+            from (src) GrometBoxFunctions Port Outputs (pof)
+            to (tgt) Outer Box Outer Port Outputs (opo)
           items:
             $ref: "#/components/schemas/GrometWire"
 
-        WLcargs:
+        wl_cargs:
           type: array
           description: |
-            WLcargs: The Wires
+            wl_cargs: The Wires
             from (src) the arguments (the Port Outputs) of the Loop
-            condition (itself a Predicate, a type of GrometBoxFunction) (PIF)
-            to (tgt) the Port Inputs of the Loop (PIL).
+            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
+            to (tgt) the Port Inputs of the Loop (pil).
           items:
             $ref: "#/components/schemas/GrometWire"
 
-        WCcargs:
+        wc_cargs:
           type: array
           description: |
-            WCcargs: The Wires
+            wc_cargs: The Wires
             from (src) the arguments (the Port Outputs) of the Conditional
-            condition (itself a Predicate, a type of GrometBoxFunction) (PIF)
-            to (tgt) the Port Inputs of the Conditional (PIC).
+            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
+            to (tgt) the Port Inputs of the Conditional (pic).
           items:
             $ref: "#/components/schemas/GrometWire"
 
         # Loops
-        BL:
+        bl:
           type: array
           description: |
-            BL: The FN GrometBoxLoops within this GrometFN.
+            bl: The FN GrometBoxLoops within this GrometFN.
           items:
             $ref: "#/components/schemas/GrometBoxLoop"
-        PIL:
+        pil:
           type: array
           description: |
-            PIL: The Port Inputs of the GrometBoxLoops (BL)
+            pil: The Port Inputs of the GrometBoxLoops (bl)
           items:
             $ref: "#/components/schemas/GrometPort"
-        POL:
+        pol:
           type: array
           description: |
-            POL: The Port Outputs of the GrometBoxLoops (BL)
+            pol: The Port Outputs of the GrometBoxLoops (bl)
           items:
             $ref: "#/components/schemas/GrometPort"
-        WLoop:
+        wloop:
           type: array
           description: |
-            WLoop: The Wires that form the loop,
-            from (src) the Port Inputs of the Loop (PIL)
-            to (tgt) the Port Outputs of the Loop (POL)
+            wloop: The Wires that form the loop,
+            from (src) the Port Inputs of the Loop (pil)
+            to (tgt) the Port Outputs of the Loop (pol)
           items:
             $ref: "#/components/schemas/GrometPort"
-        WLOPI:
+        wlopi:
           type: array
           description: |
-            WLOPI: The Wires
-            from (src) the Outer Box Outer Port Inputs (OPI)
-            to (tgt) GrometBoxLoops Port Inputs (PIL)
+            wlopi: The Wires
+            from (src) the Outer Box Outer Port Inputs (opi)
+            to (tgt) GrometBoxLoops Port Inputs (pil)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WLL:
+        wll:
           type: array
           description: |
-            WLL: The Wires
-            from (src) the GrometBoxLoops Port Outputs (POL)
-            to (tgt) the GrometBoxLoops Port Inputs (PIL)
+            wll: The Wires
+            from (src) the GrometBoxLoops Port Outputs (pol)
+            to (tgt) the GrometBoxLoops Port Inputs (pil)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WLF:
+        wlf:
           type: array
           description: |
-            WLF: The Wires
-            from (src) the GrometBoxLoops Port Outputs (POL)
-            to (tgt) the GrometBoxFunctions Port Inputs (PIF)
+            wlf: The Wires
+            from (src) the GrometBoxLoops Port Outputs (pol)
+            to (tgt) the GrometBoxFunctions Port Inputs (pif)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WLC:
+        wlc:
           type: array
           description: |
-            WLC: The Wires
-            from (src) the GrometBoxLoops Port Outputs (POL)
-            to (tgt) the GrometBoxConditionals Port Inputs (PIC)
+            wlc: The Wires
+            from (src) the GrometBoxLoops Port Outputs (pol)
+            to (tgt) the GrometBoxConditionals Port Inputs (pic)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WLOPO:
+        wlopo:
           type: array
           description: |
-            WLOPO: The Wires
-            from (src) GrometBoxLoops Port Outputs (POL)
-            to (tgt) Outer Box Outer Port Outputs (OPO)
+            wlopo: The Wires
+            from (src) GrometBoxLoops Port Outputs (pol)
+            to (tgt) Outer Box Outer Port Outputs (opo)
           items:
             $ref: "#/components/schemas/GrometWire"
 
         # Conditionals
-        BC:
+        bc:
           type: array
           description: |
-            BC: The FN GrometBoxConditionals within this GrometFN.
+            bc: The FN GrometBoxConditionals within this GrometFN.
           items:
             $ref: "#/components/schemas/GrometBoxConditional"
-        PIC:
+        pic:
           type: array
           description: |
-            PIC: The Port Inputs of the GrometBoxConditionals (BC)
+            pic: The Port Inputs of the GrometBoxConditionals (bc)
           items:
             $ref: "#/components/schemas/GrometPort"
-        POC:
+        poc:
           type: array
           description: |
-            POC: The Port Outputs of the GrometBoxConditionals (BC)
+            poc: The Port Outputs of the GrometBoxConditionals (bc)
           items:
             $ref: "#/components/schemas/GrometPort"
-        WCOPI:
+        wcopi:
           type: array
           description: |
-            WCOPI: The Wires
-            from (src) the Outer Box Outer Port Inputs (OPI)
-            to (tgt) the GrometBoxConditionals Port Inputs (PIC)
+            wcopi: The Wires
+            from (src) the Outer Box Outer Port Inputs (opi)
+            to (tgt) the GrometBoxConditionals Port Inputs (pic)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WCL:
+        wcl:
           type: array
           description: |
-            WCL: The Wires
-            from (src) the GrometBoxConditionals Port Outputs (POC)
-            to (tgt) the GrometBoxLoops Port Inputs (PIL)
+            wcl: The Wires
+            from (src) the GrometBoxConditionals Port Outputs (poc)
+            to (tgt) the GrometBoxLoops Port Inputs (pil)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WCF:
+        wcf:
           type: array
           description: |
-            WCF: The Wires
-            from (src) the GrometBoxConditionals Port Outputs (POC)
-            to (tgt) the GrometBoxFunctions Port Inputs (PIF)
+            wcf: The Wires
+            from (src) the GrometBoxConditionals Port Outputs (poc)
+            to (tgt) the GrometBoxFunctions Port Inputs (pif)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WCC:
+        wcc:
           type: array
           description: |
-            WCC: The Wires
-            from (src) the GrometBoxConditionals Port Outputs (POC)
-            to (tgt) the GrometBoxConditionals Port Inputs (PIC)
+            wcc: The Wires
+            from (src) the GrometBoxConditionals Port Outputs (poc)
+            to (tgt) the GrometBoxConditionals Port Inputs (pic)
           items:
             $ref: "#/components/schemas/GrometWire"
-        WCOPO:
+        wcopo:
           type: array
           description: |
-            WCOPO: The Wires
-            from (src) the GrometBoxConditionals Port Outputs (POC)
-            to (tgt) the Outer Box Outer Port Outputs (OPO)
+            wcopo: The Wires
+            from (src) the GrometBoxConditionals Port Outputs (poc)
+            to (tgt) the Outer Box Outer Port Outputs (opo)
           items:
             $ref: "#/components/schemas/GrometWire"
 
@@ -368,12 +368,12 @@ components:
     FunctionType:
       type: string
       enum:
-        - Function     # Function with any number of input and output Ports and FN contents.
-        - Expression   # Function with single return value (Port)
-        - Predicate    # Expression who's return value (Port) is Boolean
-        - Module       # Function with no Outer Ports, no contents
-        - PrimitiveOp  # Function with no contents
-        - LiteralValue # Function with single return value (Port) and a value
+        - FUNCTION     # Function with any number of input and output Ports and FN contents.
+        - EXPRESSION   # Function with single return value (Port)
+        - PREDICATE    # Expression who's return value (Port) is Boolean
+        - MODULE       # Function with no Outer Ports, no contents
+        - PRIMITIVE    # Function with no contents
+        - LITERALVALUE # Function with single return value (Port) and a value
 
     LiteralValue:
       description: Literal Value.
