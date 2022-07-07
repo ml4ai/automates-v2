@@ -215,10 +215,10 @@ components:
             pol: The Port Outputs of the GrometBoxLoops (bl)
           items:
             $ref: "#/components/schemas/GrometPort"
-        wloop:
+        wl:
           type: array
           description: |
-            wloop: The Wires that form the loop,
+            wl: The Wires that form the loop,
             from (src) the Port Inputs of the Loop (pil)
             to (tgt) the Port Outputs of the Loop (pol)
           items:
