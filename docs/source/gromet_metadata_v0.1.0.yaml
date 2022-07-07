@@ -216,6 +216,73 @@ components:
             The source code data type as named by the source language.
             E.g., "int_8", "Float64", etc...
 
+    SourceCodeLoopInit:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Function>.SourceCodeLoopInit
+      description: |
+        Provides bookkeeping to associate the initialization of a Loop
+        (e.g., a for-loop), which may be specified outside of the loop,
+        with the loop itself.
+      properties:
+        metadata_type:
+          type: sring
+          default: "source_code_loop_init"
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        loop_name:
+          type: string
+          description: |
+            The name of the loop that this initialization is associated with.
+#        justification:
+#          type: string
+#          description: |
+#            Represent the justification for why Program Analysis introduced this
+#            initialization code.
+#            For example, when processing a Python for-loop, this should be \"for_loop\"
+
+    SourceCodeLoopUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Function>.SourceCodeLoopUpdate
+      description: |
+        Provides bookkeeping to associate the update of a Loop parameter
+        (e.g., the iterator variable in a for-loop), which may be specified
+        within the body of the loop, but otherwise independent of the other
+        computation within the loop body.
+      properties:
+        metadata_type:
+          type: sring
+          default: "source_code_loop_update"
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        loop_name:
+          type: string
+          description: |
+            The name of the loop that this initialization is associated with.
+    #        justification:
+    #          type: string
+    #          description: |
+    #            Represent the justification for why Program Analysis introduced this
+    #            initialization code.
+    #            For example, when processing a Python for-loop, this should be \"for_loop\"
+
     ### Gromet
 
     GrometCreation:
