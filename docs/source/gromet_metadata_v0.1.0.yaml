@@ -219,7 +219,7 @@ components:
     SourceCodeLoopInit:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <Function>.SourceCodeLoopInit
+      title: <BoxLoop>.SourceCodeLoopInit
       description: |
         Provides bookkeeping to associate the initialization of a Loop
         (e.g., a for-loop), which may be specified outside of the loop,
@@ -252,7 +252,7 @@ components:
     SourceCodeLoopUpdate:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <Function>.SourceCodeLoopUpdate
+      title: <BoxLoop>.SourceCodeLoopUpdate
       description: |
         Provides bookkeeping to associate the update of a Loop parameter
         (e.g., the iterator variable in a for-loop), which may be specified
