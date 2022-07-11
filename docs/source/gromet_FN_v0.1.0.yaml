@@ -176,6 +176,15 @@ components:
           items:
             $ref: "#/components/schemas/GrometWire"
 
+#        wl_iargs:
+#          type: array
+#          description: |
+#            wl_iargs: The Wires
+#            from (src) the Port Inputs of the Loop (pil) (that get set by the init)
+#            to (tgt) the init (itself a Function, a type of GrometBoxFunction) (pof)
+#          items:
+#            $ref: "#/components/schemas/GrometWire"
+
         wl_cargs:
           type: array
           description: |
@@ -215,14 +224,17 @@ components:
             pol: The Port Outputs of the GrometBoxLoops (bl)
           items:
             $ref: "#/components/schemas/GrometPort"
-        wl:
-          type: array
-          description: |
-            wl: The Wires that form the loop,
-            from (src) the Port Inputs of the Loop (pil)
-            to (tgt) the Port Outputs of the Loop (pol)
-          items:
-            $ref: "#/components/schemas/GrometPort"
+# 2022-07-11 deprecated --
+#            not needed as can rely on port ordering
+#            to identify correspondence between input and output ports
+#        wl:
+#          type: array
+#          description: |
+#            wl: The Wires that form the loop,
+#            from (src) the Port Inputs of the Loop (pil)
+#            to (tgt) the Port Outputs of the Loop (pol)
+#          items:
+#            $ref: "#/components/schemas/GrometPort"
         wlopi:
           type: array
           description: |
