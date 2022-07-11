@@ -424,15 +424,32 @@ components:
         __Loop execution semantics__:
         The Boolean output Port of the condition Predicate represents the
         loop *exit condition*.
-        Loop execution starts by first evaluating the loop condition.
+        Loop execution starts by first evaluating the init Function, if it
+        is available. The output ports of the referenced init Function are
+        mapped to the input ports to the Loop by the wl_iargs Wires: src Loop
+        Port Inputs (pil) and tgt init BoxFunction Port Outputs (pof);
+        these set the initial values as input to the loop. The init Function is
+        evaluated only during the first iteration through the loop.
+        Next (and on every subsequent iteration), the loop condition Predicate
+        is evalutated. The Loop condition input Ports get their values by
+        by Wires in the wl_cargs table that have as their src the loop condition
+        Port Inputs (pif) and as tgt the Loop Port Inputs (pil).
         If the exit condition Port evaluates to True, then the current values
         at the input Ports to the Loop are copied to the output Ports and
         the execution moves past the Loop.
         Else, if the exit condition is False, then the values at the Outer
         Port Inputs are copied to the Loop body Input Ports, the body executes,
-        and the resulting Output Ports of the body are copied to the Outer Port
-        Inputs of the loop and execution advances to the next round of Loop
-        evaluation.
+        and the resulting Output Ports of the body are copied to the Port
+        Inputs (pil) of the loop and execution advances to the next round of Loop
+        evaluation (which after the first iteration will go directly to evaluating
+        the loop condition). <br>
+        The Port Input (pil) Ports correspond 1-1 with Port Output (pol) Ports of
+        the BoxLoop, as well as 1-1 with the Port Input Ports (pif) and Port
+        Output Ports (pof) of the loop body BoxFunction Ports -- the indices of
+        each of these Ports within all four tables (pil, pol, pif, pof) are the
+        same (e.g., if index 22 is the Port Input of the loop, then that same index
+        will be the corresponding Port in the Port Output (pol) of the loop as
+        well as the Port Input (pif) and Port Output (pif) of the BoxFunction).
       allOf:
         - $ref: "#/components/schemas/GrometBox"
       type: object
