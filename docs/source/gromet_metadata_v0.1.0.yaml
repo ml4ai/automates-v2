@@ -186,6 +186,27 @@ components:
           description: The end column of the identifier name string instance
           type: integer
 
+# Decision 2022-07-11: For now in GroMEt, any identifier name is used as the NAME of the GroMEt object
+#    SourceCodeIdentifierName:
+#      allOf:
+#        - $ref: '#/components/schemas/Metadata'
+#        title: <ANY>.SourceCodeIdentifierName
+#        description: |
+#          The original identifier name as it appears in the source code.
+#          This will happen under these conditions:
+#          (1) variable desclaration and assignment to a variable => save to Port Output;
+#          (2) function declaration => save to BoxFunction;
+#          (3) function call => save to BoxFunction call box;
+#          etc...
+#        required:
+#          - identifier_name
+#        properties:
+#          metadata_type:
+#            type: string
+#            default: "source_code_identifier_name"
+#          identifier_name:
+#            type: string
+
     SourceCodeDataType:
       allOf:
         - $ref: '#/components/schemas/Metadata'
@@ -193,9 +214,9 @@ components:
       description: |
         Information derived by Program Analysis inferring the literal value data type.
       required:
-        - code_type
-        - code_file_reference_uid
-        - line_begin
+        - source_language
+        - source_language_version
+        - data_type
       properties:
         metadata_type:
           type: string
