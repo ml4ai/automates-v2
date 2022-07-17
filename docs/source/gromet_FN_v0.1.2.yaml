@@ -57,21 +57,21 @@ components:
         Metadata (Placeholder for Metadata definition in gromet_metadata_v{VERSION_NUMBER}.yaml).
       type: object
 
+    GrometType:
+      type: string
+      enum:
+        - FN      # A Function Network
+        - IMPORT  # Import object
+
     TypedValue:
       description: |
         Provides a typed object in JSON
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/GrometTypes"
+          $ref: "#/components/schemas/GrometType"
         value:
           type: object
-
-    GrometType:
-      type: string
-      enum:
-        - FN      # A Function Network
-        - IMPORT  # Import object
 
     ImportType:
       type: string
@@ -156,7 +156,7 @@ components:
 
         name:
           type: string
-          desciption: |
+          description: |
             The name of the Function Network
 
         # Outer Box
