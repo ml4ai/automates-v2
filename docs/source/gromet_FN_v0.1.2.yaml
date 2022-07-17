@@ -105,7 +105,6 @@ components:
           type: string
           description: |
             A URI referring to the source import module <br>
-            ```
             example JSON for LIBRARY:<br>
                  {"name": "numpy.concatenate",<br>
                   "type": "LIBRARY"<br>
@@ -116,8 +115,7 @@ components:
                   "type": "GROMET_FN_MODULE",<br>
                   "uri": "<location of GrometFNModule JSON>"<br>
             Example of uri that directly references a github file<br>
-              https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
-            ```
+              "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
 
     GrometFNModule:
       description: |
@@ -140,7 +138,9 @@ components:
         attributes:  # acset storage
           # SUM TYPE {"type": {"FN", "IMPORT"}, "value": {object}}
           description: |
-            Array of (sum-type) (1) other GrometFN or (2) references to imports (functions)
+            (sum-type) Array of TypedValues. Currently expect:<br>
+            (1) other GrometFN (type = FN)<br>
+            (2) references to imports (type = IMPORT)
           type: array
           items:
             $ref: "#/components/schemas/TypedValue"
