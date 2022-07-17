@@ -104,17 +104,17 @@ components:
         uri:
           type: string
           description: |
-            A URI referring to the source import module <br>
-            example JSON for LIBRARY:<br>
-                 {"name": "numpy.concatenate",<br>
-                  "type": "LIBRARY"<br>
-                  "version": "Numpy 1.23.0"<br>
-                  "uri": "https://numpy.org/"}<br>
-            example JSON for exisitng GrometFNModule (GROMET_FN_MODULE):<br>
-                 {"name": "model.sir.get_growth_rate:<index_to_FN_in_GrometFNModule_attributes_array>",<br>
-                  "type": "GROMET_FN_MODULE",<br>
-                  "uri": "<location of GrometFNModule JSON>"<br>
-            Example of uri that directly references a github file<br>
+            A URI referring to the source import module. Examples:
+            (1) LIBRARY:
+                 {"name": "numpy.concatenate",
+                  "type": "LIBRARY",
+                  "version": "Numpy 1.23.0",
+                  "uri": "https://numpy.org/"}.
+            (2) Exisitng GrometFNModule (GROMET_FN_MODULE):
+                 {"name": "model.sir.get_growth_rate:<index_to_FN_in_GrometFNModule_attributes_array>",
+                  "type": "GROMET_FN_MODULE",
+                  "uri": "<location of GrometFNModule JSON>"}
+            (3) Misc example of uri that directly references a github file:
               "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
 
     GrometFNModule:
