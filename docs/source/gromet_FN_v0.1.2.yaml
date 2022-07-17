@@ -40,11 +40,11 @@ info:
 
   contact:
     name: Clayton T. Morrison
-    email: claytonm@email.arizona.edu
+    email: claytonm@arizona.edu
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  version: "0.1.1"
+  version: "0.1.2"
 
 paths: {}
 
@@ -57,47 +57,91 @@ components:
         Metadata (Placeholder for Metadata definition in gromet_metadata_v{VERSION_NUMBER}.yaml).
       type: object
 
-    GrometFNCollection:
+    TypedValue:
       description: |
-        A collection of Function Networks (FNs) in a Module.
-        When derived from program, the FNs are typically structured hierarchically,
-        with a root FN (that has a Module Outer Box) -- this will always be the FN at
-        index 0 of the function_networks array,
-        and then has a set of Function Boxes that have contents that are themselves FNs
-        (the rest of the indices in the function_networks array).
+        Provides a typed object in JSON
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/GrometTypes"
+        value:
+          type: object
+
+    GrometType:
+      type: string
+      enum:
+        - FN      # A Function Network
+        - IMPORT  # Import object
+
+    ImportType:
+      type: string
+      enum:
+        - REPOSITORY        # Reference to repository (top-level repository URI)
+        - FILE_URI          # Reference to specific file (direct file URI)
+        - LIBRARY           # Reference to a common library, but not the direct repository (URI to library url)
+        - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
+        - GROMET_FN_MODULE  # Importing another GrometFNModule
+
+    Import:
+      properties:
+        name:
+          type: string
+          description: |
+            The qualified name of the import.
+            The qualified name includes the module path to the element being imported.
+            E.g., "numpy.concatenate" is the qualified name for importing the concatenate function from numpy.
+            If the element being imported is from an existing GROMET_FN_MODULE,
+            then the qualified names ends in a colon followed by the integer, where the integer
+            references the index in the GrometFNModule.attributes for the corresponding FN.
+        type:
+          description: The Type of import
+          $ref: "/components/schemas/ImportType"
+        version:
+          type: string
+          description: |
+            The import source name and version (if available) of the element being imported.
+            For example, if important a native library from Python 3.10, then this would be "Python 3.10".
+        uri:
+          type: string
+          description: |
+            A URI referring to the source import module <br>
+            # example JSON for LIBRARY:<br>
+            #      {"name": "numpy.concatenate",<br>
+            #       "type": "LIBRARY"<br>
+            #       "version": "Numpy 1.23.0"<br>
+            #       "uri": "https://numpy.org/"}<br>
+            # example JSON for exisitng GrometFNModule (GROMET_FN_MODULE):<br>
+            #      {"name": "model.sir.get_growth_rate:<index_to_FN_in_GrometFNModule_attributes_array>",<br>
+            #       "type": "GROMET_FN_MODULE",<br>
+            #       "uri": "<location of GrometFNModule JSON>"<br>
+            # Example of uri that directly references a github file<br>
+            #   https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"}
+
+    GrometFNModule:
+      description: |
+        A FN Module.
+        (A Module corresonds to a namespace.)
+        When derived from a source program, the FN is typically decomposed into a
+        hierarchical structure of FNs,
+        with a root GrometFN (that has a Module Outer Box) that will be assigned to
+        the `fn` attribute of the GrometFNModule, and then has an array of `attributes`
+        that are either themselves GrometFNs (the represent the types, functions,
+        and variable-bound values, defined within the module) or imported elements.
       type: object
       properties:
         name:
           type: string
           description: |
-            The name of the Function Network Collection.
-        function_networks:
-          type: array
+            The name of the Function Network Module.
+        fn:   # the "top level" Function Network (acset)
+          $ref: "#/components/schemas/GrometFN"
+        attributes:  # acset storage
+          # SUM TYPE {"type": {"FN", "IMPORT"}, "value": {object}}
           description: |
-            The array of Function Networks.
-            The first index is always the "Module" FN.
-            All other FNs in the array are either "named" declared functions, or anonymous Function.
+            Array of (sum-type) (1) other GrometFN or (2) references to imports (functions)
+          type: array
           items:
-            $ref: "#/components/schemas/GrometFN"
-#        map_identifier_to_fn:
-#          type: array
-#          items:
-#            type: array
-#            description: |
-#              Although not enforced by JSON, these arrays should consist of two elements: string, integer.
-#              Here, the representation of the elements are:
-#              (1) string representing identifier of function
-#              (2) integer representing the index into the function_networks array.
-#        map_identifier_to_variable:
-#          type: array
-#          items:
-#            type: array
-#            description: |
-#              Although not enforced by JSON, these arrays should consist of two elements: string, string, integer.
-#              Here, the representation of the elements are:
-#              (1) string representing variable identifier.
-#              (2) string representing type of table: one of pol, pof, poc.
-#              (3) integer representing the index into the table in the FN in index 0 of function_networks.
+            $ref: "#/components/schemas/TypedValue"
         metadata:
           $ref: "#/components/schemas/Metadata"
 

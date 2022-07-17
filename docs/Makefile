@@ -27,6 +27,9 @@ ${SOURCEDIR}/cast_v1.2.0.html:
 ${SOURCEDIR}/gromet_FN_v0.1.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.1.yaml $@
 
+${SOURCEDIR}/gromet_FN_v0.1.2.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.2.yaml $@
+
 ${SOURCEDIR}/gromet_metadata_v0.1.0.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.0.yaml $@
 
@@ -56,7 +59,7 @@ ${SOURCEDIR}/grfn_api_v1.0.0.html:
 ${SOURCEDIR}/gromet_v0.0.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_v0.0.1.yaml $@
 
-apidocs: ${SOURCEDIR}/cast_v1.2.0.html ${SOURCEDIR}/gromet_FN_v0.1.1.html ${SOURCEDIR}/gromet_metadata_v0.1.0.html ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html ${SOURCEDIR}/gromet_v0.0.1.html ${SOURCEDIR}/grfn_api_v1.0.0.html
+apidocs: ${SOURCEDIR}/cast_v1.2.0.html ${SOURCEDIR}/gromet_FN_v0.1.1.html ${SOURCEDIR}/gromet_FN_v0.1.2.html ${SOURCEDIR}/gromet_metadata_v0.1.0.html ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html ${SOURCEDIR}/gromet_v0.0.1.html ${SOURCEDIR}/grfn_api_v1.0.0.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
 
