@@ -111,11 +111,12 @@ components:
                   "version": "Numpy 1.23.0",
                   "uri": "https://numpy.org/"}.
             (2) Exisitng GrometFNModule (GROMET_FN_MODULE):
-                 {"name": "model.sir.get_growth_rate:<index_to_FN_in_GrometFNModule_attributes_array>",
+                 {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
                   "type": "GROMET_FN_MODULE",
                   "uri": "<location of GrometFNModule JSON>"}
-            (3) Misc example of uri that directly references a github file:
-              "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
+
+        # (3) Misc example of uri that directly references a github file:
+        #     "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
 
     GrometFNModule:
       description: |
