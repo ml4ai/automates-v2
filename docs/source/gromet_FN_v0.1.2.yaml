@@ -101,7 +101,7 @@ components:
 #      "version": "CHIME penn... 2020-..."
 #      "uri": "<location of GrometFNModule JSON>"}
 
-    Import:
+    ImportReference:
       properties:
         name:
           type: string
@@ -148,8 +148,8 @@ components:
           # SUM TYPE {"type": {"FN", "IMPORT"}, "value": {object}}
           description: |
             (sum-type) Array of TypedValues. Currently expect:<br>
-            (1) other GrometFN (type = FN)<br>
-            (2) references to Import (type = IMPORT)
+            (1) other GrometFN (type = "FN")<br>
+            (2) references to ImportReference (type = "IMPORT")
           type: array
           items:
             $ref: "#/components/schemas/TypedValue"
