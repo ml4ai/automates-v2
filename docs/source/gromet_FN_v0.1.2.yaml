@@ -57,28 +57,21 @@ components:
         Metadata (Placeholder for Metadata definition in gromet_metadata_v{VERSION_NUMBER}.yaml).
       type: object
 
-    GrometType:
-      type: string
-      enum:
-        - FN      # A Function Network
-        - IMPORT  # Import object
-
     TypedValue:
       description: Typed object (to label value types in JSON).
       type: object
       properties:
         type:
-          $ref: "#/components/schemas/GrometType"
+          type: string
+          description: The type of the value.
         value:
           type: object
 
-    ImportType:
-      description: Type of import.
+    GrometType:
       type: string
       enum:
-        - GROMET_FN_MODULE  # Importing another GrometFNModule; ImportSourceType is Gromet File
-        - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
-        - OTHER             # Importing from some other source.
+        - FN      # A Function Network
+        - IMPORT  # Import object
 
     SourceType:
       description: Type of source object that URI references.
@@ -88,6 +81,14 @@ components:
         - SOURCE_FILE       # Reference to specific file (direct file URL), e.g.: "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
         - REPOSITORY        # Reference to repository (top-level repository URL), e.g.,: "https://github.com/CodeForPhilly/chime"
         - LIBRARY           # Reference to a common library URL, but not the direct repository (URI to library url)
+
+    ImportType:
+      description: Type of import.
+      type: string
+      enum:
+        - GROMET_FN_MODULE  # Importing another GrometFNModule; ImportSourceType is Gromet File
+        - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
+        - OTHER             # Importing from some other source.
 
 # Examples of types of Imports
 #(1) LIBRARY:
