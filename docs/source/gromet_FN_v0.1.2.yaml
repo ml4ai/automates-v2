@@ -64,8 +64,7 @@ components:
         - IMPORT  # Import object
 
     TypedValue:
-      description: |
-        Provides a typed object in JSON
+      description: Typed object (to label value types in JSON).
       type: object
       properties:
         type:
@@ -74,13 +73,33 @@ components:
           type: object
 
     ImportType:
+      description: Type of import.
       type: string
       enum:
-        - REPOSITORY        # Reference to repository (top-level repository URI)
-        - FILE_URI          # Reference to specific file (direct file URI)
-        - LIBRARY           # Reference to a common library, but not the direct repository (URI to library url)
+        - GROMET_FN_MODULE  # Importing another GrometFNModule; ImportSourceType is Gromet File
         - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
-        - GROMET_FN_MODULE  # Importing another GrometFNModule
+        - OTHER             # Importing from some other source.
+
+    SourceType:
+      description: Type of source object that URI references.
+      type: string
+      enum:
+        - GROMET            # Reference to a GroMEt file.
+        - SOURCE_FILE       # Reference to specific file (direct file URL), e.g.: "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
+        - REPOSITORY        # Reference to repository (top-level repository URL), e.g.,: "https://github.com/CodeForPhilly/chime"
+        - LIBRARY           # Reference to a common library URL, but not the direct repository (URI to library url)
+
+# Examples of types of Imports
+#(1) LIBRARY:
+#     {"name": "numpy.concatenate",
+#      "type": "LIBRARY",
+#      "version": "Numpy 1.23.0",
+#      "uri": "https://numpy.org/"}.
+#(2) Exisitng GrometFNModule (GROMET_FN_MODULE):
+#     {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
+#      "type": "GROMET_FN_MODULE",
+#      "version": "CHIME penn... 2020-..."
+#      "uri": "<location of GrometFNModule JSON>"}
 
     Import:
       properties:
@@ -95,28 +114,17 @@ components:
             references the index in the GrometFNModule.attributes for the corresponding FN.
         type:
           description: The Type of import
-          $ref: "/components/schemas/ImportType"
+          $ref: "#/components/schemas/ImportType"
         version:
           type: string
           description: |
             The import source name and version (if available) of the element being imported.
             For example, if important a native library from Python 3.10, then this would be "Python 3.10".
         uri:
-          type: string
           description: |
-            A URI referring to the source import module. Examples:
-            (1) LIBRARY:
-                 {"name": "numpy.concatenate",
-                  "type": "LIBRARY",
-                  "version": "Numpy 1.23.0",
-                  "uri": "https://numpy.org/"}.
-            (2) Exisitng GrometFNModule (GROMET_FN_MODULE):
-                 {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
-                  "type": "GROMET_FN_MODULE",
-                  "uri": "<location of GrometFNModule JSON>"}
-
-        # (3) Misc example of uri that directly references a github file:
-        #     "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
+            A TypedValue that enable labeling what type of source the URI refers to.
+            "type" is one of SourceType, value is string representing URI.
+          $ref: "#/components/schemas/TypedValue"
 
     GrometFNModule:
       description: |
@@ -141,7 +149,7 @@ components:
           description: |
             (sum-type) Array of TypedValues. Currently expect:<br>
             (1) other GrometFN (type = FN)<br>
-            (2) references to imports (type = IMPORT)
+            (2) references to Import (type = IMPORT)
           type: array
           items:
             $ref: "#/components/schemas/TypedValue"
@@ -482,12 +490,12 @@ components:
     FunctionType:
       type: string
       enum:
-        - FUNCTION     # Function with any number of input and output Ports and FN contents.
-        - EXPRESSION   # Function with single return value (Port)
-        - PREDICATE    # Expression who's return value (Port) is Boolean
-        - MODULE       # Function with no Outer Ports, no contents
-        - PRIMITIVE    # Function with no contents
-        - LITERALVALUE # Function with single return value (Port) and a value
+        - FUNCTION    # Function with any number of input and output Ports and FN contents.
+        - EXPRESSION  # Function with single return value (Port)
+        - PREDICATE   # Expression who's return value (Port) is Boolean
+        - MODULE      # Function with no Outer Ports, no contents
+        - PRIMITIVE   # Function with no contents
+        - LITERAL     # Function LiteralValue with single return value (Port) and a value
 
     LiteralValue:
       description: Literal Value.
