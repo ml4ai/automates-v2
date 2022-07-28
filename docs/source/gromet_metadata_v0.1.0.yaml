@@ -105,10 +105,11 @@ components:
       required:
         - source_type
         - document_reference_uid
+        - equation_number
       properties:
-        metadata_type:
-          type: string
-          default: "equation_extraction"
+#        metadata_type:
+#          type: string
+#          default: "equation_extraction"
         source_type:
           type: string
           default: "equation_document_source"
@@ -127,16 +128,16 @@ components:
         Representation of Text Extraction.
         Assumes COSMOS within-document reference coordinates to a span of text.
       required:
-        - source_type
+#        - source_type
         - document_reference_uid
         - page
         - block
         - char_begin
         - char_end
       properties:
-        metadata_type:
-          type: string
-          default: "text_extraction"
+#        metadata_type:
+#          type: string
+#          default: "text_extraction"
         document_reference_uid:
           description: uid of \<document_reference>
           type: string
@@ -162,7 +163,7 @@ components:
       description: |
         Reference to a source code span (sub-line, line, block).
       required:
-        - code_type
+#        - code_type
         - code_file_reference_uid
         - line_begin
       properties:
@@ -333,7 +334,7 @@ components:
       properties:
         metadata_type:
           type: string
-          default: "code_collection_reference"
+          default: "code_collection"
         name:
           description: Code Collection name
           type: string
