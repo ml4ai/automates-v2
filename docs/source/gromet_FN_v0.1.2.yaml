@@ -54,8 +54,11 @@ components:
 
     Metadata:
       description: |
-        Metadata (Placeholder for Metadata definition in gromet_metadata_v{VERSION_NUMBER}.yaml).
-      type: object
+        An array of Metadata objects
+        (as defined in gromet_metadata_v{VERSION_NUMBER}.yaml).
+      type: array
+      items:
+        type: object
 
     TypedValue:
       description: Typed object (to label value types in JSON).
@@ -80,7 +83,7 @@ components:
         - GROMET            # Reference to a GroMEt file.
         - SOURCE_FILE       # Reference to specific file (direct file URL), e.g.: "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
         - REPOSITORY        # Reference to repository (top-level repository URL), e.g.,: "https://github.com/CodeForPhilly/chime"
-        - LIBRARY           # Reference to a common library URL, but not the direct repository (URI to library url)
+        - WEB               # Reference to a common library URL, but not the direct repository (URI to library url)
 
     ImportType:
       description: Type of import.
