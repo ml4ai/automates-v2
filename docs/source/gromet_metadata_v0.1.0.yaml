@@ -318,10 +318,10 @@ components:
         metadata_type:
           type: string
           default: "gromet_creation"
-        timestamp:
-          description: Creation timestamp
-          type: string
-          format: datetime
+#        timestamp:
+#          description: Creation timestamp
+#          type: string
+#          format: datetime
 
     SourceCodeCollection:
       allOf:
