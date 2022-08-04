@@ -449,11 +449,13 @@ components:
         name:
           type: string
         src:
-          $ref: "#/components/schemas/GrometPort"
-          # description: The source Port of the Wire.
+          # $ref: "#/components/schemas/GrometPort"
+          description: Index to the source Port of the Wire.
+          type: integer
         tgt:
-          $ref: "#/components/schemas/GrometPort"
-          # description: The target Port of the Wire.
+          # $ref: "#/components/schemas/GrometPort"
+          description: Index to the target Port of the Wire.
+          type: integer
 
         metadata:
           $ref: "#/components/schemas/Metadata"
@@ -476,8 +478,9 @@ components:
         name:
           type: string
         box:
-          $ref: "#/components/schemas/GrometBox"
-          # description: The Box the Port belongs to.
+          # $ref: "#/components/schemas/GrometBox"
+          description: Index to the Box that the Port belongs to.
+          type: integer
 
         metadata:
           $ref: "#/components/schemas/Metadata"
