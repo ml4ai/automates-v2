@@ -323,11 +323,11 @@ components:
           type: string
           format: datetime
 
-    CodeCollection:
+    SourceCodeCollection:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <GrometFNCollection>.CodeCollection
-      description: Reference to a code collection (i.e., repository)
+      title: <GrometFNCollection>.SourceCodeCollection
+      description: Reference to a source code collection (e.g., a repository)
       required:
         - global_reference_id
         - files
