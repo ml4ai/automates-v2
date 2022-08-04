@@ -372,6 +372,7 @@ components:
         - documents
       properties:
         metadata_type:
+          type: string
           default: "textual_document_collection"
         documents:
           description: List of document references
@@ -430,6 +431,7 @@ components:
         - equation_extraction
       properties:
         metadata_type:
+          type: string
           default: "equation_definition"
         equation_extraction:
           $ref: '#/components/schemas/EquationExtraction'
@@ -498,6 +500,7 @@ components:
         - value
       properties:
         metadata_type:
+          type: string
           default: "equation_parameter"
         equation_extraction:
           $ref: '#/components/schemas/EquationExtraction'
@@ -520,6 +523,7 @@ components:
         - variable_definition
       properties:
         metadata_type:
+          type: string
           default: "text_definition"
         text_extraction:
           $ref: '#/components/schemas/TextExtraction'
@@ -543,6 +547,7 @@ components:
         - value
       properties:
         metadata_type:
+          type: string
           default: "text_parameter"
         text_extraction:
           $ref: '#/components/schemas/TextExtraction'
