@@ -310,7 +310,7 @@ components:
     GrometCreation:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <GrometFNCollection>.GrometCreation
+      title: <GrometFNModule>.GrometCreation
       description: Metadata about the creation of a GroMEt JSON file
       required:
         - timestamp
@@ -326,7 +326,7 @@ components:
     SourceCodeCollection:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <GrometFNCollection>.SourceCodeCollection
+      title: <GrometFNModule>.SourceCodeCollection
       description: Reference to a source code collection (e.g., a repository)
       required:
         - global_reference_id
@@ -364,7 +364,7 @@ components:
     TextualDocumentCollection:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <GrometFNCollection>.TextualDocumentCollection
+      title: <GrometFNModule>.TextualDocumentCollection
       description: >
         A collection of textual document references
         (e.g., documentation, scientific publication, etc.).
