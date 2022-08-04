@@ -607,15 +607,15 @@ components:
         condition:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
+            The index to the entry in the `bf` table (array) of *this* GrometFN
             representing the conditional condition.
         body_if:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
+            The index to the entry in the `bf` table (array) of *this* GrometFN
             representing the body (Function) of IF-branch of the conditional.
         body_else:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
+            The index to the entry in the `bf` table (array) of *this* GrometFN
             representing the body (Function) of ELSE-branch of the conditional.
