@@ -12,7 +12,7 @@ Welcome to the SKEMA documentation!
 
    cast_v1.2.0
    gromet_FN_v0.1.2
-   gromet_metadata_v0.1.0
+   gromet_metadata_v0.1.1
 
 .. toctree::
    :maxdepth: 2
