@@ -1,5 +1,7 @@
 openapi: 3.0.0
 
+### NOTE 2022-08-05 CTM: Turning off Required attributes for now
+
 info:
   title: GroMEt Metadata spec
   description: |
@@ -56,9 +58,9 @@ components:
     Metadata:
       description: |
         Root type of Metadata.
-      required:
-        - metadata_type
-        - provenance
+#      required:
+#        - metadata_type
+#        - provenance
       properties:
 #        metadata_type:
 #          description: Type of metadata.
@@ -68,9 +70,9 @@ components:
 
     Provenance:
       description: Provenance of metadata.
-      required:
-        - method
-        - timestamp
+#      required:
+#        - method
+#        - timestamp
       properties:
         method:
           description: |
@@ -102,10 +104,10 @@ components:
     EquationExtraction:
       # title: <equation_extraction>
       description: Representation of equation extraction.
-      required:
-        - source_type
-        - document_reference_uid
-        - equation_number
+#      required:
+#        - source_type
+#        - document_reference_uid
+#        - equation_number
       properties:
 #        metadata_type:
 #          type: string
@@ -127,13 +129,13 @@ components:
       description: |
         Representation of Text Extraction.
         Assumes COSMOS within-document reference coordinates to a span of text.
-      required:
-#        - source_type
-        - document_reference_uid
-        - page
-        - block
-        - char_begin
-        - char_end
+#      required:
+##        - source_type
+#        - document_reference_uid
+#        - page
+#        - block
+#        - char_begin
+#        - char_end
       properties:
 #        metadata_type:
 #          type: string
@@ -162,10 +164,10 @@ components:
       title: <ANY>.SourceCodeReference
       description: |
         Reference to a source code span (sub-line, line, block).
-      required:
-#        - code_type
-        - code_file_reference_uid
-        - line_begin
+#      required:
+##        - code_type
+#        - code_file_reference_uid
+#        - line_begin
       properties:
         metadata_type:
           type: string
@@ -214,10 +216,10 @@ components:
       title: <BoxLiteralValue>.SourceCodeDataType
       description: |
         Information derived by Program Analysis inferring the literal value data type.
-      required:
-        - source_language
-        - source_language_version
-        - data_type
+#      required:
+#        - source_language
+#        - source_language_version
+#        - data_type
       properties:
         metadata_type:
           type: string
@@ -312,8 +314,6 @@ components:
         - $ref: '#/components/schemas/Metadata'
       title: <GrometFNModule>.GrometCreation
       description: Metadata about the creation of a GroMEt JSON file
-      required:
-        - timestamp
       properties:
         metadata_type:
           type: string
@@ -328,9 +328,9 @@ components:
         - $ref: '#/components/schemas/Metadata'
       title: <GrometFNModule>.SourceCodeCollection
       description: Reference to a source code collection (e.g., a repository)
-      required:
-        - global_reference_id
-        - files
+#      required:
+#        - global_reference_id
+#        - files
       properties:
         metadata_type:
           type: string
@@ -368,8 +368,8 @@ components:
       description: >
         A collection of textual document references
         (e.g., documentation, scientific publication, etc.).
-      required:
-        - documents
+#      required:
+#        - documents
       properties:
         metadata_type:
           type: string
@@ -383,9 +383,9 @@ components:
     TextualDocumentReference:
       # title: <textual_document_reference>
       description: Document reference.
-      required:
-        - uid
-        - global_reference_id
+#      required:
+#        - uid
+#        - global_reference_id
       properties:
         uid:
           description: Unique identifier of the DocumentReference
@@ -427,8 +427,8 @@ components:
       description: >
         Association of an EquationExtraction with a GroMEt component
         (e.g., a GroMEt FN Function Box).
-      required:
-        - equation_extraction
+#      required:
+#        - equation_extraction
       properties:
         metadata_type:
           type: string
@@ -494,10 +494,10 @@ components:
       title: <PortOutput>.EquationParameter
       description: |
         Association of parameter values extracted from equations to host Port.
-      required:
-        - equation_extraction
-        - varaible_identifier
-        - value
+#      required:
+#        - equation_extraction
+#        - varaible_identifier
+#        - value
       properties:
         metadata_type:
           type: string
@@ -517,10 +517,10 @@ components:
       title: <PortOutput>.TextDefinition
       description: |
         Definition of host derived from a text source.
-      required:
-        - text_extraction
-        - variable_identifier
-        - variable_definition
+#      required:
+#        - text_extraction
+#        - variable_identifier
+#        - variable_definition
       properties:
         metadata_type:
           type: string
@@ -541,10 +541,10 @@ components:
       title: <PortOutput>.TextParameter
       description: |
         Association of parameter values extracted from text to host Port.
-      required:
-        - text_extraction
-        - variable_identifier
-        - value
+#      required:
+#        - text_extraction
+#        - variable_identifier
+#        - value
       properties:
         metadata_type:
           type: string
