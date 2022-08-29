@@ -33,11 +33,14 @@ ${SOURCEDIR}/gromet_FN_v0.1.1.html:
 ${SOURCEDIR}/gromet_FN_v0.1.2.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.2.yaml $@
 
+${SOURCEDIR}/gromet_FN_v0.1.3.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.3.yaml $@
+
 ${SOURCEDIR}/gromet_metadata_v0.1.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.1.yaml $@
 
-${SOURCEDIR}/gromet_metadata_v0.1.2.html:
-	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.2.yaml $@
+${SOURCEDIR}/gromet_metadata_v0.1.3.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.3.yaml $@
 
 # Legacy ASKE
 
