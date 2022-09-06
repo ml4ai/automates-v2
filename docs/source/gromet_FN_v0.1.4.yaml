@@ -178,8 +178,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TypedValue"
-        metadata_collection:
-          description: Table of metadata
+        metadata:
+          description: Table (array) of metadata
           type: array
           items:
             $ref: "#/components/schemas/Metadata"
