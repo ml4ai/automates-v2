@@ -62,14 +62,12 @@ components:
       description: Generic base class for any GroMEt object
       type: object
       properties:
-        id:
-          description: An integer representing an identifier that is unique within the GrometFNModule.
+#        id:
+#          description: An integer representing an identifier that is unique within the GrometFNModule.
+#          type: integer
+        metadata:
+          description: Index (integer) into the metadata_collection table in GrometFNModule.
           type: integer
-#        metadata:
-#          description: Array of indices to the metadata_collection table in GrometFNModule.
-#          type: array
-#          items:
-#            type: integer
 
     TypedValue:
       description: Typed object (to label value types in JSON).
@@ -178,11 +176,16 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/TypedValue"
-        metadata:
-          description: Table (array) of metadata
-          type: array
+        metadata_collection:
+          description: |
+            Table (array) of lists (arrays) of metadata,
+            where each list in the Table-array represents the collection
+            of metadata associated with a GroMEt object.
+          type: array  # The Table of metadata_collection(s) (lists)
           items:
-            $ref: "#/components/schemas/Metadata"
+            type: array  # Collection (list) of metadata associated with a particular GroMEt object.
+            items:
+              $ref: "#/components/schemas/Metadata"
 
     GrometFN:
       description: |
