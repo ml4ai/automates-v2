@@ -65,11 +65,11 @@ components:
         id:
           description: An integer representing an identifier that is unique within the GrometFNModule.
           type: integer
-        metadata:
-          description: Array of indices to the metadata_collection table in GrometFNModule.
-          type: array
-          items:
-            type: integer
+#        metadata:
+#          description: Array of indices to the metadata_collection table in GrometFNModule.
+#          type: array
+#          items:
+#            type: integer
 
     TypedValue:
       description: Typed object (to label value types in JSON).
@@ -159,6 +159,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
+        gromet_fn_version:
+          type: string
+          default: # "0.1.4"
+            $ref: "#/info/version"
         name:
           type: string
           description: |
