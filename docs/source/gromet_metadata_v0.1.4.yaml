@@ -59,9 +59,11 @@ components:
       description: |
         Root type of Metadata.
       properties:
-#        id:
-#          description: An identifier unique to the GrometFNModule
-#          type: integer
+        gromet_src_id:
+          description: |
+            The identifier of the Gromet object within the GrometFNModule
+            that this metadata is associated with.
+          type: integer
         provenance:
           $ref: '#/components/schemas/Provenance'
 
