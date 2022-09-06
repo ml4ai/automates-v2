@@ -58,10 +58,9 @@ components:
         Generic base class for all AST nodes. Every node holds a list of source refs to relate to where it was found in the original code.
       type: object
       properties:
-        uid:
-          description: A unique identifier
-          type: string
-          format: uuid
+        id:
+          description: An identifier (integer)
+          type: integer
         source_refs:
           type: array
           items: 
