@@ -12,8 +12,8 @@ Welcome to the SKEMA documentation!
    :caption: ASKEM - dev
 
    cast_v1.2.1
-   gromet_FN_v0.1.3
-   gromet_metadata_v0.1.3
+   gromet_FN_v0.1.4
+   gromet_metadata_v0.1.4
 
 .. toctree::
    :maxdepth: 2
