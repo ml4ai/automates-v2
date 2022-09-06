@@ -146,7 +146,7 @@ components:
 
     GrometFNModule:
       description: |
-        A FN Module.
+        A GroMEt FN Module.
         (A Module corresonds to a namespace.)
         When derived from a source program, the FN is typically decomposed into a
         hierarchical structure of FNs,
@@ -157,7 +157,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_fn_version:
+        schema:
+          type: string
+          default: "FN"
+        schema_version:
           type: string
           default: # "0.1.4"
             $ref: "#/info/version"
