@@ -22,7 +22,8 @@ info:
 paths: {}
 
 components:
-  metadata:
+
+  schemas:
 
     SourceRef:
       description: |
@@ -39,22 +40,8 @@ components:
         row_end:
           type: number
 
-    SourceCodeDataType:
-      description: |
-        Metadata: describes the language, language version, and data type for a LiteralValue node.
-      properties:
-        source_language: 
-          type: string
-        source_language_version:
-          type: string
-        data_type:
-          type: string
-
-
-  schemas:
-  
     AstNode:
-      description: | 
+      description: |
         Generic base class for all AST nodes. Every node holds a list of source refs to relate to where it was found in the original code.
       type: object
       properties:
@@ -63,8 +50,9 @@ components:
           type: integer
         source_refs:
           type: array
-          items: 
-            $ref: "#/components/metadata/SourceRef"
+          items:
+            $ref: "#/components/schemas/SourceRef"
+            # "#/components/metadata/SourceRef"
 
 
     # ValueConstructorSeq:
@@ -85,22 +73,22 @@ components:
 
     Module:
       type: object
-      description: | 
+      description: |
         Represents a section of code found from the evaluated program
-      
+
         name - Name of the enclosing module
 
         __body__ - The ordered list of nodes found in the body of the module. This will hold function definitions, control statement nodes (If/Loop), or expressions.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         name:
           type: string
         body:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/AstNode"
-    
+
     # Class definitions
     ClassDef:
       type: object
@@ -108,13 +96,13 @@ components:
         Represents the definition of a class. Holds the name of the class, its fields, and its associated functions.
 
         __name__ - The raw string name of the class definition.
-        
+
         __bases__ - A list of the base classes.
-        
+
         __funcs__ - The ordered list of the function definitions within the class.
-        
+
         __fields__ - The list of fields found defined in the class.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         name:
@@ -131,20 +119,20 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Var"
-  
+
     # Control flow structures
     If:
       type: object
       description: |
         Represents an if control statement and maintains the capacity to represent elif / else blocks.
-        
+
         __expr__ - The expression evaluated for this clause of the control statement.
-        
+
         __body__ - A list of nodes representing the expressions of the body controlled by the expr.
-        
+
         __orelse__ - This represents the elif/else of a If node. If there is subsequent elif clause after the current one we are evaluating, this will hold one node of type If. If this is the else clause of the statement, all of the nodes of the else body well be held in order in the list. If there are no further statements for this If statement, this will be empty.
-        
-      allOf: 
+
+      allOf:
       - $ref: "#/components/schemas/AstNode"
       properties:
         expr:
@@ -157,8 +145,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
-  
-    
+
+
     Loop:
       type: object
       description: |
@@ -167,10 +155,10 @@ components:
         __init__ - The ordered list of any nodes representing the initialization code for the loop.
 
         __expr__ - The expr to evaluate that controls the loop.
-        
+
         __body__ - The ordered list of nodes representing the body of the loop.
-        
-      allOf: 
+
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         init:
@@ -190,19 +178,19 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
-         
+
     FunctionDef:
       type: object
       description: |
         Represents the definition of a function from the code.
-        
+
         __name__ - The name of the function.
-        
+
         __func_args__ - The arguments passed into the function. This will be a a list of Var nodes representing the variables defined from the arguments passed to the function.
-        
+
         __body__ - The ordered list of nodes representing the body of the function.
-        
-      allOf: 
+
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         name:
@@ -215,130 +203,130 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
-    
-    # Expression statements  
+
+    # Expression statements
     Expr:
       type: object
-      description: | 
+      description: |
         Represents a standalone expression found in the code.
-        
+
         __expr__ - The expression held in this node. It could be an assignment, unary op, binary op, etc.
-        
-      allOf: 
+
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         expr:
-          $ref: "#/components/schemas/AstNode"  
-        
+          $ref: "#/components/schemas/AstNode"
+
     Assignment:
       type: object
       description: |
         Represents the assignment of the result of the expression on the left to the value on the right.
-        
+
         __left__ - The left hand expression that generates the value to assign to.
-        
+
         __right__ - The right hand expression that generates the value to assign.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         left:
-          $ref: "#/components/schemas/AstNode"  
+          $ref: "#/components/schemas/AstNode"
         right:
-          $ref: "#/components/schemas/AstNode"  
-              
+          $ref: "#/components/schemas/AstNode"
+
     Call:
       type: object
       description: |
         Represents the call of a function within an expression.
-        
+
         __func__ - The function being called. This will either be a Name representing the name of the function called or it will be an attribute node representing the function being called on an object.
-        
+
         __arguments__ - An ordered list of nodes matching the order of the arguments in the function definition. Each item is an AstNode representing an expression for the value passed at its corresponding position.
-        
-      allOf: 
+
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         func:
-          $ref: "#/components/schemas/AstNode"  
+          $ref: "#/components/schemas/AstNode"
         arguments:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
-            
+
     Attribute:
       type: object
       description: |
         Represents accessing the attribute of a value. This could be accessing a field or method of a class.
-        
+
         __value__ - The left side value that the attribute is being accessed from. This could simply be a Name value or a large expression.
-        
+
         __attr__ - The name of the attribute being accessed.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         value:
-          $ref: "#/components/schemas/AstNode"  
+          $ref: "#/components/schemas/AstNode"
         attr:
-          $ref: "#/components/schemas/Name"  
-    
-    Return: 
+          $ref: "#/components/schemas/Name"
+
+    Return:
       type: object
       description: |
         Found in function bodies and holds the expression to return.
-        
+
         __ value __ - The expression computing the value to be returned.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         value:
-          $ref: "#/components/schemas/AstNode"  
-    
+          $ref: "#/components/schemas/AstNode"
+
     UnaryOp:
       type: object
       description: |
         Represents an operator applied to a single value.
-        
+
         __op__ - The unary operator being used.
-        
+
         __value__ - The value the operator is applied to.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         op:
-          $ref: "#/components/schemas/UnaryOperator"  
+          $ref: "#/components/schemas/UnaryOperator"
         value:
-          $ref: "#/components/schemas/AstNode"  
-  
+          $ref: "#/components/schemas/AstNode"
+
     BinaryOp:
       type: object
       description: |
         Represents an operator applied between a left and right value.
-        
+
         __op__ - The binary operator being used.
-        
+
         __left__ - The left hand value of the operator.
-         
+
         __right__ - The right hand value of the operator.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         op:
-          $ref: "#/components/schemas/BinaryOperator"  
+          $ref: "#/components/schemas/BinaryOperator"
         left:
-          $ref: "#/components/schemas/AstNode"  
+          $ref: "#/components/schemas/AstNode"
         right:
-          $ref: "#/components/schemas/AstNode"  
-             
+          $ref: "#/components/schemas/AstNode"
+
     UnaryOperator:
       type: string
-      description: | 
+      description: |
         Represents all potential unary operator types.
       enum:
         - UAdd
         - USub
         - Not
         - Invert
-    
+
     BinaryOperator:
       type: string
       description: |
@@ -352,18 +340,18 @@ components:
         - FloorDiv
         - Mod
         - Pow
-        
+
         # Binary operators
         - LShift
         - RShift
         - BitOr
         - BitXor
         - BitAnd
-        
+
         # Boolean operators
         - And
         - Or
-        
+
         # Comparators
         - Eq
         - NotEq
@@ -373,53 +361,53 @@ components:
         - Gte
         - In
         - NotIn
-        
-        
+
+
     Subscript:
       type: object
       description: |
         Represents subscripting to access a value in a list or dict.
-        
+
         __value__ - The left expression that generates the list or dictionary to subscript.
-        
+
         __slice__ - The value being accessed. This could simply be a String or Num, or an expression evaluating to one.
-        
-      allOf: 
+
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
         value:
-          $ref: "#/components/schemas/AstNode"  
+          $ref: "#/components/schemas/AstNode"
         slice:
-          $ref: "#/components/schemas/AstNode"  
-      
+          $ref: "#/components/schemas/AstNode"
+
     # Loop control statements
     Break:
       type: object
       description: "The occurence of this node represents a break statement within the current control structure of the AST."
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
-    
+
     Continue:
       type: object
       description: "The occurence of this node represents a continue statement within the current control structure of the AST."
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
-    
+
     # Used to represent variable names and keywords found in code
     Var:
       type: object
       description: |
         Used to represent variables in the AST.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
-        val: 
+        val:
           type: object
           $ref: "#/components/schemas/Name"
-        type: 
+        type:
           type: object
           $ref: "#/components/schemas/VarType"
-          
+
     VarType:
       type: string
       description: |
@@ -435,20 +423,31 @@ components:
           - Tuple
 
         OR it holds the name of a ClassDef name.
-  
-    Name: 
+
+    Name:
       type: object
       description: |
         Used to represent names of variables and functions.
-      allOf: 
+      allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
-        name  : 
-          type: string    
-        id    : 
+        name  :
           type: string
-  
-  
+        id    :
+          type: string
+
+    SourceCodeDataType:
+      description: |
+        Metadata: describes the language, language version, and data type for a LiteralValue node.
+      properties:
+        source_language:
+          type: string
+        source_language_version:
+          type: string
+        data_type:
+          type: string
+
+
     # NOTE: NEW Literal values for CAST 1.2
     LiteralValue:
       type: object
@@ -464,7 +463,8 @@ components:
         source_code_data_type:
           type: array
           items:
-            $ref:  "#/components/metadata/SourceCodeDataType"
+            $ref: "#/components/schemas/SourceCodeDataType"
+            # "#/components/metadata/SourceCodeDataType"
 
     ScalarType:
       type: string
