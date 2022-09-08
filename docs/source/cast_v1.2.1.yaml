@@ -45,9 +45,9 @@ components:
         Generic base class for all AST nodes. Every node holds a list of source refs to relate to where it was found in the original code.
       type: object
       properties:
-        id:
-          description: An identifier (integer)
-          type: integer
+#        cast_id:  # or: order_id ?
+#          description: An identifier (integer) used to represent source code order
+#          type: integer
         source_refs:
           type: array
           items:
