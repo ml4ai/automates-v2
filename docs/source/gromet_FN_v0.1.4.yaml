@@ -20,6 +20,7 @@ info:
     2. Run swagger-codegen with the options in the example below.
        The URL references where the yaml for this documentation is stored on
        github. Make sure to replace CURRENT_VERSION with the correct version.
+       (The current version is `0.1.4`.)
        To generate Java classes rather, change the `-l python` to `-l java`.
        Change the value to the `-o` option to the desired output location.
        ```
