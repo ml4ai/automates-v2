@@ -89,6 +89,27 @@ components:
           items:
             $ref: "#/components/schemas/AstNode"
 
+    Import:
+      type: object
+      description: |
+        Represents the action of importing symbols from an existing module
+        into the current module.
+      allOf:
+        - $ref: "#/components/schemas/AstNode"
+      properties:
+        name:
+          type: string
+        alias:
+          type: string
+        symbol:
+          type: string
+        all:
+          description: |
+            When true, then all of the symbols of the module
+            are being imported (and Import.symbol will be empty)
+          type: bool
+          default: false
+
     # Class definitions
     ClassDef:
       type: object
