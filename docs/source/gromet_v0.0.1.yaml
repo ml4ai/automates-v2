@@ -109,9 +109,9 @@ components:
           type: string
           format: uid
         type:
-          description: The type of this GroMEt element
+          description: The uid of the type that this \<type> extends
           type: string
-          default: "Type"
+          format: uid
         name:
           description: Name of the \<type>
           type: string
@@ -184,12 +184,10 @@ components:
 
     type__dictionary:
       allOf:
-        - $ref: '#/components/schemas/type__composite'
+        - $ref: '#/components/schemas/type'
       title: <type>:<dictionary>
       description: >
         Object with known keys
-      required:
-        - known_keys
       properties:
         name:
           type: string
@@ -203,8 +201,11 @@ components:
     literal_value:
       title: <literal_value>
       description: A literal value.
+      required:
+        - gromet_type
+        - value
       properties:
-        type:
+        gromet_type:
           description: The type of this gromet element
           type: string
           default: "Literal"
@@ -228,8 +229,11 @@ components:
       description: >
         An object reference.
         Enables values to be oneOf <object> or <literal_value>
+      required:
+        - gromet_type
+        - object_def
       properties:
-        type:
+        gromet_type:
           description: The type of this GroMEt element
           type: string
           default: "ObjectRef"
@@ -252,10 +256,6 @@ components:
           description: Unique identifier.
           type: string
           format: uid
-        type:
-          description: The type of this GroMEt element
-          type: string
-          default: "Object"
         type_def:
           description: uid of the definition of the \<object>'s \<type>.
           type: string
@@ -396,13 +396,18 @@ components:
         - $ref: '#/components/schemas/box'
         - $ref: '#/components/schemas/box__relation'
         - $ref: '#/components/schemas/box__function'
+        - $ref: '#/components/schemas/box__function__extract'
+        - $ref: '#/components/schemas/box__function__pack'
+        - $ref: '#/components/schemas/box__function__operator'
+        - $ref: '#/components/schemas/box__function__decision'
+        - $ref: '#/components/schemas/box__function__container'
+        - $ref: '#/components/schemas/box__function__conditional'
         - $ref: '#/components/schemas/box__function__loop'
         - $ref: '#/components/schemas/box__function__predicate'
 
     box:
       title: <box>
-      description: >
-        A box.
+      description: A box.
       required:
         - uid
         - type
@@ -412,15 +417,12 @@ components:
           description: Unique identifier.
           type: string
           format: uid
-        name:
-          description: The name of the \<box>
-          type: string
         type:
-          description: The type of this GroMEt element
+          description: The type of \<box>
           type: string
           default: "Box"
-        box_type:
-          description: The type of \<box>
+        name:
+          description: The name of the \<box>
           type: string
         wiring:
           description: Array of \<wiring>s "in" the \<box>
@@ -439,7 +441,7 @@ components:
       title: <box>:<relation>
       description: A relation.
       properties:
-        box_type:
+        type:
           type: string
           default: "Relation"
         arguments:
@@ -461,20 +463,11 @@ components:
         A representation of a function (transforms state).
         A \<function> is wired by a directed hyperedge between \<variables>; a \<function> may also contain a subgraph (of a Function Network (FN)).
       properties:
-        box_type:
-          type: string
-          default: "Function"
-        function_type:
+        type:
           description: >
             The type of function being computed by this \<function> node.<br>
-            The following are three groups of types:<br>
-            <em>Compound object reference</em>: [ \"EXTRACT\", \"PACK\" ]<br>
-            <em>executable + instances (wiring)</em>: [ \"OPERATOR\", \"LITERAL\", \"ASSIGN\", \"CONDITION\", \"DECISION\" ]<br>
-            <em>containers</em>: [ \"CONTAINER\", \"CONDITIONAL\" ]
           type: string
-          enum: [ EXTRACT, PACK,
-                  OPERATOR, LITERAL, ASSIGN,  CONDITION, DECISION,
-                  CONTAINER, CONDITIONAL ]
+          default: "Function"
         input_variables:
           description: >
             Array of zero or more uids for variables <em>within</em> the function box.<br>
@@ -501,33 +494,98 @@ components:
             Stringified pythonic version of the lambda function code
           type: string
 
+    box__function__extract:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<extract>
+      properties:
+        type:
+          type: string
+          default: "Extract"
+
+    box__function__pack:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<pack>
+      properties:
+        type:
+          type: string
+          default: "Pack"
+
+    box__function__operator:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<operator>
+      properties:
+        type:
+          type: string
+          default: "Operator"
+
+    box__function__assign:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<assign>
+      properties:
+        type:
+          type: string
+          default: "Assign"
+
+    box__function__decision:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<decision>
+      properties:
+        type:
+          type: string
+          default: "Decision"
+
+    box__function__container:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<container>
+      properties:
+        type:
+          type: string
+          default: "Container"
+
+    box__function__conditional:
+      allOf:
+        - $ref: '#/components/schemas/box__function'
+      title: <function>:<conditional>
+      properties:
+        type:
+          type: string
+          default: "Conditional"
+
     box__function__loop:
       allOf:
         - $ref: '#/components/schemas/box__function'
-      title: <box>:<function_loop>
+      title: <function>:<loop>
       description: A function that loops.
       properties:
-        function_type:
-          description: The type of \<function>.
+        type:
           type: string
-          default: "Function:Loop"
-        exit:
+          default: "Loop"
+        exit_condition:
+          description: The predicate that represents the exit condition.
+          allOf:
+            - $ref: '#/components/schemas/box__function__predicate'
+        exit_expression:
           description: >
             Only used in loop type.
-            Unique identifier for the lambda function that computes the exit condition.
+            Stringified pythonic version of the lambda function code that computes the exit condition.
           type: string
 
     box__function__predicate:
       allOf:
         - $ref: '#/components/schemas/box__function'
-      title: <box>:<function_predicate>
+      title: <function>:<predicate>
       description: >
-        A representation of a predicate: asserts a relation is True
+        A representation of a predicate (truth-valued function)
       properties:
-        function_type:
-          description: This is a Predicate function.
+        type:
           type: string
-          default: "Function:Predicate"
+          default: "Predicate"
         expression:
           description: >
             Executable expression that returns a truth value.
@@ -543,14 +601,17 @@ components:
     wiring:
       title: <wiring>
       description: Top-level wiring
+      required:
+        - uid
+        - type
       properties:
+        uid:
+          description: Unique identifier.
+          type: string
+          format: uid
         type:
-          description: The type of this GroMEt element
           type: string
           default: "Wiring"
-        wiring_type:
-          description: The type of \<wiring>
-          type: string
 
     wiring__directed:
       allOf:
@@ -559,11 +620,10 @@ components:
       description: Function Network directed hyper edge
       required:
         - input_variables
-        - function_uid
+        - box_uid
         - output_variables
       properties:
-        wiring_type:
-          description: A directed wiring.
+        type:
           type: string
           default: "Directed"
         input_variables:
