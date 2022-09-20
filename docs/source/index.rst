@@ -11,7 +11,7 @@ Welcome to the SKEMA documentation!
    :maxdepth: 2
    :caption: ASKEM - current (2022-09-09)
 
-   cast_v1.2.1
+   cast_v1.2.2
    gromet_FN_v0.1.4
    gromet_metadata_v0.1.4
 
