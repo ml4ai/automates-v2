@@ -375,14 +375,16 @@ components:
         - Or
 
         # Comparators
+        - Is
+        - NotIs
         - Eq
         - NotEq
+        - In
+        - NotIn
         - Lt
         - Lte
         - Gt
         - Gte
-        - In
-        - NotIn
 
 
     Subscript:
