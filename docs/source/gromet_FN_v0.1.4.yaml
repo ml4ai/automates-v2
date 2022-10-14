@@ -34,7 +34,7 @@ info:
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
     If generating GroMEt schema data model classes in SKEMA (AutoMATES), then
-    afer generating the above, follow the instructions here:
+    after generating the above, follow the instructions here:
     ```
     <automates>/automates/model_assembly/gromet/model/README.md
     ```
@@ -114,7 +114,7 @@ components:
 #      "type": "LIBRARY",
 #      "version": "Numpy 1.23.0",
 #      "uri": "https://numpy.org/"}.
-#(2) Exisitng GrometFNModule (GROMET_FN_MODULE):
+#(2) Existing GrometFNModule (GROMET_FN_MODULE):
 #     {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
 #      "type": "GROMET_FN_MODULE",
 #      "version": "CHIME penn... 2020-..."
@@ -151,7 +151,7 @@ components:
     GrometFNModule:
       description: |
         A GroMEt FN Module.
-        (A Module corresonds to a namespace.)
+        (A Module corresponds to a namespace.)
         When derived from a source program, the FN is typically decomposed into a
         hierarchical structure of FNs,
         with a root GrometFN (that has a Module Outer Box) that will be assigned to
@@ -488,7 +488,7 @@ components:
             The Port id is a natural number that represent the order of the Port on the Box.
             This enables the following:
             (1) BoxFunctions with FN context will be able to unambiguously match the "calling"
-            BoxFunction Port Inputs (pif) (and Port Outputs, pof) to their corresonding
+            BoxFunction Port Inputs (pif) (and Port Outputs, pof) to their corresponding
             Outer Port Inputs (opi) (and Outer Port Outputs, opo) based in the ordering of the
             ids of each Port.
             (2) Loop Port Input (pil) id ordering will match the Loop Port Output (pol) as well
@@ -562,7 +562,7 @@ components:
         these set the initial values as input to the loop. The init Function is
         evaluated only during the first iteration through the loop.
         Next (and on every subsequent iteration), the loop condition Predicate
-        is evalutated. The Loop condition input Ports get their values by
+        is evaluated. The Loop condition input Ports get their values by
         by Wires in the wl_cargs table that have as their src the loop condition
         Port Inputs (pif) and as tgt the Loop Port Inputs (pil).
         If the exit condition Port evaluates to True, then the current values

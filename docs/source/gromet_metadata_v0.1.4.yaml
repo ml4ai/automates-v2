@@ -35,7 +35,7 @@ info:
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
     If generating GroMEt Metadata schema data model classes in SKEMA (AutoMATES),
-    then afer generating the above, follow the instructions here:
+    then after generating the above, follow the instructions here:
     ```
     <automates>/automates/model_assembly/gromet/metadata/README.md
     ```
@@ -197,7 +197,7 @@ components:
 #        description: |
 #          The original identifier name as it appears in the source code.
 #          This will happen under these conditions:
-#          (1) variable desclaration and assignment to a variable => save to Port Output;
+#          (1) variable declaration and assignment to a variable => save to Port Output;
 #          (2) function declaration => save to BoxFunction;
 #          (3) function call => save to BoxFunction call box;
 #          etc...
@@ -499,7 +499,7 @@ components:
         Association of parameter values extracted from equations to host Port.
 #      required:
 #        - equation_extraction
-#        - varaible_identifier
+#        - variable_identifier
 #        - value
       properties:
         metadata_type:
