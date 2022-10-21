@@ -165,16 +165,25 @@ components:
         name:
           type: string
           description: |
-            The name of the Function Network Module.
+            The name of the collecion, e.g., the name of the multi-module system.
         modules:
           type: array
           items:
             $ref: "#/components/schemas/GrometFNModule"
         module_index:
+          description: |
+            The index of module path names (strings) with the index to the
+            GrometFNModule in the modules table.
+            Because this is a bijection, the module path names are represented
+            as an array of strings, where the order in the array is the index
+            into the modules table.
           type: array
           items:
             type: string
         executables:
+          description: |
+            Array of indices into the modules table to denote GrometFNModules
+            that have a main function (and are executable).
           type: array
           items:
             type: integer
@@ -197,7 +206,7 @@ components:
           default: "FN"
         schema_version:
           type: string
-          default: # "0.1.4"
+          default:
             $ref: "#/info/version"
         name:
           type: string
