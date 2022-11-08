@@ -197,7 +197,7 @@ components:
 #        description: |
 #          The original identifier name as it appears in the source code.
 #          This will happen under these conditions:
-#          (1) variable desclaration and assignment to a variable => save to Port Output;
+#          (1) variable declaration and assignment to a variable => save to Port Output;
 #          (2) function declaration => save to BoxFunction;
 #          (3) function call => save to BoxFunction call box;
 #          etc...
@@ -239,6 +239,34 @@ components:
           description: |
             The source code data type as named by the source language.
             E.g., "int_8", "Float64", etc...
+
+    SourceCodeWireKeywordArg:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Wire>.SourceCodeWireKeywordArg
+      description: |
+        When there is a keyword argument assignment but we don't have
+        access to the argument names for the function (e.g., the function
+        is imported from a module that we don't have access to), then use
+        this metadata to keep track of the name of the keywork argument.
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_wire_keyword_arg"
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        arg_name:
+          type: string
+          description: |
+            The name of keyword argument that the value/var is being assigned (wired) to.
 
     SourceCodeLoopInit:
       allOf:
@@ -490,6 +518,22 @@ components:
 #            <em>Compound</em>: \"SET\", \"SEQUENCE\", \"DICTIONARY\", \"COMPOSITE\"
 #          type: string
 #          enum: [ BOOLEAN, INTEGER, FLOAT, STRING, SET, SEQUENCE, DICTIONARY, COMPOSITE ]
+
+# CTM 2022-10-28: Decided to not use for now, as will have literal assignment
+#                 have unnamed port that is wired to the correct fn input port
+#                 in the call.
+#    ArgumentAssignment:
+#      allOf:
+#        - $ref: '#/components/schemas/Metadata'
+#      title: <PortOutput>.SourceCodeArgumentAssignment
+#      description: |
+#        Noting when a literal value assignment is taking place as an
+#        assignment to a function argument (as opposed to a variable within
+#        a local scope).
+#      properties:
+#        metadata_type:
+#          type: string
+#          default: "argument_assignment"
 
     EquationParameter:
       allOf:
