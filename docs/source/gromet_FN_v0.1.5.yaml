@@ -539,6 +539,14 @@ components:
           # $ref: "#/components/schemas/GrometBox"
           description: Index to the Box that the Port belongs to.
           type: integer
+        default_value:
+          description: |
+            Default value of the Port.
+            E.g., for the outer input Port (opi) on a Function Box, this can be
+            used to represent declared default values of function arguments.
+          type:
+            $ref: "#/components/schemas/LiteralValue"
+            # TODO: needs to be generalized if default value references other var (global)
 
     GrometBox:
       description: |
