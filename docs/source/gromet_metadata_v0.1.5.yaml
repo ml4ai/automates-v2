@@ -240,10 +240,10 @@ components:
             The source code data type as named by the source language.
             E.g., "int_8", "Float64", etc...
 
-    SourceCodePortDefaultArg:
+    SourceCodePortDefaultVal:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <Port>.SourceCodePortKeywordArg
+      title: <Port>.SourceCodePortDefaultVal
       description: |
         When there is a default argument value for a defined Function
         and the call to that function is NOT setting the incoming argument
@@ -254,7 +254,7 @@ components:
       properties:
         metadata_type:
           type: string
-          default: "source_code_port_default_arg"
+          default: "source_code_port_default_val"
         source_language:
           type: string
           description: |
