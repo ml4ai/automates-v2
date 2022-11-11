@@ -240,19 +240,46 @@ components:
             The source code data type as named by the source language.
             E.g., "int_8", "Float64", etc...
 
-    SourceCodeWireKeywordArg:
+    SourceCodePortDefaultArg:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <Wire>.SourceCodeWireKeywordArg
+      title: <Port>.SourceCodePortKeywordArg
+      description: |
+        When there is a default argument value for a defined Function
+        and the call to that function is NOT setting the incoming argument
+        value, then PA creates and instance of the specified default
+        LiteralValue (as a LiteralFunction) and the output Port (pof)
+        will get this metadata to clarify how the value was declared
+        (where it came from).
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_port_default_arg"
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+
+    SourceCodePortKeywordArg:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Port>.SourceCodePortKeywordArg
       description: |
         When there is a keyword argument assignment but we don't have
         access to the argument names for the function (e.g., the function
         is imported from a module that we don't have access to), then use
         this metadata to keep track of the name of the keywork argument.
+        NOTE: This will be associated with the "call" Function input Port (pif)
       properties:
         metadata_type:
           type: string
-          default: "source_code_wire_keyword_arg"
+          default: "source_code_port_keyword_arg"
         source_language:
           type: string
           description: |
