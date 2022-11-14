@@ -470,9 +470,9 @@ components:
           type: string
         bibjson:
           description: The bibjson entry for this document.<br>
-          $ref: '#/components/schemas/bibjson'
+          $ref: '#/components/schemas/Bibjson'
 
-    bibjson:
+    Bibjson:
       # title: <bibjson>
       description: See http://okfnlabs.org/bibjson/
 
