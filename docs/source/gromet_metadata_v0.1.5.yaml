@@ -35,14 +35,14 @@ info:
        `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
 
     If generating GroMEt Metadata schema data model classes in SKEMA (AutoMATES),
-    then afer generating the above, follow the instructions here:
+    then after generating the above, follow the instructions here:
     ```
     <automates>/automates/model_assembly/gromet/metadata/README.md
     ```
 
   contact:
     name: Clayton T. Morrison
-    email: claytonm@email.arizona.edu
+    email: claytonm@arizona.edu
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -274,7 +274,7 @@ components:
         When there is a keyword argument assignment but we don't have
         access to the argument names for the function (e.g., the function
         is imported from a module that we don't have access to), then use
-        this metadata to keep track of the name of the keywork argument.
+        this metadata to keep track of the name of the keyword argument.
         NOTE: This will be associated with the "call" Function input Port (pif)
       properties:
         metadata_type:
@@ -570,7 +570,7 @@ components:
         Association of parameter values extracted from equations to host Port.
 #      required:
 #        - equation_extraction
-#        - varaible_identifier
+#        - variable_identifier
 #        - value
       properties:
         metadata_type:
