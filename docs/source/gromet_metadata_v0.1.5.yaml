@@ -189,6 +189,36 @@ components:
           description: The end column of the identifier name string instance
           type: integer
 
+    SourceCodeComment:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <ANY>.SourceCodeComments
+      description: |
+        Association of a source code comment with a FN object.
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_comment"
+        comment:
+          description: The comment string.
+          type: string
+        code_file_reference_uid:
+          description: uid for the source code file CodeFileReference.
+          type: string
+          format: uuid
+        line_begin:
+          description: The line number where the comment begins.
+          type: integer
+        line_end:
+          description: The line number where the comment ends.
+          type: integer
+        col_begin:
+          description: The start column of the comment.
+          type: integer
+        col_end:
+          description: The end column of the comment.
+          type: integer
+
 # Decision 2022-07-11: For now in GroMEt, any identifier name is used as the NAME of the GroMEt object
 #    SourceCodeIdentifierName:
 #      allOf:
