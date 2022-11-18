@@ -432,6 +432,9 @@ components:
         type:
           type: object
           $ref: "#/components/schemas/VarType"
+        default_value:
+          type: object
+          $ref: "#/components/schemas/LiteralValue"
 
     VarType:
       type: string
