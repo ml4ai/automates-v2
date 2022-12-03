@@ -592,12 +592,12 @@ components:
 #          type: string
 #          default: "argument_assignment"
 
-    EquationParameter:
+    EquationLiteralValue:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-      title: <PortOutput>.EquationParameter
+      title: <PortOutput>.EquationLiteralValue
       description: |
-        Association of parameter values extracted from equations to host Port.
+        Association of parameter literal value extracted from equations to host Port.
 #      required:
 #        - equation_extraction
 #        - variable_identifier
@@ -605,7 +605,7 @@ components:
       properties:
         metadata_type:
           type: string
-          default: "equation_parameter"
+          default: "equation_literal_value"
         equation_extraction:
           $ref: '#/components/schemas/EquationExtraction'
         variable_identifier:
@@ -642,7 +642,7 @@ components:
       properties:
         metadata_type:
           type: string
-          default: "text_definition"
+          default: "text_description"
         text_extraction:
           $ref: '#/components/schemas/TextExtraction'
         variable_identifier:
