@@ -614,17 +614,31 @@ components:
         value:
           $ref: "#/components/schemas/LiteralValue"
 
+    TextExtractionMetadata:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: TextExractionMetadata
+      description: |
+        Abstract type that introduces fields for grounding and score.
+      properties:
+        score:
+          type: number
+        score_type:
+          description: The type of score (e.g., cosine similarity)
+          type: string
+        grounding:
+          description: Array of grounding hypotheses
+          type: array
+          items:
+            type: sring
+
     # Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
     TextDefinition:
       allOf:
-        - $ref: '#/components/schemas/Metadata'
+        - $ref: '#/components/schemas/TextExtractionMetadata'
       title: <PortOutput>.TextDefinition
       description: |
         Definition of host derived from a text source.
-#      required:
-#        - text_extraction
-#        - variable_identifier
-#        - variable_definition
       properties:
         metadata_type:
           type: string
@@ -639,20 +653,16 @@ components:
           type: string
 
     # are these test-based, or are they parameter-code-based ?
-    TextParameter:
+    TextLiteralValue:
       allOf:
-        - $ref: '#/components/schemas/Metadata'
-      title: <PortOutput>.TextParameter
+        - $ref: '#/components/schemas/TextExtractionMetadata'
+      title: <PortOutput>.TextLiteralValue
       description: |
-        Association of parameter values extracted from text to host Port.
-#      required:
-#        - text_extraction
-#        - variable_identifier
-#        - value
+        Association of parameter literal values extracted from text to host Port.
       properties:
         metadata_type:
           type: string
-          default: "text_parameter"
+          default: "text_literal_value"
         text_extraction:
           $ref: '#/components/schemas/TextExtraction'
         variable_identifier:
@@ -660,6 +670,25 @@ components:
           type: string
         value:
           $ref: "#/components/schemas/LiteralValue"
+
+    TextUnits:
+      allOf:
+        - $ref: '#/components/schemas/TextExtractionMetadata'
+      title: <PortOutput>.TextUnits
+      description: |
+        Association of parameter unit type extracted from text to host Port.
+      properties:
+        metadata_type:
+          type: string
+          default: "text_units"
+        text_extraction:
+          $ref: '#/components/schemas/TextExtraction'
+        variable_identifier:
+          description: Variable identifier in text
+          type: string
+        unit_type:
+          description: The extracted unit type
+          type: string
 
 #    measurement_scale:
 #      allOf:
