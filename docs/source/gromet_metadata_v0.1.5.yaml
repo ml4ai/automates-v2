@@ -633,12 +633,12 @@ components:
             type: sring
 
     # Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
-    TextDefinition:
+    TextDescription:
       allOf:
         - $ref: '#/components/schemas/TextExtractionMetadata'
-      title: <PortOutput>.TextDefinition
+      title: <PortOutput>.TextDescription
       description: |
-        Definition of host derived from a text source.
+        Description (possibly definition) of host derived from a text source.
       properties:
         metadata_type:
           type: string
