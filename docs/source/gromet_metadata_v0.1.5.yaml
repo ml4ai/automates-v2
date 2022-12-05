@@ -161,28 +161,28 @@ components:
     ProgramAnalysisRecordBookkeeping:
       allOf:
         - $ref: '#/components/schemas/Metadata'
-        title: <Module>.ProgramAnalysisRecordBookkeeping
-        description: |
-          Storing metadata derived from program analysis about Record (class/type) information
-          in a given Module, such as where fields for a Record (class/type) are first declared
-          and what methods are associated with a Record (class/type).
-          There will be one such metadata entry for each Record (class/type).
-          This will be stored in metadata array that is the first index of the
-          metadata_collection.
-        properties:
-          metadata_type:
+      title: <Module>.ProgramAnalysisRecordBookkeeping
+      description: |
+        Storing metadata derived from program analysis about Record (class/type) information
+        in a given Module, such as where fields for a Record (class/type) are first declared
+        and what methods are associated with a Record (class/type).
+        There will be one such metadata entry for each Record (class/type).
+        This will be stored in metadata array that is the first index of the
+        metadata_collection.
+      properties:
+        metadata_type:
+          type: string
+          default: "program_analysis_record_bookkeeping"
+        type_name:
+          type: string
+        field_declarations:
+          description: dictionary of key=field_name, val=method_name
+          type: object
+        method_declarations:
+          description: array of method names associted with a type
+          type: array
+          items:
             type: string
-            default: "program_analysis_record_bookkeeping"
-          type_name:
-            type: string
-          field_declarations:
-            description: dictionary of key=field_name, val=method_name
-            type: object
-          method_declarations:
-            description: array of method names associted with a type
-            type: array
-            items:
-              type: string
 
     ### <ANY>.<code_span>
 
