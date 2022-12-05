@@ -621,16 +621,22 @@ components:
       description: |
         Abstract type that introduces fields for grounding and score.
       properties:
-        score:
-          type: number
-        score_type:
-          description: The type of score (e.g., cosine similarity)
-          type: string
         grounding:
           description: Array of grounding hypotheses
           type: array
           items:
-            type: sring
+            $ref: '#/components/schemas/TextGrounding'
+
+    TextGrounding:
+      properties:
+        argument_name:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        score:
+          type: number
 
     # Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
     TextDescription:
