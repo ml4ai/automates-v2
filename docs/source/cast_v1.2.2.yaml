@@ -499,6 +499,7 @@ components:
       description: |
         Represents the potential scalar types
       enum:
+        - Ellipsis
         - Integer
         - AbstractFloat
         - Boolean
