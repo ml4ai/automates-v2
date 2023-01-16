@@ -33,6 +33,9 @@ ${SOURCEDIR}/cast_v1.2.2.html:
 ${SOURCEDIR}/cast_v1.2.3.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/cast_v1.2.3.yaml $@
 
+${SOURCEDIR}/gromet_FN_v0.1.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.0.yaml $@
+
 ${SOURCEDIR}/gromet_FN_v0.1.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.1.yaml $@
 
@@ -50,6 +53,9 @@ ${SOURCEDIR}/gromet_FN_v0.1.5.html:
 
 ${SOURCEDIR}/gromet_FN_v0.1.6.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_FN_v0.1.6.yaml $@
+
+${SOURCEDIR}/gromet_metadata_v0.1.0.html:
+	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.0.yaml $@
 
 ${SOURCEDIR}/gromet_metadata_v0.1.1.html:
 	python3 swagger-yaml-to-html.py ${SOURCEDIR}/gromet_metadata_v0.1.1.yaml $@
