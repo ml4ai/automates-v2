@@ -27,6 +27,7 @@ Welcome to the SKEMA documentation!
    gfrn_intersection_graph
    grfn_api_v1.0.0
    gromet_v0.0.1
+   gromet_v0.1.0
 
 
 Indices and tables
