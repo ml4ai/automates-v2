@@ -91,63 +91,6 @@ components:
         - FN      # A Function Network
         - IMPORT  # Import object
 
-    SourceType:
-      description: Type of source object that URI references.
-      type: string
-      enum:
-        - GROMET            # Reference to a GroMEt file.
-        - SOURCE_FILE       # Reference to specific file (direct file URL), e.g.: "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
-        - REPOSITORY        # Reference to repository (top-level repository URL), e.g.,: "https://github.com/CodeForPhilly/chime"
-        - WEB               # Reference to a common library URL, but not the direct repository (URI to library url)
-
-    ImportType:
-      description: Type of import.
-      type: string
-      enum:
-        - GROMET_FN_MODULE  # Importing another GrometFNModule; ImportSourceType is Gromet File
-        - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
-        - OTHER             # Importing from some other source.
-
-# Examples of types of Imports
-#(1) LIBRARY:
-#     {"name": "numpy.concatenate",
-#      "type": "LIBRARY",
-#      "version": "Numpy 1.23.0",
-#      "uri": "https://numpy.org/"}.
-#(2) Existing GrometFNModule (GROMET_FN_MODULE):
-#     {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
-#      "type": "GROMET_FN_MODULE",
-#      "version": "CHIME penn... 2020-..."
-#      "uri": "<location of GrometFNModule JSON>"}
-
-    ImportReference:
-      properties:
-        name:
-          type: string
-          description: |
-            The qualified name of the import.
-            The qualified name includes the module path to the element being imported.
-            E.g., "numpy.concatenate" is the qualified name for importing the concatenate function from numpy.
-            If the element being imported is from an existing GROMET_FN_MODULE,
-            then the qualified names ends in a colon followed by the integer, where the integer
-            references the index in the GrometFNModule.attributes for the corresponding FN.
-        src_language:
-          description: The programming language of the imported module
-          type: string
-        type:
-          description: The Type of import
-          $ref: "#/components/schemas/ImportType"
-        version:
-          type: string
-          description: |
-            The import source name and version (if available) of the element being imported.
-            For example, if important a native library from Python 3.10, then this would be "Python 3.10".
-        uri:
-          description: |
-            A TypedValue that enables labeling what type of source the URI refers to.
-            "type" is one of SourceType, value is string representing URI.
-          $ref: "#/components/schemas/TypedValue"
-
     GrometFNModuleCollection:
       description: |
         A collection of GroMEt FN Modules.
@@ -569,9 +512,85 @@ components:
         - FUNCTION    # Function with any number of input and output Ports and FN contents.
         - EXPRESSION  # Function with single return value (Port)
         - PREDICATE   # Expression whose return value (Port) is Boolean
-        - MODULE      # Function with no Outer Ports, no contents
-        - PRIMITIVE   # Function with no contents
-        - LITERAL     # Function LiteralValue with single return value (Port) and a value
+        - MODULE      # Function with no Outer Ports (no contents)
+        - ABSTRACT    # Primitive Function (no contents): GrometFN primitive, for abstracting in model role analysis
+        - SOURCE      # Primitive Function (no contents): source language
+        - IMPORTED    # Function (no contents) imported from another module
+        - LITERAL     # Function LiteralValue with single return value (Port) and a value (no contents)
+
+    ImportType:
+      description: The type of source of an IMPORTED resource
+      type: string
+      enum:
+        - GROMET_FN_MODULE  # Importing another GrometFNModule; SourceType is Gromet File
+        - NATIVE            # Reference to native language library (e.g., Python 3.10 argparse, sys, etc...)
+        - OTHER             # Importing from some other source.
+
+    ImportSourceType:
+      description: |
+        When a resource is imported, this is the type of source object that imported URI references.
+      type: string
+      enum:
+        - GROMET            # Reference to a GroMEt file.
+        - SOURCE_FILE       # Reference to specific file (direct file URL), e.g.: "https://raw.githubusercontent.com/CodeForPhilly/chime/develop/src/penn_chime/model/sir.py"
+        - REPOSITORY        # Reference to repository (top-level repository URL), e.g.,: "https://github.com/CodeForPhilly/chime"
+        - WEB               # Reference to a common library URL, but not the direct repository (URI to library url)
+
+# Example of Function of type ABSTRACT
+# (0) Primitive GroMEt function set
+#     {"name": "set",
+#      "contents": None,
+#      "function_type": "ABSTRACT",
+#      "import_type": None,
+#      "import_version": None,
+#      "source_language": None,
+#      "source_language_version": None,
+#      "uri": None,
+#      "value": None}
+
+# Example of Function of type SOURCE
+# (0) Built-in Python function str()
+#     {"name": "str",
+#      "contents": None,
+#      "function_type": "SOURCE",
+#      "import_type": None,
+#      "import_version": None,
+#      "source_language": "Python",
+#      "source_language_version": "3.10",
+#      "uri": None,
+#      "value": None}
+
+# Examples of Function of type IMPORTED
+# (0) GROMET_FN_MODULE: Existing GrometFNModule
+#     {"name": "model.sir.get_growth_rate: <index_to_FN_in_GrometFNModule_attributes_array>",
+#      "contents": None,
+#      "function_type": "IMPORTED",
+#      "import_type": "GROMET_FN_MODULE",
+#      "import_version": "CHIME penn... 2020-...",
+#      "source_language": "Python",
+#      "source_language_version": "3.10",
+#      "uri": {"type": "GROMET", "value": "<location of GrometFNModuleCollection JSON>: <index_of_module_in_collection>"},
+#      "value": None}
+# (1) NATIVE: importing a function from a native Python library
+#     {"name": "sys.exit",
+#      "contents": None,
+#      "function_type": "IMPORTED",
+#      "import_type": "NATIVE",
+#      "import_version": None,  # Here, the import_version is redundant to source_language_version
+#      "source_language": "Python",
+#      "source_language_version": "3.10",
+#      "uri": None,  # URI redundant to source_language -- assumed to be known
+#      "value": None}
+# (2) OTHER: importing a function from another library
+#     {"name": "numpy.concatenate",
+#      "contents": None,
+#      "function_type": "IMPORTED",
+#      "import_type": "OTHER",
+#      "import_version": "Numpy 1.23.0",
+#      "source_language": "Python",
+#      "source_language_version": "3.10",
+#      "uri": {"type": "WEB", "value": "https://numpy.org/"},
+#      "value": None}
 
     LiteralValue:
       description: Literal Value.
@@ -588,23 +607,63 @@ components:
 
     GrometBoxFunction:
       description: |
-        FN Box Module
+        FN Box Function.
+        The interpretation of the attributes (properties) depends on the function_type, as follows:
+        - FUNCTION : Function with any number of input and output Ports and FN contents.
+        - EXPRESSION : Function with single return value (single output Port).
+        - PREDICATE : Expression whose return value (output Port) is value type Boolean.
+        - MODULE : Function with no Outer Ports and no contents.
+        - ABSTRACT : Primitive Function (no contents): GrometFN primitive, for abstracting in model role analysis.
+        - SOURCE : Primitive Function (no contents): a source language primitive.
+        - IMPORTED : Function (no contents) imported from another module
+            The **name** of an IMPORTED function will be the qualified name of the import.
+              The qualified name includes the module path to the element being imported.
+              E.g., "numpy.concatenate" is the qualified name for importing the concatenate function from numpy.
+              If the element being imported is from an existing GROMET_FN_MODULE,
+              then the qualified names ends in a colon followed by the integer,
+              where the integer references the index in the GrometFNModule.attributes for
+              the corresponding FN.
+        - LITERAL : Function LiteralValue with single return value (Port) and a value (no contents)
+
       allOf:
         - $ref: "#/components/schemas/GrometBox"
       type: object
       properties:
         function_type:
           $ref: "#/components/schemas/FunctionType"
-        source_language:
-          description: The source language base name (e.g., "Python", "C", "Fortran")
-          type: string
-        source_language_version:
-          description: The version of the source language (e.g., "3.10.9")
-          type: string
+
         contents:
           type: integer
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
+
+        import_type:
+          description: |
+            When function_type is IMPORTED: the type of the import
+          $ref: "#/components/schemas/ImportType"
+        import_version:
+          description: |
+            When function_type is IMPORTED: the version of the resource being imported (e.g., "Numpy 1.23.0")
+          type: string
+
+        # When function_type is SOURCE or IMPORTED
+        source_language:
+          description: |
+            When function_type is SOURCE or IMPORTED: The source language base name (e.g., "Python", "C", "Fortran")
+          type: string
+        source_language_version:
+          description: |
+            When function_type is SOURCE or IMPORTED: The version of the source language (e.g., "3.10.9")
+          type: string
+
+        uri:
+          description: |
+            When function_type is IMPORTED:
+            A TypedValue that enables labeling what type of source the URI refers to.
+            The "type" is one of ImportSourceType, "value" is string representing the URI.
+          $ref: "#/components/schemas/TypedValue"
+
+        # When function_type is LITERAL
         value:
           $ref: "#/components/schemas/LiteralValue"
           # description: Only present when function_type = LiteralValue
