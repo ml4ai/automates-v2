@@ -571,6 +571,7 @@ components:
         - PREDICATE   # Expression whose return value (Port) is Boolean
         - MODULE      # Function with no Outer Ports, no contents
         - PRIMITIVE   # Function with no contents
+        - IMPORTED_METHOD  # A method call on an object derived from and imported module.
         - LITERAL     # Function LiteralValue with single return value (Port) and a value
 
     LiteralValue:
