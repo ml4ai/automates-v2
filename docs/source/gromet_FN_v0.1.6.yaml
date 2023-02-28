@@ -615,9 +615,9 @@ components:
         - EXPRESSION : Function with single return value (single output Port).
         - PREDICATE : Expression whose return value (output Port) is value type Boolean.
         - MODULE : Function with no Outer Ports and no contents.
-        - ABSTRACT : Primitive Function (no contents): GrometFN primitive, for abstracting in model role analysis.
-        - SOURCE : Primitive Function (no contents): a source language primitive.
-        - IMPORTED : Function (no contents) imported from another module
+        - ABSTRACT : (no contents) Primitive Function: GrometFN primitive, for abstracting in model role analysis.
+        - LANGUAGE_PRIMITIVE : (no contents) Primitive Function: a source language primitive.
+        - IMPORTED : (no contents) Function imported from another module.
             The **name** of an IMPORTED function will be the qualified name of the import.
               The qualified name includes the module path to the element being imported.
               E.g., "numpy.concatenate" is the qualified name for importing the concatenate function from numpy.
@@ -625,6 +625,10 @@ components:
               then the qualified names ends in a colon followed by the integer,
               where the integer references the index in the GrometFNModule.attributes for
               the corresponding FN.
+        - IMPORTED_METHOD : (no contents) A method call on an object derived from and imported module.
+        - UNKNOWN_METHOD : (no contents)
+            A method that **may** have already been defined OR is IMPORTED_METHOD.
+            Use this type when there is ambiguity about whether it was already defined or imported.
         - LITERAL : Function LiteralValue with single return value (Port) and a value (no contents)
 
       allOf:
