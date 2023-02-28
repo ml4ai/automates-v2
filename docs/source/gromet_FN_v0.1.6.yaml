@@ -514,7 +514,7 @@ components:
         - PREDICATE   # Expression whose return value (Port) is Boolean
         - MODULE      # Function with no Outer Ports (no contents)
         - ABSTRACT    # Primitive Function (no contents): GrometFN primitive, for abstracting in model role analysis
-        - SOURCE      # Primitive Function (no contents): source language primitives
+        - LANGUAGE_PRIMITIVE  # Primitive Function (no contents): source language primitives
         - IMPORTED    # Function (no contents) imported from another module
         - IMPORTED_METHOD  # A method call on an object derived from and imported module.
         - UNKNOWN_METHOD  # A method that may have already been defined OR is IMPORTED_METHOD
