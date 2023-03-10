@@ -353,6 +353,48 @@ components:
           description: |
             The name of keyword argument that the value/var is being assigned (wired) to.
 
+    SourceCodeBoolAnd:
+      allOf:
+        - $ref: "#/components/schemas/Metadata"
+      title: <BoxFunction>.SourceCodeBoolAnd
+      description: |
+        Metadata indicating whether a Box Function is an implementation
+        of an Conjunction (And).
+        In most programming languages, Conjunctions and Disjunctions
+        are interpreted as control flow.
+        In FNs, a Conjunction is translated into a tree of nested
+            conditionals, where for each argument (except for the last):
+          the conditional *condition* is the next argument to the conjunction,
+          the *if_branch* is either the next conjunct-argument (the next
+                element in the And) or the last Bool condition (expression,
+                Boolean function call, or Boolean literal), and
+          the *else_branch* returns False.
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_bool_and"
+
+    SourceCodeBoolOr:
+      allOf:
+        - $ref: "#/components/schemas/Metadata"
+      title: <BoxFunction>.SourceCodeBoolOr
+      description: |
+        Metadata indicating whether a Box Function is an implementation
+        of an Disjunction (Or).
+        In most programming languages, Conjunctions and Disjunctions
+        are interpreted as control flow.
+        In FNs, a Disjunction is translated into a tree of nested
+            conditionals, where for each argument (except the last):
+          the conditional *condition* is the next argument to the disjunction,
+          the *if_branch* returns True, and
+          the *else_branch* is either the next conjunct-argument (the next
+                element in the OR) or last Bool condition (expression,
+                Boolean function call, or Boolean literal).
+      properties:
+        metadata_type:
+          type: string
+          default: "source_code_bool_or"
+
     SourceCodeLoopInit:
       allOf:
         - $ref: '#/components/schemas/Metadata'
