@@ -85,11 +85,11 @@ components:
           type: integer
           description: Helper bookkeeping to facilitate keeping track of large list of TypedValues
 
-    AttributeType:   # Was previously called GrometType
-      type: string
-      enum:
-        - FN      # A Function Network
-        - IMPORT  # Import object
+#    AttributeType:   # Was previously called GrometType
+#      type: string
+#      enum:
+#        - FN      # A Function Network
+#        - IMPORT  # Import object
 
     GrometFNModuleCollection:
       description: |
@@ -157,15 +157,16 @@ components:
             The name of the Function Network Module.
         fn:   # the "top level" Function Network (acset)
           $ref: "#/components/schemas/GrometFN"
-        attributes:  # acset storage
+        fn_array:  # previously attributes, as these are acset storage
           # SUM TYPE {"type": {"FN", "IMPORT"}, "value": {object}}
           description: |
-            (sum-type) Array of TypedValues. Currently expect:<br>
-            (1) other GrometFN (type = "FN")<br>
-            (2) references to ImportReference (type = "IMPORT")
+            Array of GrometFNs
+#            (sum-type) Array of TypedValues. Currently expect:<br>
+#            (1) other GrometFN (type = "FN")<br>
+#            (2) references to ImportReference (type = "IMPORT")
           type: array
           items:
-            $ref: "#/components/schemas/TypedValue"
+            $ref: "#/components/schemas/GrometFN"  # TypedValue
         metadata_collection:
           description: |
             Table (array) of lists (arrays) of metadata,
@@ -651,6 +652,12 @@ components:
           description: |
             When function_type is IMPORTED: the version of the resource being imported (e.g., "Numpy 1.23.0")
           type: string
+        import_source:
+          description: |
+            When function_type is IMPORTED:
+            A TypedValue that enables labeling what type of source the import_source refers to.
+            The "type" is one of ImportSourceType, "value" is string representing the URI.
+          $ref: "#/components/schemas/TypedValue"
 
         # When function_type is SOURCE or IMPORTED
         source_language:
@@ -661,13 +668,6 @@ components:
           description: |
             When function_type is SOURCE or IMPORTED: The version of the source language (e.g., "3.10.9")
           type: string
-
-        uri:
-          description: |
-            When function_type is IMPORTED:
-            A TypedValue that enables labeling what type of source the URI refers to.
-            The "type" is one of ImportSourceType, "value" is string representing the URI.
-          $ref: "#/components/schemas/TypedValue"
 
         # When function_type is LITERAL
         value:
