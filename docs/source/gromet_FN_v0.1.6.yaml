@@ -338,43 +338,43 @@ components:
             to (tgt) GrometBoxLoops Port Outputs (pol).
           items:
             $ref: "#/components/schemas/GrometWire"
-        wl_iiargs:
-          type: array
-          description: |
-            wl_iiargs: The Wires
-            from (src) the arguments (the Port Inputs) of the Loop
-            init (itself a Function, a type of GrometBoxFunction) (pif)
-            to (tgt) the Port Inputs of the Loop (pil).
-            It is through these Wires that the Loop init Function
-            gets its input argument values before the init Function
-            is evaluated; these values originate from outside of the
-            Loop.
-          items:
-            $ref: "#/components/schemas/GrometWire"
-        wl_ioargs:
-          type: array
-          description: |
-            wl_ioargs: The Wires
-            from (src) the Port Inputs of the Loop (pil)
-            to (tgt) the Port Outputs of the Loop init
-            (itself a Function, a type of GrometBoxFunction) (pof).
-            It is through these Wires that the Loop Port Inputs
-            get their values initialized after evaluation of the
-            init Function.
-          items:
-            $ref: "#/components/schemas/GrometWire"
-        wl_cargs:
-          type: array
-          description: |
-            wl_cargs: The Wires
-            from (src) the arguments (the Port Inputs) of the Loop
-            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
-            to (tgt) the Port Inputs of the Loop (pil).
-            It is through these Wires that the Loop condition Predicate
-            gets its input argument values from the current state of the
-            Loop Input Ports.
-          items:
-            $ref: "#/components/schemas/GrometWire"
+#        wl_iiargs:
+#          type: array
+#          description: |
+#            wl_iiargs: The Wires
+#            from (src) the arguments (the Port Inputs) of the Loop
+#            init (itself a Function, a type of GrometBoxFunction) (pif)
+#            to (tgt) the Port Inputs of the Loop (pil).
+#            It is through these Wires that the Loop init Function
+#            gets its input argument values before the init Function
+#            is evaluated; these values originate from outside of the
+#            Loop.
+#          items:
+#            $ref: "#/components/schemas/GrometWire"
+#        wl_ioargs:
+#          type: array
+#          description: |
+#            wl_ioargs: The Wires
+#            from (src) the Port Inputs of the Loop (pil)
+#            to (tgt) the Port Outputs of the Loop init
+#            (itself a Function, a type of GrometBoxFunction) (pof).
+#            It is through these Wires that the Loop Port Inputs
+#            get their values initialized after evaluation of the
+#            init Function.
+#          items:
+#            $ref: "#/components/schemas/GrometWire"
+#        wl_cargs:
+#          type: array
+#          description: |
+#            wl_cargs: The Wires
+#            from (src) the arguments (the Port Inputs) of the Loop
+#            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
+#            to (tgt) the Port Inputs of the Loop (pil).
+#            It is through these Wires that the Loop condition Predicate
+#            gets its input argument values from the current state of the
+#            Loop Input Ports.
+#          items:
+#            $ref: "#/components/schemas/GrometWire"
 
         # Conditionals
         bc:
@@ -435,17 +435,17 @@ components:
             to (tgt) the GrometBoxConditionals Port Outputs (poc).
           items:
             $ref: "#/components/schemas/GrometWire"
-        wc_cargs:
-          type: array
-          description: |
-            wc_cargs: The Wires
-            from (src) the arguments (the Port Inputs) of the Conditional
-            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
-            to (tgt) the Port Inputs of the Conditional (pic).
-            It is through these Wires that the Conditional condition Predicate
-            gets its input argument values from the Conditional Input Ports.
-          items:
-            $ref: "#/components/schemas/GrometWire"
+#        wc_cargs:
+#          type: array
+#          description: |
+#            wc_cargs: The Wires
+#            from (src) the arguments (the Port Inputs) of the Conditional
+#            condition (itself a Predicate, a type of GrometBoxFunction) (pif)
+#            to (tgt) the Port Inputs of the Conditional (pic).
+#            It is through these Wires that the Conditional condition Predicate
+#            gets its input argument values from the Conditional Input Ports.
+#          items:
+#            $ref: "#/components/schemas/GrometWire"
 
     GrometWire:
       description: FN Wire
@@ -710,24 +710,30 @@ components:
         - $ref: "#/components/schemas/GrometBox"
       type: object
       properties:
+        pre:
+          type: integer
+          description: |
+            The index to the entry in the BF table (array) of *this* GrometFN
+            representing the init (Function) of the Loop.
+            This enables support of for-loops, cases where most languages
+            have provided an extension to loops that have an initialization that is
+            only in the scope of the loop, but not part of the loop body.
         condition:
           type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the loop condition Predicate of the Loop.
-        init:
-          type: integer
-          description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
-            representing the init (Function) of the Loop.
-            This is primarily for the support of for-loops, cases where most languages
-            have provided an extension to loops that have an initialization that is
-            only in the scope of the loop, but not part of the loop body.
         body:
           type: integer
           description: |
             The index to the entry in the BF table (array) of *this* GrometFN
             representing the body (Function) of the Loop.
+        post:
+          type: integer
+          description: |
+            The index to the entry in the BF table of *this* GrometFN representing
+            any post-loop computation just prior to exiting the Loop.
+            This is useful for representing
 
     GrometBoxConditional:
       description: |
