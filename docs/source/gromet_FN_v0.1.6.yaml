@@ -551,11 +551,11 @@ components:
 #      "uri": None,
 #      "value": None}
 
-# Example of Function of type SOURCE
+# Example of Function of type LANGUAGE_PRIMITIVE
 # (0) Built-in Python function str()
 #     {"name": "str",
 #      "contents": None,
-#      "function_type": "SOURCE",
+#      "function_type": "LANGUAGE_PRIMITIVE",
 #      "import_type": None,
 #      "import_version": None,
 #      "source_language": "Python",
@@ -575,7 +575,7 @@ components:
 #      "uri": {"type": "GROMET", "value": "<location of GrometFNModuleCollection JSON>: <index_of_module_in_collection>"},
 #      "value": None}
 # (1) NATIVE: importing a function from a native Python library
-#     {"name": "sys.exit",
+#     {"name": "sys.exit",f  # <module_name>.<function_name>
 #      "contents": None,
 #      "function_type": "IMPORTED",
 #      "import_type": "NATIVE",
@@ -585,9 +585,35 @@ components:
 #      "uri": None,  # URI redundant to source_language -- assumed to be known
 #      "value": None}
 # (2) OTHER: importing a function from another library
-#     {"name": "numpy.concatenate",
+#     {"name": "numpy.concatenate",  # <module_name>.<function_name>
 #      "contents": None,
 #      "function_type": "IMPORTED",
+#      "import_type": "OTHER",
+#      "import_version": "Numpy 1.23.0",
+#      "source_language": "Python",
+#      "source_language_version": "3.10",
+#      "uri": {"type": "WEB", "value": "https://numpy.org/"},
+#      "value": None}
+
+# Example of Function of type IMPORTED_METHOD
+"""
+import numpy
+
+arr = numpy.array([1,2,3])
+m = arr.mean()
+
+### gets roughly translated to a FN function call, where arr is an argument
+mean(arr)
+
+### get module name:
+type(arr).__module__
+### get class name:
+type(arr).__name__
+"""
+# (0) function call to numpy.ndarray.mean()
+#     {"name": "numpy.ndarray.mean",   # <module>.<class_name>.<method_name>
+#      "contents": None,
+#      "function_type": "IMPORTED_METHOD",
 #      "import_type": "OTHER",
 #      "import_version": "Numpy 1.23.0",
 #      "source_language": "Python",
@@ -626,7 +652,7 @@ components:
               then the qualified names ends in a colon followed by the integer,
               where the integer references the index in the GrometFNModule.attributes for
               the corresponding FN.
-        - IMPORTED_METHOD : (no contents) A method call on an object derived from and imported module.
+        - IMPORTED_METHOD : (no contents) A method call on an object derived from an imported module.
         - UNKNOWN_METHOD : (no contents)
             A method that **may** have already been defined OR is IMPORTED_METHOD.
             Use this type when there is ambiguity about whether it was already defined or imported.
