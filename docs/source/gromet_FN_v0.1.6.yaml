@@ -546,9 +546,9 @@ components:
 #      "function_type": "ABSTRACT",
 #      "import_type": None,
 #      "import_version": None,
+#      "import_source": None,
 #      "source_language": None,
 #      "source_language_version": None,
-#      "uri": None,
 #      "value": None}
 
 # Example of Function of type LANGUAGE_PRIMITIVE
@@ -558,9 +558,9 @@ components:
 #      "function_type": "LANGUAGE_PRIMITIVE",
 #      "import_type": None,
 #      "import_version": None,
+#      "import_source": None,
 #      "source_language": "Python",
 #      "source_language_version": "3.10",
-#      "uri": None,
 #      "value": None}
 
 # Examples of Function of type IMPORTED
@@ -570,9 +570,9 @@ components:
 #      "function_type": "IMPORTED",
 #      "import_type": "GROMET_FN_MODULE",
 #      "import_version": "CHIME penn... 2020-...",
+#      "import_source": {"type": "GROMET", "value": "<location of GrometFNModuleCollection JSON>: <index_of_module_in_collection>"},
 #      "source_language": "Python",
 #      "source_language_version": "3.10",
-#      "uri": {"type": "GROMET", "value": "<location of GrometFNModuleCollection JSON>: <index_of_module_in_collection>"},
 #      "value": None}
 # (1) NATIVE: importing a function from a native Python library
 #     {"name": "sys.exit",f  # <module_name>.<function_name>
@@ -580,9 +580,9 @@ components:
 #      "function_type": "IMPORTED",
 #      "import_type": "NATIVE",
 #      "import_version": None,  # Here, the import_version is redundant to source_language_version
+#      "import_source": None,  # URI redundant to source_language -- assumed to be known
 #      "source_language": "Python",
 #      "source_language_version": "3.10",
-#      "uri": None,  # URI redundant to source_language -- assumed to be known
 #      "value": None}
 # (2) OTHER: importing a function from another library
 #     {"name": "numpy.concatenate",  # <module_name>.<function_name>
@@ -590,9 +590,9 @@ components:
 #      "function_type": "IMPORTED",
 #      "import_type": "OTHER",
 #      "import_version": "Numpy 1.23.0",
+#      "import_source": {"type": "WEB", "value": "https://numpy.org/"},
 #      "source_language": "Python",
 #      "source_language_version": "3.10",
-#      "uri": {"type": "WEB", "value": "https://numpy.org/"},
 #      "value": None}
 
 # Example of Function of type IMPORTED_METHOD
@@ -616,9 +616,9 @@ type(arr).__name__
 #      "function_type": "IMPORTED_METHOD",
 #      "import_type": "OTHER",
 #      "import_version": "Numpy 1.23.0",
+#      "import_source": {"type": "WEB", "value": "https://numpy.org/"},
 #      "source_language": "Python",
 #      "source_language_version": "3.10",
-#      "uri": {"type": "WEB", "value": "https://numpy.org/"},
 #      "value": None}
 
     LiteralValue:
@@ -665,7 +665,7 @@ type(arr).__name__
         function_type:
           $ref: "#/components/schemas/FunctionType"
 
-        contents:
+        body:
           type: integer
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
@@ -706,16 +706,12 @@ type(arr).__name__
         __Loop execution semantics__:
         The Boolean output Port of the condition Predicate represents the
         loop *exit condition*.
-        Loop execution starts by first evaluating the init Function, if it
-        is available. The output ports of the referenced init Function are
-        mapped to the input ports to the Loop by the wl_iargs Wires: src Loop
-        Port Inputs (pil) and tgt init BoxFunction Port Outputs (pof);
-        these set the initial values as input to the loop. The init Function is
-        evaluated only during the first iteration through the loop.
+        Loop execution starts by first evaluating the pre (aka 'init') Function,
+        if it is available.
+        The init Function is evaluated only during the first iteration through
+        the loop.
         Next (and on every subsequent iteration), the loop condition Predicate
-        is evaluated. The Loop condition input Ports get their values by
-        by Wires in the wl_cargs table that have as their src the loop condition
-        Port Inputs (pif) and as tgt the Loop Port Inputs (pil).
+        is evaluated.
         If the exit condition Port evaluates to True, then the current values
         at the input Ports to the Loop are copied to the output Ports and
         the execution moves past the Loop.
@@ -726,12 +722,13 @@ type(arr).__name__
         evaluation (which after the first iteration will go directly to evaluating
         the loop condition). <br>
         The Port Input (pil) Ports correspond 1-1 with Port Output (pol) Ports of
-        the BoxLoop, as well as 1-1 with the Port Input Ports (pif) and Port
-        Output Ports (pof) of the loop body BoxFunction Ports -- the indices of
-        each of these Ports within all four tables (pil, pol, pif, pof) are the
-        same (e.g., if index 22 is the Port Input of the loop, then that same index
-        will be the corresponding Port in the Port Output (pol) of the loop as
-        well as the Port Input (pif) and Port Output (pif) of the BoxFunction).
+        the BoxLoop, as well as 1-1 with the Outer Port Input Ports (opi) and the
+        Outer Port Output Ports (opo) of the GrometFNs that the loop pre, condition,
+        body, and post reference. The 1-1 correspondence is enforced by the order
+        of the Ports (e.g., if index 5 is the Port Input of the loop, then that
+        same index will be the corresponding Port in the Port Output (pol) of the
+        BoxLoop as well as the Outer Port Input (opi) and Outer Port Output (opo)
+        of each of the pre, condition, body and post GrometFN).
       allOf:
         - $ref: "#/components/schemas/GrometBox"
       type: object
@@ -739,27 +736,35 @@ type(arr).__name__
         pre:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
-            representing the init (Function) of the Loop.
-            This enables support of for-loops, cases where most languages
-            have provided an extension to loops that have an initialization that is
-            only in the scope of the loop, but not part of the loop body.
+            OPTIONAL.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the pre (aka 'init') (Function)
+            of the Loop.
+            This enables support of for-loops, where many languages have provided
+            an extension to loops that have an initialization that is only in the
+            scope of the loop, but not part of the loop body.
         condition:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
-            representing the loop condition Predicate of the Loop.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the condition (Predicate) of
+            the Loop.
         body:
           type: integer
           description: |
-            The index to the entry in the BF table (array) of *this* GrometFN
-            representing the body (Function) of the Loop.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the body (Function) of the Loop.
         post:
           type: integer
           description: |
-            The index to the entry in the BF table of *this* GrometFN representing
-            any post-loop computation just prior to exiting the Loop.
-            This is useful for representing
+            OPTIONAL.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the post-loop (Function) just
+            prior to exiting the Loop.
+            This is useful for representing control structures such as in Fortran
+            where loop variable update is advanced one more step than what Python-style
+            iterators support, and where that updated value is available outside
+            the loop.
 
     GrometBoxConditional:
       description: |
@@ -778,15 +783,15 @@ type(arr).__name__
         condition:
           type: integer
           description: |
-            The index to the entry in the `bf` table (array) of *this* GrometFN
-            representing the conditional condition.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the conditional condition.
         body_if:
           type: integer
           description: |
-            The index to the entry in the `bf` table (array) of *this* GrometFN
-            representing the body (Function) of IF-branch of the conditional.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the IF-branch of the conditional.
         body_else:
           type: integer
           description: |
-            The index to the entry in the `bf` table (array) of *this* GrometFN
-            representing the body (Function) of ELSE-branch of the conditional.
+            The index to the entry in the `fn_array` table of the GrometFNModule
+            representing the GrometFN implementing the ELSE-branch of the conditional.
