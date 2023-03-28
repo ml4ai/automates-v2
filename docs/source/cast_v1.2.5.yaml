@@ -227,18 +227,18 @@ components:
             $ref: "#/components/schemas/AstNode"
 
     # Expression statements
-    Expr:
-      type: object
-      description: |
-        Represents a standalone expression found in the code.
-
-        __expr__ - The expression held in this node. It could be an assignment, unary op, binary op, etc.
-
-      allOf:
-         - $ref: "#/components/schemas/AstNode"
-      properties:
-        expr:
-          $ref: "#/components/schemas/AstNode"
+#    Expr:
+#      type: object
+#      description: |
+#        Represents a standalone expression found in the code.
+#
+#        __expr__ - The expression held in this node. It could be an assignment, unary op, binary op, etc.
+#
+#      allOf:
+#         - $ref: "#/components/schemas/AstNode"
+#      properties:
+#        expr:
+#          $ref: "#/components/schemas/AstNode"
 
     Assignment:
       type: object
