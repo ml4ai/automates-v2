@@ -574,17 +574,67 @@ components:
 #      "value": None}
 
     LiteralValue:
-      description: Literal Value.
+      description: |
+        Literal Value.
+        Supports representation of identifiers to refer to GrometFN components
+          via value_type as "literal_function_defined" or "literal_function_imported".
+        When **value_type** is "literal_function_defined" or "literal_function_imported",
+          then the **value** will be a string representing the (qualified) function name.
+          (When imported, the qualified function name includes the module path.)
+          Also **source_language** and **source_language_version** will be filled in.
+        When **value_type** is "literal_function_defined":
+          then the **source_fn** also will be filled in.
+        When **value_type** is "literal_function_defined":
+          then the **import_type**, **import_version**, **import_source**,
+          also will be filled in.
       type: object
+
       properties:
+
         value_type:
           type: string
-          description: The type of the value
+          description: |
+            The type of the value.
+
         value:
           type: object
           description: |
             The value as an object representing the value.
             Interpret the value object according to the value_type.
+
+        # When LiteralValue value_type is "literal_function_defined"
+        source_fn:
+          description: |
+            Integer representing index into the fn_array
+          type: integer
+
+        # When LiteralValue value_type is "literal_function_imported"
+        import_type:
+          description: |
+            When value_type is "literal_function_imported":
+            the type of the import
+          $ref: "#/components/schemas/ImportType"
+        import_version:
+          description: |
+            When value_type is "literal_function_imported":
+            the version of the resource being imported (e.g., "Numpy 1.23.0")
+          type: string
+        import_source:
+          description: |
+            When value_type is "literal_function_imported":
+            A TypedValue that enables labeling what type of source the import_source refers to.
+            The "type" is one of ImportSourceType, "value" is string representing the URI.
+          $ref: "#/components/schemas/TypedValue"
+
+        # When LiteralValue value_type is "literal_function_defined" or "literal_function_defined"
+        source_language:
+          description: |
+            When function_type is SOURCE or IMPORTED: The source language base name (e.g., "Python", "C", "Fortran")
+          type: string
+        source_language_version:
+          description: |
+            When function_type is SOURCE or IMPORTED: The version of the source language (e.g., "3.10.9")
+          type: string
 
     GrometBoxFunction:
       description: |
@@ -622,6 +672,7 @@ components:
           description: |
             The index to the FN in the parent GrometFNCollection.function_networks array.
 
+        # When function_type is IMPORTED
         import_type:
           description: |
             When function_type is IMPORTED: the type of the import
