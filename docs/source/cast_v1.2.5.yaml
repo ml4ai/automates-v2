@@ -172,18 +172,20 @@ components:
     Loop:
       type: object
       description: |
-        Represents a loop control statement. The body of the loop is executed until the expression evaluates to false.
+        Represents a loop control statement. The body of the loop is executed until the expression evaluates to False.
 
-        __init__ - The ordered list of any nodes representing the initialization code for the loop.
+        __pre__ - The ordered list of any nodes representing the pre-loop computation (initialization) code for the loop.
 
         __expr__ - The expr to evaluate that controls the loop.
 
         __body__ - The ordered list of nodes representing the body of the loop.
 
+        __post__ - The ordered list of any nodes representing the post-loop computation code for the loop.
+
       allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
-        init:
+        pre:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
@@ -191,7 +193,7 @@ components:
             This holds any expressions related to initializing a loop.
             In general, this is populated as a result of Program Analysis
             translating a loop idiom from some source language, e.g., a
-            Python Loop involves specifying an iterator and calling _next
+            Python for-loop involves specifying an iterator and calling _next
             on it (syntactically this happens implicitly in Python; behind
             the scenes, Python creates an iterator and calls _next on it).
         expr:
@@ -200,6 +202,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/AstNode"
+        post:
+          type: array
+          items:
+            $ref: "#/components/schemas/AstNode"
+          description: |
+            TODO.
 
     FunctionDef:
       type: object
