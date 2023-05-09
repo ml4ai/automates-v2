@@ -470,7 +470,7 @@ components:
           $ref: "#/components/schemas/VarType"
         default_value:
           type: object
-          $ref: "#/components/schemas/LiteralValue"
+          $ref: "#/components/schemas/CASTLiteralValue"
 
     VarType:
       type: string
@@ -502,7 +502,7 @@ components:
 
     SourceCodeDataType:
       description: |
-        Metadata: describes the language, language version, and data type for a LiteralValue node.
+        Metadata: describes the language, language version, and data type for a CASTLiteralValue node.
       properties:
         source_language:
           type: string
@@ -513,10 +513,10 @@ components:
 
 
     # NOTE: NEW Literal values for CAST 1.2
-    LiteralValue:
+    CASTLiteralValue:
       type: object
       description: |
-        A unified datatype representing any of the literal types
+        A unified datatype representing any of the literal types in CAST
       allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
