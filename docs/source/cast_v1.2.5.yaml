@@ -516,7 +516,10 @@ components:
     CASTLiteralValue:
       type: object
       description: |
-        A unified datatype representing any of the literal types in CAST
+        A unified datatype representing any of the literal types in CAST.
+        (Note: This version has prefix `CAST` in order to distinguish
+        from GrometFN version of LiteralValue; in swagger code-gen, these
+        interactive if they have the same name.)
       allOf:
          - $ref: "#/components/schemas/AstNode"
       properties:
