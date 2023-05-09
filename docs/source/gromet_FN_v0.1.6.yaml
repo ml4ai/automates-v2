@@ -715,7 +715,7 @@ components:
         the loop.
         Next (and on every subsequent iteration), the loop condition Predicate
         is evaluated.
-        If the exit condition Port evaluates to True, then the current values
+        If the continuation condition Port evaluates to False, then the current values
         at the input Ports to the Loop are copied to the output Ports and
         the execution moves past the Loop.
         Else, if the exit condition is False, then the values at the Outer
