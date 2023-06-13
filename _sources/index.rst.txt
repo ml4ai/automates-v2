@@ -12,7 +12,7 @@ Welcome to the SKEMA documentation!
    :caption: ASKEM - current (2023-01-12)
 
    cast_v1.2.5
-   gromet_FN_v0.1.6
+   gromet_FN_v0.1.7
    gromet_metadata_v0.1.6
 
 .. toctree::
