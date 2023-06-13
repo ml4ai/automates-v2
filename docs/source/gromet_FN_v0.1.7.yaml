@@ -75,8 +75,11 @@ components:
 
     TypedValue:
       description: Typed object (to label value types in JSON).
-      gromet_type: object
+      type: object
       properties:
+        gromet_type:
+          type: string
+          default: "TypedValue"
         type:
           type: string
           description: The type of the value.
@@ -474,6 +477,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
+        gromet_type:
+          type: string
+          default: "GrometBox"
         name:
           type: string
 
@@ -608,6 +614,9 @@ components:
       type: object
 
       properties:
+        gromet_type:
+          type: string
+          default: "LiteralValue"
 
         value_type:
           type: string
