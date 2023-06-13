@@ -1,5 +1,5 @@
-GroMEt Function Network - v0.1.6
+GroMEt Function Network - v0.1.7
 ================================
 
 .. raw:: html
-  :file: gromet_FN_v0.1.6.html
+  :file: gromet_FN_v0.1.7.html
