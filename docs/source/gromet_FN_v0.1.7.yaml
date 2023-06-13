@@ -66,9 +66,6 @@ components:
 #        id:
 #          description: An integer representing an identifier that is unique within the GrometFNModule.
 #          type: integer
-        gromet_type:
-          type: string
-          default: "GrometObject"
         metadata:
           description: Index (integer) into the metadata_collection table in GrometFNModule.
           type: integer
