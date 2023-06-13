@@ -474,9 +474,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometBox"
         name:
           type: string
 
