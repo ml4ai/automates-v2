@@ -74,9 +74,6 @@ components:
       description: Typed object (to label value types in JSON).
       type: object
       properties:
-        gromet_type:
-          type: string
-          default: "TypedValue"
         type:
           type: string
           description: The type of the value.
@@ -87,6 +84,11 @@ components:
         index:
           type: integer
           description: Helper bookkeeping to facilitate keeping track of large list of TypedValues
+
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "TypedValue"
 
 #    AttributeType:   # Was previously called GrometType
 #      type: string
@@ -101,9 +103,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometFNModuleCollection"
         schema:
           type: string
           default: "FN"
@@ -137,6 +136,11 @@ components:
           items:
             type: integer
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometFNModuleCollection"
+
     GrometFNModule:
       description: |
         A GroMEt FN Module.
@@ -150,9 +154,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometFNModule"
         schema:
           type: string
           default: "FN"
@@ -187,15 +188,17 @@ components:
             items:
               $ref: "#/components/schemas/Metadata"
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometFNModule"
+
     GrometFN:
       description: |
         A Function Network (FN).
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometFN"
 
         name:
           type: string
@@ -411,14 +414,16 @@ components:
           items:
             $ref: "#/components/schemas/GrometWire"
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometFN"
+
     GrometWire:
       description: FN Wire
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometWire"
         name:
           type: string
         src:
@@ -427,6 +432,11 @@ components:
         tgt:
           description: Index to the target Port of the Wire.
           type: integer
+
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometWire"
 
     GrometPort:
       description: |
@@ -439,9 +449,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/GrometObject"
       properties:
-        gromet_type:
-          type: string
-          default: "GrometPort"
         id:
           type: integer
           description: |
@@ -467,6 +474,11 @@ components:
           #   used to represent declared default values of function arguments.
           $ref: "#/components/schemas/LiteralValue"
           # TODO: needs to be generalized if default value references other var (global)
+
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometPort"
 
     GrometBox:
       description: |
@@ -608,9 +620,6 @@ components:
       type: object
 
       properties:
-        gromet_type:
-          type: string
-          default: "LiteralValue"
 
         value_type:
           type: string
@@ -657,6 +666,11 @@ components:
             When function_type is SOURCE or IMPORTED: The version of the source language (e.g., "3.10.9")
           type: string
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "LiteralValue"
+
     GrometBoxFunction:
       description: |
         FN Box Function.
@@ -685,9 +699,7 @@ components:
         - $ref: "#/components/schemas/GrometBox"
       type: object
       properties:
-        gromet_type:
-          type: string
-          default: "GrometBoxFunction"
+
         function_type:
           $ref: "#/components/schemas/FunctionType"
 
@@ -727,6 +739,11 @@ components:
           $ref: "#/components/schemas/LiteralValue"
           # description: Only present when function_type = LiteralValue
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometBoxFunction"
+
     GrometBoxLoop:
       description: |
         FN Box Loop.
@@ -760,9 +777,6 @@ components:
         - $ref: "#/components/schemas/GrometBox"
       type: object
       properties:
-        gromet_type:
-          type: string
-          default: "GrometBoxLoop"
         pre:
           type: integer
           description: |
@@ -796,6 +810,11 @@ components:
             iterators support, and where that updated value is available outside
             the loop.
 
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometBoxLoop"
+
     GrometBoxConditional:
       description: |
         FN Box Conditional.
@@ -810,9 +829,6 @@ components:
         - $ref: "#/components/schemas/GrometBox"
       type: object
       properties:
-        gromet_type:
-          type: string
-          default: "GrometBoxConditional"
         condition:
           type: integer
           description: |
@@ -828,3 +844,8 @@ components:
           description: |
             The index to the entry in the `fn_array` table of the GrometFNModule
             representing the GrometFN implementing the ELSE-branch of the conditional.
+
+        # Place at end of properties so __init__ fn preserves positional arguments
+        gromet_type:
+          type: string
+          default: "GrometBoxConditional"
