@@ -1,0 +1,915 @@
+openapi: 3.0.0
+
+### NOTE 2022-08-05 CTM: Turning off Required attributes for now
+
+info:
+  title: GroMEt Metadata spec
+  description: |
+    Grounded Model Exchange (GroMEt) Metadata schema specification
+
+    __Using Swagger to Generate Class Structure__
+
+    To automatically generate Python or Java models corresponding to this
+    document, you can use
+    [swagger-codegen](https://swagger.io/tools/swagger-codegen/).
+    We can use this to generate client code based off of this spec that
+    will also generate the class structure.
+
+    1. Install via the method described for your operating system
+       [here](https://github.com/swagger-api/swagger-codegen#Prerequisites).
+       Make sure to install a version after 3.0 that will support openapi 3.
+    2. Run swagger-codegen with the options in the example below.
+       The URL references where the yaml for this documentation is stored on
+       github. Make sure to replace CURRENT_VERSION with the correct version.
+       (The current version is `0.1.4`.)
+       To generate Java classes rather, change the `-l python` to `-l java`.
+       Change the value to the `-o` option to the desired output location.
+       ```
+       swagger-codegen generate -l python -o ./client -i https://raw.githubusercontent.com/ml4ai/automates-v2/master/docs/source/gromet_metadata_v{CURRENT_VERSION}.yaml
+       ```
+    3. Once it executes, the client code will be generated at your specified
+       location.
+       For python, the classes will be located in
+       `$OUTPUT_PATH/swagger_client/models/`.
+       For java, they will be located in
+       `$OUTPUT_PATH/src/main/java/io/swagger/client/model/`
+
+    If generating GroMEt Metadata schema data model classes in SKEMA (AutoMATES),
+    then after generating the above, follow the instructions here:
+    ```
+    <automates>/automates/model_assembly/gromet/metadata/README.md
+    ```
+
+  contact:
+    name: Clayton T. Morrison
+    email: claytonm@arizona.edu
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: "0.1.8"
+
+paths: {}
+
+components:
+
+  schemas:
+
+    ### Metadata
+
+    Metadata:
+      description: |
+        Root type of Metadata.
+      properties:
+#        gromet_src_id:
+#          description: |
+#            The identifier of the Gromet object within the GrometFNModule
+#            that this metadata is associated with.
+#          type: integer
+        provenance:
+          $ref: '#/components/schemas/Provenance'
+
+    Provenance:
+      description: Provenance of metadata.
+#      required:
+#        - method
+#        - timestamp
+      properties:
+        gromet_type:
+          type: string
+          default: "Provenance"
+        method:
+          description: |
+            The inference method (with version) used to derive data.
+          type: string
+        timestamp:
+          description: |
+            Date and time that metadata was generated.
+          type: string
+          format: date-time
+
+    ### LiteralValue (Same as GroMEt)
+
+    LiteralValue:
+      description: Literal Value.
+      type: object
+      properties:
+        gromet_type:
+          type: string
+          default: "LiteralValue"
+        value_type:
+          type: string
+          description: The type of the value
+        value:
+          type: object
+          description: |
+            The value as an object representing the value.
+            Interpret the value object according to the value_type.
+
+    ### Equation extraction
+
+    EquationExtraction:
+      # title: <equation_extraction>
+      description: Representation of equation extraction.
+#      required:
+#        - source_type
+#        - document_reference_uid
+#        - equation_number
+      properties:
+        gromet_type:
+          type: string
+          default: "EquationExtraction"
+#        metadata_type:
+#          type: string
+#          default: "equation_extraction"
+        source_type:
+          type: string
+          default: "equation_document_source"
+        document_reference_uid:
+          description: uid of the source DocumentReference
+          type: string
+        equation_number:
+          description: Number of equation (relative to document source)
+          type: integer
+
+    ### Text extraction
+
+    TextExtraction:
+      # title: <text_extraction>
+      description: |
+        Representation of Text Extraction.
+        Assumes COSMOS within-document reference coordinates to a span of text.
+#      required:
+##        - source_type
+#        - document_reference_uid
+#        - page
+#        - block
+#        - char_begin
+#        - char_end
+      properties:
+        gromet_type:
+          type: string
+          default: "TextExtraction"
+#        metadata_type:
+#          type: string
+#          default: "text_extraction"
+        document_reference_uid:
+          description: uid of \<document_reference>
+          type: string
+        page:
+          description: The COSMOS-assigned page number
+          type: integer
+        block:
+          description: The COSMOS-extracted text block from the page
+          type: integer
+        char_begin:
+          description: Character coordinate within a text block where span begins
+          type: integer
+        char_end:
+          description: Character coordinate within a text block where span ends
+          type: integer
+
+    ### <Module>.<type_bookkeeping>
+
+    ProgramAnalysisRecordBookkeeping:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Module>.ProgramAnalysisRecordBookkeeping
+      description: |
+        Storing metadata derived from program analysis about Record (class/type) information
+        in a given Module, such as where fields for a Record (class/type) are first declared
+        and what methods are associated with a Record (class/type).
+        There will be one such metadata entry for each Record (class/type).
+        This will be stored in metadata array that is the first index of the
+        metadata_collection.
+      properties:
+        gromet_type:
+          type: string
+          default: "ProgramAnalysisRecordBookkeeping"
+        is_metadatum:
+          type: boolean
+          default: True
+        type_name:
+          type: string
+        field_declarations:
+          description: dictionary of key=field_name, val=method_name
+          type: object
+        method_declarations:
+          description: array of method names associted with a type
+          type: array
+          items:
+            type: string
+
+    ### <ANY>.<code_span>
+
+    SourceCodeReference:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <ANY>.SourceCodeReference
+      description: |
+        Reference to a source code span (sub-line, line, block).
+#      required:
+##        - code_type
+#        - code_file_reference_uid
+#        - line_begin
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeReference"
+        is_metadatum:
+          type: boolean
+          default: True
+        code_file_reference_uid:
+          description: uid for the source code file CodeFileReference
+          type: string
+          format: uuid
+        line_begin:
+          description: The line number where the identifier name string occurs
+          type: integer
+        line_end:
+          description: The line number where the identifier name string occurs
+          type: integer
+        col_begin:
+          description: The start column of the identifier name string instance
+          type: integer
+        col_end:
+          description: The end column of the identifier name string instance
+          type: integer
+
+    CommentType:
+      description: |
+        The type of a comment
+      type: string
+      enum:
+        - DOCSTRING         # Comments derived from a docstring
+        - OTHER             # Other comments
+
+    SourceCodeComment:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <ANY>.SourceCodeComments
+      description: |
+        Association of a source code comment with a FN object.
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeComment"
+        is_metadatum:
+          type: boolean
+          default: True
+        comment:
+          description: The comment string.
+          type: string
+        comment_type:
+          description: The comment type.
+          type: CommentType
+        context_function_name:
+          description: |
+            When the comment_type is "DOCSTRING", this represents the name of the
+            function that the docstring is associated with.
+          type: string
+        code_file_reference_uid:
+          description: uid for the source code file CodeFileReference.
+          type: string
+          format: uuid
+        line_begin:
+          description: The line number where the comment begins.
+          type: integer
+        line_end:
+          description: The line number where the comment ends.
+          type: integer
+        col_begin:
+          description: The start column of the comment.
+          type: integer
+        col_end:
+          description: The end column of the comment.
+          type: integer
+
+# Decision 2022-07-11: For now in GroMEt, any identifier name is used as the NAME of the GroMEt object
+#    SourceCodeIdentifierName:
+#      allOf:
+#        - $ref: '#/components/schemas/Metadata'
+#        title: <ANY>.SourceCodeIdentifierName
+#        description: |
+#          The original identifier name as it appears in the source code.
+#          This will happen under these conditions:
+#          (1) variable declaration and assignment to a variable => save to Port Output;
+#          (2) function declaration => save to BoxFunction;
+#          (3) function call => save to BoxFunction call box;
+#          etc...
+#        required:
+#          - identifier_name
+#        properties:
+#          metadata_type:
+#            type: string
+#            default: "source_code_identifier_name"
+#          identifier_name:
+#            type: string
+
+    SourceCodeDataType:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <BoxLiteralValue>.SourceCodeDataType
+      description: |
+        Information derived by Program Analysis inferring the literal value data type.
+#      required:
+#        - source_language
+#        - source_language_version
+#        - data_type
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeDataType"
+        is_metadatum:
+          type: boolean
+          default: True
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        data_type:
+          type: string
+          description: |
+            The source code data type as named by the source language.
+            E.g., "int_8", "Float64", etc...
+
+    SourceCodePortDefaultVal:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Port>.SourceCodePortDefaultVal
+      description: |
+        When there is a default argument value for a defined Function
+        and the call to that function is NOT setting the incoming argument
+        value, then PA creates and instance of the specified default
+        LiteralValue (as a LiteralFunction) and the output Port (pof)
+        will get this metadata to clarify how the value was declared
+        (where it came from).
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodePortDefaultVal"
+        is_metadatum:
+          type: boolean
+          default: True
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+
+    SourceCodePortKeywordArg:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <Port>.SourceCodePortKeywordArg
+      description: |
+        When there is a keyword argument assignment but we don't have
+        access to the argument names for the function (e.g., the function
+        is imported from a module that we don't have access to), then use
+        this metadata to keep track of the name of the keyword argument.
+        NOTE: This will be associated with the "call" Function input Port (pif)
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodePortKeywordArg"
+        is_metadatum:
+          type: boolean
+          default: True
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        arg_name:
+          type: string
+          description: |
+            The name of keyword argument that the value/var is being assigned (wired) to.
+
+    SourceCodeBoolAnd:
+      allOf:
+        - $ref: "#/components/schemas/Metadata"
+      title: <BoxFunction>.SourceCodeBoolAnd
+      description: |
+        Metadata indicating whether a Box Function is an implementation
+        of an Conjunction (And).
+        In most programming languages, Conjunctions and Disjunctions
+        are interpreted as control flow.
+        In FNs, a Conjunction is translated into a tree of nested
+            conditionals, where for each argument (except for the last):
+          the conditional *condition* is the next argument to the conjunction,
+          the *if_branch* is either the next conjunct-argument (the next
+                element in the And) or the last Bool condition (expression,
+                Boolean function call, or Boolean literal), and
+          the *else_branch* returns False.
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeBoolAnd"
+        is_metadatum:
+          type: boolean
+          default: True
+
+    SourceCodeBoolOr:
+      allOf:
+        - $ref: "#/components/schemas/Metadata"
+      title: <BoxFunction>.SourceCodeBoolOr
+      description: |
+        Metadata indicating whether a Box Function is an implementation
+        of an Disjunction (Or).
+        In most programming languages, Conjunctions and Disjunctions
+        are interpreted as control flow.
+        In FNs, a Disjunction is translated into a tree of nested
+            conditionals, where for each argument (except the last):
+          the conditional *condition* is the next argument to the disjunction,
+          the *if_branch* returns True, and
+          the *else_branch* is either the next conjunct-argument (the next
+                element in the OR) or last Bool condition (expression,
+                Boolean function call, or Boolean literal).
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeBoolOr"
+        is_metadatum:
+          type: boolean
+          default: True
+
+    SourceCodeLoopInit:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <BoxLoop>.SourceCodeLoopInit
+      description: |
+        Provides bookkeeping to associate the initialization of a Loop
+        (e.g., a for-loop), which may be specified outside of the loop,
+        with the loop itself.
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeLoopInit"
+        is_metadatum:
+          type: boolean
+          default: True
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        loop_name:
+          type: string
+          description: |
+            The name of the loop that this initialization is associated with.
+#        justification:
+#          type: string
+#          description: |
+#            Represent the justification for why Program Analysis introduced this
+#            initialization code.
+#            For example, when processing a Python for-loop, this should be \"for_loop\"
+
+    SourceCodeLoopUpdate:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <BoxLoop>.SourceCodeLoopUpdate
+      description: |
+        Provides bookkeeping to associate the update of a Loop parameter
+        (e.g., the iterator variable in a for-loop), which may be specified
+        within the body of the loop, but otherwise independent of the other
+        computation within the loop body.
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeLoopUpdate"
+        is_metadatum:
+          type: boolean
+          default: True
+        source_language:
+          type: string
+          description: |
+            The source code language.
+            E.g., "Python"
+        source_language_version:
+          type: string
+          description: |
+            The version of the source code language.
+            E.g., "3.8" for Python 3.8
+        loop_name:
+          type: string
+          description: |
+            The name of the loop that this initialization is associated with.
+    #        justification:
+    #          type: string
+    #          description: |
+    #            Represent the justification for why Program Analysis introduced this
+    #            initialization code.
+    #            For example, when processing a Python for-loop, this should be \"for_loop\"
+
+    ### Gromet
+
+    GrometCreation:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <GrometFNModule>.GrometCreation
+      description: Metadata about the creation of a GroMEt JSON file
+      properties:
+        gromet_type:
+          type: string
+          default: "GrometCreation"
+        is_metadatum:
+          type: boolean
+          default: True
+        gromet_version:
+          type: string
+          default: "0.1.2"  # Is there a way to get this by reference from info.version?
+#        timestamp:
+#          description: Creation timestamp
+#          type: string
+#          format: datetime
+
+    SourceCodeCollection:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <GrometFNModule>.SourceCodeCollection
+      description: Reference to a source code collection (e.g., a repository)
+#      required:
+#        - global_reference_id
+#        - files
+      properties:
+        gromet_type:
+          type: string
+          default: "SourceCodeCollection"
+        is_metadatum:
+          type: boolean
+          default: True
+        name:
+          description: Code Collection name
+          type: string
+        global_reference_id:
+          description: >
+            URL (e.g., GitHub url), or aske_id
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/CodeFileReference'
+
+    CodeFileReference:
+      # title: <code_file_reference>
+      description: Reference to a specific file within a code collection
+      properties:
+        gromet_type:
+          type: string
+          default: "CodeFileReference"
+        uid:
+          description: uid for CodeFileReference
+          type: string
+        name:
+          description: File name
+          type: string
+        path:
+          description: File path, assume starting from root of code collection
+          type: string
+
+    TextualDocumentCollection:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <GrometFNModule>.TextualDocumentCollection
+      description: >
+        A collection of textual document references
+        (e.g., documentation, scientific publication, etc.).
+#      required:
+#        - documents
+      properties:
+        gromet_type:
+          type: string
+          default: "TextualDocumentCollection"
+        is_metadatum:
+          type: boolean
+          default: True
+        documents:
+          description: List of document references
+          type: array
+          items:
+            $ref: '#/components/schemas/TextualDocumentReference'
+
+    TextualDocumentReference:
+      # title: <textual_document_reference>
+      description: Document reference.
+#      required:
+#        - uid
+#        - global_reference_id
+      properties:
+        gromet_type:
+          type: string
+          default: "TextualDocumentReference"
+        uid:
+          description: Unique identifier of the DocumentReference
+          type: string
+        global_reference_id:
+          description: |
+            Identifier of source document.<br>
+            Rank preference of identifier type:<br>
+            (1) DOI (digital object identifier) recognized by COSMOS<br>
+            (2) PMID (Pubmed ID) or other DOI<br>
+            (3) aske_id (ASKE unique identifier)
+          type: string
+        cosmos_id:
+          description: ID of COSMOS component used to process document.
+          type: string
+        cosmos_version_number:
+          description: Version number of COSMOS component.
+          type: string
+        skema_id:
+          description: ID of SKEMA component used to process document.
+          type: string
+        skema_version_number:
+          description: Version number of SKEMA component.
+          type: string
+        bibjson:
+          description: The bibjson entry for this document.<br>
+          $ref: '#/components/schemas/bibjson'
+
+    bibjson:
+      # title: <bibjson>
+      description: See http://okfnlabs.org/bibjson/
+
+    ### Functions
+
+    EquationDefinition:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <ANY>.EquationDefinition
+      description: >
+        Association of an EquationExtraction with a GroMEt component
+        (e.g., a GroMEt FN Function Box).
+#      required:
+#        - equation_extraction
+      properties:
+        gromet_type:
+          type: string
+          default: "EquationDefinition"
+        is_metadatum:
+          type: boolean
+          default: True
+        equation_extraction:
+          $ref: '#/components/schemas/EquationExtraction'
+        equation_mathml_source:
+          description: Source MathML of equation
+          type: string
+        equation_latex_source:
+          description: Source LaTeX of equation
+          type: string
+
+    ### <variable>
+
+    # variable_code_spans:
+    #   allOf:
+    #     - $ref: '#/components/schemas/metadata'
+    #   title: <variable>.<code_spans>
+    #   description: >
+    #     host: \<variable> <br>
+    #     Array of \<code_span>s for a \<variable> definition.
+    #     A \<variable> instance index corresponds to the index in the code_spans array.
+    #   required:
+    #     - code_file_reference_uid
+    #     - code_spans
+    #   properties:
+    #     type:
+    #       default: "equation_parameter"
+    #     code_file_reference_uid:
+    #       description: uid for the source code file \<code_file_reference>
+    #       type: string
+    #       format: uuid
+    #     code_spans:
+    #       description: TODO
+    #       type: array
+    #       items:
+    #         $ref: '#/components/schemas/code_span'
+
+#    data_type:
+#      allOf:
+#        - $ref: '#/components/schemas/metadata'
+#      title: <variable>.<data_type>
+#      description: >
+#        host: \<variable> <br>
+#        Data type associated with \<variable>.
+#      required:
+#        - data_type
+#      properties:
+#        type:
+#          default: "equation_parameter"
+#        data_type:
+#          description: >
+#            Primitive data types:<br>
+#            <em>Atomic</em>: \"BOOLEAN\", \"INTEGER\", \"FLOAT\", \"STRING\"<br>
+#            <em>Compound</em>: \"SET\", \"SEQUENCE\", \"DICTIONARY\", \"COMPOSITE\"
+#          type: string
+#          enum: [ BOOLEAN, INTEGER, FLOAT, STRING, SET, SEQUENCE, DICTIONARY, COMPOSITE ]
+
+# CTM 2022-10-28: Decided to not use for now, as will have literal assignment
+#                 have unnamed port that is wired to the correct fn input port
+#                 in the call.
+#    ArgumentAssignment:
+#      allOf:
+#        - $ref: '#/components/schemas/Metadata'
+#      title: <PortOutput>.SourceCodeArgumentAssignment
+#      description: |
+#        Noting when a literal value assignment is taking place as an
+#        assignment to a function argument (as opposed to a variable within
+#        a local scope).
+#      properties:
+#        metadata_type:
+#          type: string
+#          default: "argument_assignment"
+
+    EquationLiteralValue:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <PortOutput>.EquationLiteralValue
+      description: |
+        Association of parameter literal value extracted from equations to host Port.
+#      required:
+#        - equation_extraction
+#        - variable_identifier
+#        - value
+      properties:
+        gromet_type:
+          type: string
+          default: "EquationLiteralValue"
+        is_metadatum:
+          type: boolean
+          default: True
+        equation_extraction:
+          $ref: '#/components/schemas/EquationExtraction'
+        variable_identifier:
+          description: Variable identifier in equation
+          type: string
+        value:
+          $ref: "#/components/schemas/LiteralValue"
+
+    TextExtractionMetadata:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: TextExractionMetadata
+      description: |
+        Abstract type that introduces fields for grounding and score.
+      properties:
+        gromet_type:
+          type: string
+          default: "TextExtractionMetadata"
+        grounding:
+          description: Array of grounding hypotheses
+          type: array
+          items:
+            $ref: '#/components/schemas/TextGrounding'
+
+    TextGrounding:
+      properties:
+        gromet_type:
+          type: string
+          default: "TextGrounding"
+        argument_name:
+          type: string
+        id:
+          type: string
+        description:
+          type: string
+        score:
+          type: number
+
+    # Example: "attributes": { "text_identifier": "γ", "text_definition": "gamma" }
+    TextDescription:
+      allOf:
+        - $ref: '#/components/schemas/TextExtractionMetadata'
+      title: <PortOutput>.TextDescription
+      description: |
+        Description (possibly definition) of host derived from a text source.
+      properties:
+        gromet_type:
+          type: string
+          default: "TextDescription"
+        is_metadatum:
+          type: boolean
+          default: True
+        text_extraction:
+          $ref: '#/components/schemas/TextExtraction'
+        variable_identifier:
+          description: Variable identifier
+          type: string
+        variable_definition:
+          description: Variable definition text
+          type: string
+
+    # are these test-based, or are they parameter-code-based ?
+    TextLiteralValue:
+      allOf:
+        - $ref: '#/components/schemas/TextExtractionMetadata'
+      title: <PortOutput>.TextLiteralValue
+      description: |
+        Association of parameter literal values extracted from text to host Port.
+      properties:
+        gromet_type:
+          type: string
+          default: "TextLiteralValue"
+        is_metadatum:
+          type: boolean
+          default: True
+        text_extraction:
+          $ref: '#/components/schemas/TextExtraction'
+        variable_identifier:
+          description: Variable identifier in text
+          type: string
+        value:
+          $ref: "#/components/schemas/LiteralValue"
+
+    TextUnits:
+      allOf:
+        - $ref: '#/components/schemas/TextExtractionMetadata'
+      title: <PortOutput>.TextUnits
+      description: |
+        Association of parameter unit type extracted from text to host Port.
+      properties:
+        gromet_type:
+          type: string
+          default: "TextUnits"
+        is_metadatum:
+          type: boolean
+          default: True
+        text_extraction:
+          $ref: '#/components/schemas/TextExtraction'
+        variable_identifier:
+          description: Variable identifier in text
+          type: string
+        unit_type:
+          description: The extracted unit type
+          type: string
+
+#    measurement_scale:
+#      allOf:
+#        - $ref: '#/components/schemas/metadata'
+#      title: <variable>.<measurement_scale>
+#      description: >
+#        host: \<variable> <br>
+#        The measurement scale of \<variable> value.<br>
+#      required:
+#        - measurement_scale
+#      properties:
+#        metadata_type:
+#          default: "measurement_scale"
+#        measurement_scale:
+#          description: >
+#            Values: \"binary\", \"categorical\", \"continuous\"
+#          type: string
+#          enum: [ BINARY, CATEGORICAL, CONTINUOUS ]
+
+#    value_domain:
+#      allOf:
+#        - $ref: '#/components/schemas/metadata'
+#      title: <variable>.<value_domain>
+#      description: >
+#        host: \<variable> <br>
+#        Expression of the possible values data can take, as interval.<br>
+#      required:
+#        - value_domain
+#      properties:
+#        type:
+#          default: "value_domain"
+#        value_domain:
+#          description: >
+#            Example\: \"(and (> v -infty) (< v infty))\"
+#          type: string
+
+    ### <type>
+
+#    type_alias:
+#      allOf:
+#        - $ref: '#/components/schemas/metadata'
+#      title: <type>.<type_alias>
+#      description: >
+#        host: \<type>
+#        Alias name of a \<type>. <br>
+#        (E.g., using C typedef as alternate alias name to a \<type>).
+#      required:
+#        - alias
+#      properties:
+#        type:
+#          default: "type_alias"
+#        alias:
+#          description: Alias name
+#          type: string
