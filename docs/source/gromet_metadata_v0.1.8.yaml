@@ -552,6 +552,9 @@ components:
         path:
           description: File path, assume starting from root of code collection
           type: string
+        source_string:
+          description: Optional string containing the contents of the source file
+          type: string
 
     TextualDocumentCollection:
       allOf:
