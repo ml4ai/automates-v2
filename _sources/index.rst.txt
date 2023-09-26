@@ -9,11 +9,10 @@ Welcome to the SKEMA documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: ASKEM - current (2023-01-12)
+   :caption: ASKEM - current (2023-09-26)
 
    cast_v1.2.5
-   gromet_FN_v0.1.7
-   gromet_metadata_v0.1.7
+   gromet_FN_v0.1.8
    gromet_metadata_v0.1.8
 
 .. toctree::
@@ -29,7 +28,7 @@ Welcome to the SKEMA documentation!
    grfn_api_v1.0.0
    gromet_v0.0.1
    gromet_FN_v0.1.0
-   gromet_metadat_v0.1.0
+   gromet_metadata_v0.1.0
 
 
 Indices and tables
