@@ -90,6 +90,32 @@ components:
           type: string
           format: date-time
 
+    ### DEBUG
+
+    Debug:
+      allOf:
+        - $ref: '#/components/schemas/Metadata'
+      title: <ANY>.Debug
+      description: |
+        Generic metadatum to log warnings and errors in support of debugging.
+      properties:
+        gromet_type:
+          type: string
+          default: "Debug"
+        debug_type:
+          type: string
+          description: |
+            Info about the debug message, e.g., system component that generated 
+            (e.g., "CommentExtractor", "Code2FN", "MORAE").
+        severity:
+          type: string
+          description: |  # TODO: make enum?  
+            The severity level of the debug event, e.g.: 'Error', 'Warning', 'Notice'
+        message:
+          type: string
+          description: |
+            The message payload
+
     ### LiteralValue (Same as GroMEt)
 
     LiteralValue:
