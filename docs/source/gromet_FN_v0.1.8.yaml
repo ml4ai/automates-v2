@@ -135,6 +135,16 @@ components:
           type: array
           items:
             type: integer
+        metadata_collection:
+          description: |
+            Table (array) of lists (arrays) of metadata,
+            where each list in the Table-array represents the collection
+            of metadata associated with a GrometFNModuleCollection object.
+          type: array  # The Table of metadata_collection(s) (lists)
+          items:
+            type: array  # Collection (list) of metadata associated with a particular GroMEt object.
+            items:
+              $ref: "#/components/schemas/Metadata"
 
         # Place at end of properties so __init__ fn preserves positional arguments
         gromet_type:
@@ -181,7 +191,7 @@ components:
           description: |
             Table (array) of lists (arrays) of metadata,
             where each list in the Table-array represents the collection
-            of metadata associated with a GroMEt object.
+            of metadata associated with a GrometFNModule object.
           type: array  # The Table of metadata_collection(s) (lists)
           items:
             type: array  # Collection (list) of metadata associated with a particular GroMEt object.
