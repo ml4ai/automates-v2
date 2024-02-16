@@ -169,7 +169,7 @@ components:
           description: |
             The name of the Module dependency
         source_reference:
-          type: TypeValue
+          type: TypedValue
           description: |
             Could be value of type: { "url", "directory path", "filename" }    
 

@@ -9,7 +9,7 @@ Welcome to the SKEMA documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: ASKEM - current (2023-09-26)
+   :caption: ASKEM - current (2024-02-16)
 
    cast_v1.2.6
    gromet_FN_v0.1.10
