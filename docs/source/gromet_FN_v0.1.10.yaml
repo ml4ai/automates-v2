@@ -169,9 +169,9 @@ components:
           description: |
             The name of the Module dependency
         source_reference:
-          type: TypedValue
           description: |
-            Could be value of type: { "url", "directory path", "filename" }    
+            Could be value of type: { "url", "directory path", "filename" }
+          $ref: "#/components/schemas/TypedValue"
 
     GrometFNModule:
       description: |
