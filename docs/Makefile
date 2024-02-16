@@ -130,8 +130,8 @@ ${SOURCEDIR}/gromet_v0.0.1.html:
 
 # ${SOURCEDIR}/cast_v1.2.0.html ${SOURCEDIR}/cast_v1.2.1.html ${SOURCEDIR}/cast_v1.2.2.html ${SOURCEDIR}/cast_v1.2.3.html ${SOURCEDIR}/cast_v1.2.4.html ${SOURCEDIR}/cast_v1.2.5.html
 # ${SOURCEDIR}/gromet_FN_v0.1.0.html ${SOURCEDIR}/gromet_FN_v0.1.2.html ${SOURCEDIR}/gromet_FN_v0.1.3.html ${SOURCEDIR}/gromet_FN_v0.1.4.html ${SOURCEDIR}/gromet_FN_v0.1.5.html ${SOURCEDIR}/gromet_FN_v0.1.6.html ${SOURCEDIR}/gromet_FN_v0.1.7.html ${SOURCEDIR}/gromet_FN_v0.1.8.html
-# ${SOURCEDIR}/gromet_FN_v0.1.10.html ${SOURCEDIR}/gromet_metadata_v0.1.0.html ${SOURCEDIR}/gromet_metadata_v0.1.1.html ${SOURCEDIR}/gromet_metadata_v0.1.3.html ${SOURCEDIR}/gromet_metadata_v0.1.4.html ${SOURCEDIR}/gromet_metadata_v0.1.5.html ${SOURCEDIR}/gromet_metadata_v0.1.6.html ${SOURCEDIR}/gromet_metadata_v0.1.7.html
-apidocs: ${SOURCEDIR}/cast_v1.2.6.html ${SOURCEDIR}/gromet_FN_v0.1.9.html ${SOURCEDIR}/gromet_metadata_v0.1.8.html ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html ${SOURCEDIR}/gromet_v0.0.1.html ${SOURCEDIR}/grfn_api_v1.0.0.html
+# ${SOURCEDIR}/gromet_metadata_v0.1.0.html ${SOURCEDIR}/gromet_metadata_v0.1.1.html ${SOURCEDIR}/gromet_metadata_v0.1.3.html ${SOURCEDIR}/gromet_metadata_v0.1.4.html ${SOURCEDIR}/gromet_metadata_v0.1.5.html ${SOURCEDIR}/gromet_metadata_v0.1.6.html ${SOURCEDIR}/gromet_metadata_v0.1.7.html
+apidocs: ${SOURCEDIR}/cast_v1.2.6.html ${SOURCEDIR}/gromet_FN_v0.1.9.html ${SOURCEDIR}/gromet_FN_v0.1.10.html ${SOURCEDIR}/gromet_metadata_v0.1.8.html ${SOURCEDIR}/air.html ${SOURCEDIR}/cast_v1.0.0.html ${SOURCEDIR}/grfn_v2.2.0.html ${SOURCEDIR}/grfn_v3.0.0.html ${SOURCEDIR}/grfn_metadata.html ${SOURCEDIR}/grfn_intersection_graph.html ${SOURCEDIR}/gromet_v0.0.1.html ${SOURCEDIR}/grfn_api_v1.0.0.html
 	rm -rf generated/
 	sphinx-apidoc -o source ../src -f
 
